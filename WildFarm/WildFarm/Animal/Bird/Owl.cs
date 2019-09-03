@@ -6,8 +6,11 @@ namespace WildFarm
     {
         public Owl(string name, double weight, double wingSize, int food) : base(name, weight, wingSize, food)
         {
-            this.Weight = weight + (0.40 * food);
             FoodEaten.Add("Meat");
+        }
+        public override void GainWeight(double weight, int food)
+        {
+            this.Weight = weight + (0.40 * food);
         }
         public override void Talk()
         {

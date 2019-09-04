@@ -40,7 +40,16 @@ namespace Generics
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new System.NotImplementedException();
+            if (array.Length > Count)
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    array[arrayIndex] = items[i];
+                    arrayIndex++;
+                }
+            }
+            else
+                throw new System.ArgumentException("Destination array was not long enough.");   
         }
 
         public IEnumerator<T> GetEnumerator()

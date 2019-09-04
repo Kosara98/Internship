@@ -8,11 +8,11 @@ namespace Generics
     {
         int indexBase = 0;
         T[] items = new T[16];
-        T val = default(T);
+        T defaultValue = default(T);
 
         public T this[int index] { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
-        public int Count => throw new System.NotImplementedException();
+        public int Count => indexBase;
 
         public bool IsReadOnly => throw new System.NotImplementedException();
 
@@ -24,7 +24,7 @@ namespace Generics
 
         public void Clear()
         {
-            items = null;
+            items = new T[16];
             indexBase = 0;
         }
 
@@ -33,11 +33,9 @@ namespace Generics
             foreach (var i in items)
             {
                 if (i.Equals(item))
-                    break;
-                else
-                    return false;
+                    return true;
             }
-            return true;
+            return false;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
@@ -66,7 +64,24 @@ namespace Generics
 
         public void Insert(int index, T item)
         {
-            throw new System.NotImplementedException();
+            if (index < 0 || index > items.Length)
+                throw new System.ArgumentOutOfRangeException();
+            else
+            {
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (i.Equals(index))
+                    {
+                        indexBase++;
+                        for (int n = indexBase; n > index; n--)
+                        {
+                            items[n] = items[n - 1];
+                        }
+                        items[index] = item;
+                        
+                    }
+                }
+            }
         }
 
         public bool Remove(T item)
@@ -76,7 +91,7 @@ namespace Generics
             {
                 if (i.Equals(item))
                 {
-                    item = val;
+                    items[index] = defaultValue;
                     for (int n = index + 1; n < items.Length; n++)
                     {
                         item = items[index - 1];
@@ -99,7 +114,7 @@ namespace Generics
                 {
                     if (i.Equals(index))
                     {
-                        items[index] = val;
+                        items[index] = defaultValue;
                         for (int n = index + 1; n < items.Length; n++)
                         {
                             items[n] = items[index - 1];

@@ -13,21 +13,27 @@ namespace Generics
             //var number = new Nullable<int>(5);
             //Console.WriteLine($"Has Value ? : {number.HasValue}");
             //Console.WriteLine($"Value: {number.GetValueOrDefault()}");
-            List<int> list = new List <int>();
-            list.Add(6);
+            
+            IList<int> list = new CustomList<int>();
+            for (int i = 0; i < 15; i++)
+            {
+                list.Add(i);
+            }
+            int number = 14;
+            Console.WriteLine("Contains:" + list.Contains(number));
+            list.Remove(4);
+            Console.WriteLine("Contains:" + list.Contains(4));
             list.Clear();
-            list.Add(5);
-            list.Add(0);
-            Console.WriteLine(list.IndexOf(7));
+            list.Add(number);
+            //Console.WriteLine(list.Contains(number));
+            //Console.WriteLine(list.Count);
 
-            CustomList<int> customList = new CustomList<int>();
-            customList.Add(5);
-            customList.Add(4);
-            // Console.WriteLine(list.IndexOf(7));
-            // customList.Remove(4);
-            customList.RemoveAt(1);
-            customList.Add(6);
-            Console.WriteLine(customList.IndexOf(6));
+            Console.WriteLine("Index of  14 before insert " + list.IndexOf(number));
+            list.Insert(0, 3);
+            Console.WriteLine("Index of  14 after insert " + list.IndexOf(number));
+            Console.WriteLine("Index of 3 " + list.IndexOf(3));
+            Console.WriteLine(list.Count);
+
         }
     }
 }

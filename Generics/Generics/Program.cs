@@ -15,7 +15,7 @@ namespace Generics
             //Console.WriteLine($"Value: {number.GetValueOrDefault()}");
             
             IList<int> list = new CustomList<int>();
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 16; i++)
             {
                 list.Add(i);
             }
@@ -23,7 +23,7 @@ namespace Generics
             Console.WriteLine("Contains:" + list.Contains(number));
             list.Remove(4);
             Console.WriteLine("Contains:" + list.Contains(4));
-            list.Clear();
+            //list.Clear();
             list.Add(number);
             list.Add(5);
             list.Add(4);
@@ -36,7 +36,7 @@ namespace Generics
             //Console.WriteLine("Index of  14 after insert " + list.IndexOf(number));
             //Console.WriteLine("Index of 3 " + list.IndexOf(3));
             //Console.WriteLine(list.Count);
-            int[] copy = new int[10];
+            int[] copy = new int[20];
             list.CopyTo(copy, 0);
 
             foreach (var item in copy)

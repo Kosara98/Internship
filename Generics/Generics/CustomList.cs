@@ -9,6 +9,7 @@ namespace Generics
         int indexBase = 0;
         T[] items = new T[16];
         T defaultValue = default(T);
+        T[] itemsNew = new T[32];
 
         public T this[int index] { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -18,6 +19,14 @@ namespace Generics
 
         public void Add(T item)
         {
+            if (indexBase == 15)
+            {
+                DoubleLength(item);
+            }
+            if (indexBase == 31)
+            {
+                DoubleLength(item);
+            }
             items[indexBase] = item;
             indexBase++;
         }
@@ -137,6 +146,15 @@ namespace Generics
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new System.NotImplementedException();
+        }
+
+        private void DoubleLength(T item)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                itemsNew[i] = items[i];
+            }
+            items = itemsNew;
         }
     }
 }

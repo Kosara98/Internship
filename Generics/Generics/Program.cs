@@ -17,12 +17,17 @@ namespace Generics
             list.Add(6);
             list.Clear();
             list.Add(5);
-            list.Add(4);
-            Console.WriteLine(list.IndexOf(4));
+            list.Add(0);
+            Console.WriteLine(list.IndexOf(7));
 
             CustomList<int> customList = new CustomList<int>();
             customList.Add(5);
-            Console.WriteLine(customList.IndexOf(5));
+            customList.Add(4);
+            // Console.WriteLine(list.IndexOf(7));
+            // customList.Remove(4);
+            customList.RemoveAt(1);
+            customList.Add(6);
+            Console.WriteLine(customList.IndexOf(6));
         }
     }
 }

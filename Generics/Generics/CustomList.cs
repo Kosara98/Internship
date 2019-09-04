@@ -6,8 +6,9 @@ namespace Generics
 {
     public class CustomList<T> : IEnumerable<T>, ICollection<T>, IList<T>
     {
-        int index = 0;
+        int indexBase = 0;
         T[] items = new T[16];
+        T val = default(T);
 
         public T this[int index] { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
@@ -17,14 +18,14 @@ namespace Generics
 
         public void Add(T item)
         {
-            items[index] = item;
-            index++;
+            items[indexBase] = item;
+            indexBase++;
         }
 
         public void Clear()
         {
             items = null;
-            index = 0;
+            indexBase = 0;
         }
 
         public bool Contains(T item)
@@ -70,13 +71,20 @@ namespace Generics
 
         public bool Remove(T item)
         {
+            int index = 0;
             foreach(var i in items)
             {
                 if (i.Equals(item))
                 {
+                    item = val;
+                    for (int n = index + 1; n < items.Length; n++)
+                    {
+                        item = items[index - 1];
+                    }
+                    indexBase--;
                     return true;
                 }
-               
+                index++;
             }
             return false;
         }
@@ -89,7 +97,15 @@ namespace Generics
             {
                 for (int i = 0; i < items.Length; i++)
                 {
-
+                    if (i.Equals(index))
+                    {
+                        items[index] = val;
+                        for (int n = index + 1; n < items.Length; n++)
+                        {
+                            items[n] = items[index - 1];
+                        }
+                        indexBase--;
+                    }
                 }
             }
         }

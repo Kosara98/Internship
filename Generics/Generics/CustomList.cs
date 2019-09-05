@@ -63,6 +63,8 @@ namespace Generics
 
         public IEnumerator<T> GetEnumerator()
         {
+            //for (int i = 0; i < Count; i++)
+            //    yield return items[i];
             throw new System.NotImplementedException();
         }
 
@@ -112,7 +114,7 @@ namespace Generics
                     items[index] = defaultValue;
                     for (int n = index + 1; n < items.Length; n++)
                     {
-                        item = items[index - 1];
+                        items[n - 1] = items[n];
                     }
                     indexBase--;
                     return true;
@@ -145,7 +147,7 @@ namespace Generics
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            return new CustomEnumerator<T>();
         }
 
         private void DoubleLength(T item)

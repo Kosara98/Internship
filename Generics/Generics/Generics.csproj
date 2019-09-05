@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Book.cs" />
     <Compile Include="BookList.cs" />
+    <Compile Include="CustomEnumerator.cs" />
     <Compile Include="CustomList.cs" />
     <Compile Include="DiscountCalculator.cs" />
     <Compile Include="List.cs" />

@@ -28,22 +28,34 @@ namespace Generics
             list.Add(5);
             list.Add(4);
             list.Add(3);
-            Console.WriteLine(list.Contains(number));
-            //Console.WriteLine(list.Count);
 
-            //Console.WriteLine("Index of  14 before insert " + list.IndexOf(number));
-            //list.Insert(0, 3);
-            //Console.WriteLine("Index of  14 after insert " + list.IndexOf(number));
-            //Console.WriteLine("Index of 3 " + list.IndexOf(3));
-            //Console.WriteLine(list.Count);
-            int[] copy = new int[20];
+            //var enumarator = list.GetEnumerator();
+            //while (enumarator.MoveNext())
+            //{
+            //    Console.WriteLine(enumarator.Current);
+            //}
+
+            //foreach (var item in list)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            
+            Console.WriteLine(list.Contains(number));
+            Console.WriteLine(list.Count);
+
+            Console.WriteLine("Index of  14 before insert " + list.IndexOf(number));
+            list.Insert(0, 3);
+            Console.WriteLine("Index of  14 after insert " + list.IndexOf(number));
+            Console.WriteLine("Index of 3 " + list.IndexOf(3));
+            Console.WriteLine(list.Count);
+            Console.WriteLine("------------");
+            int[] copy = new int[22];
             list.CopyTo(copy, 0);
 
             foreach (var item in copy)
             {
                 Console.WriteLine(item);
             }
-
         }
     }
 }

@@ -87,7 +87,10 @@ namespace Generics
             if (index < 0)
                 throw new System.ArgumentOutOfRangeException();
             else if (index >= items.Length - 1)
+            {
                 DoubleLength();
+                items[index] = item;
+            }
             else
             {
                 for (int i = 0; i < items.Length; i++)

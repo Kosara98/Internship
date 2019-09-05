@@ -40,6 +40,11 @@ namespace Generics
         public bool MoveNext()
         {
             index++;
+            if (index > 0)
+            {
+                if (items[index].Equals(default(T)))
+                    return false;
+            }
             return (index < items.Count);
         }
 

@@ -20,15 +20,15 @@ namespace WildFarm
         public abstract void Talk();
         public abstract void GainWeight(double weight, int food);
 
-        public void Eat(string food, string quantity, Animal animal)
+        public void Eat(string food, string quantity)
         {
-            if (!animal.FoodEaten.Contains(food))
+            if (!this.FoodEaten.Contains(food))
             {
-                Console.WriteLine($"{animal.Name} does not eat {food}");
-                animal.FoodQuantity -= Convert.ToInt32(quantity);
+                Console.WriteLine($"{this.Name} does not eat {food}");
+                this.FoodQuantity -= Convert.ToInt32(quantity);
             }
             else
-                animal.GainWeight(this.Weight, Convert.ToInt32(quantity));
+                this.GainWeight(this.Weight, Convert.ToInt32(quantity));
         }
     }
 }

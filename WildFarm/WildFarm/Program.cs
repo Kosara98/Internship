@@ -48,7 +48,7 @@ namespace WildFarm
                         break;
                 }
                 animal.Talk();
-                animal.Eat(food[0], food[1],animal);
+                animal.Eat(food[0], food[1]);
                 animals.Add(animal);
             }
 

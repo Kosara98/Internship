@@ -23,7 +23,7 @@ namespace Generics
             Console.WriteLine("Contains:" + list.Contains(number));
             list.Remove(4);
             Console.WriteLine("Contains:" + list.Contains(4));
-            //list.Clear();
+            list.Clear();
             list.Add(number);
             list.Add(5);
             list.Add(4);

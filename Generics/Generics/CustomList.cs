@@ -53,7 +53,10 @@ namespace Generics
             {
                 for (int i = 0; i < array.Length; i++)
                 {
-                    array[arrayIndex] = items[i];
+                    if (i >= items.Length)
+                        array[arrayIndex] = defaultValue;
+                    else
+                        array[arrayIndex] = items[i];
                     arrayIndex++;
                 }
             }

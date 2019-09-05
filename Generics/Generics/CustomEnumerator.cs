@@ -5,24 +5,47 @@ namespace Generics
 {
     public class CustomEnumerator<T> : IEnumerator<T>
     {
-        
-        public T Current => throw new System.NotImplementedException();
+        int index = -1;
+        IList<T> items;
 
-        object IEnumerator.Current => throw new System.NotImplementedException();
+        public CustomEnumerator(IList<T> array)
+        {
+            items = array;
+        }
+
+        public T Current
+        {
+            get
+            {
+                if (index == -1)
+                {
+                    return items[0];
+                }
+                return items[index];
+            }
+        }
+
+        object IEnumerator.Current
+        {
+            get
+            {
+                return Current;
+            }
+        }
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
         }
 
         public bool MoveNext()
         {
-            throw new System.NotImplementedException();
+            index++;
+            return (index < items.Count);
         }
 
         public void Reset()
         {
-            throw new System.NotImplementedException();
+            index = -1;
         }
     }
 }

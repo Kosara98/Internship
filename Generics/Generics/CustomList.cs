@@ -62,9 +62,10 @@ namespace Generics
 
         public IEnumerator<T> GetEnumerator()
         {
+            CustomEnumerator<T> customEnumerator = new CustomEnumerator<T>(items);
+            return customEnumerator;
             //for (int i = 0; i < Count; i++)
             //    yield return items[i];
-            throw new System.NotImplementedException();
         }
 
         public int IndexOf(T item)
@@ -148,7 +149,7 @@ namespace Generics
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new CustomEnumerator<T>();
+            return GetEnumerator();
         }
 
         private void DoubleLength()

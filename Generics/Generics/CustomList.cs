@@ -110,7 +110,7 @@ namespace Generics
             int index = 0;
             while (!items[index].Equals(item))
             {
-                if (index == items.Length)
+                if (index == (items.Length -1))
                     return false;
                 index++;
             };
@@ -126,7 +126,7 @@ namespace Generics
 
         public void RemoveAt(int index)
         {
-            if (index < 0)
+            if (index < 0 || index > Count)
                 throw new System.ArgumentOutOfRangeException();
             else
             {

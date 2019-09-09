@@ -15,29 +15,33 @@ namespace Generics
             //Console.WriteLine($"Value: {number.GetValueOrDefault()}");
             
             IList<int> list = new CustomList<int>();
-            for (int i = 0; i < 20; i++)
+
+            for (int i = 0; i < 15; i++)
             {
                 list.Add(i);
             }
-            Console.WriteLine("------------------------");
+            Console.WriteLine("----");
+            Console.WriteLine(list.IndexOf(5));
+            //var e = list.GetEnumerator();
 
-            var e = list.GetEnumerator();
-          
-            while(e.MoveNext())
-            {
-                if (e.Current.Equals(4))
-                {
-                    e.Reset();
-                    break;
-                }
-                Console.WriteLine(e.Current);
-            }
+            //Console.WriteLine(e.Current);
+            //Console.WriteLine("------------------------");
 
-            Console.WriteLine("-------------------");
-            while (e.MoveNext())
-            {
-                Console.WriteLine(e.Current);
-            }
+            //while (e.MoveNext())
+            //{
+            //    if (e.Current.Equals(4))
+            //    {
+            //        e.Reset();
+            //        break;
+            //    }
+            //    Console.WriteLine(e.Current);
+            //}
+
+            //Console.WriteLine("-------------------");
+            //while (e.MoveNext())
+            //{
+            //    Console.WriteLine(e.Current);
+            //}
         }
     }
 }

@@ -11,11 +11,11 @@ namespace Generics
         T defaultValue = default(T);
         T[] itemsNew;
 
-        public T this[int index] { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public T this[int index] { get => items[index]; set => items[index] = value;  }
 
         public int Count => indexBase;
 
-        public bool IsReadOnly => throw new System.NotImplementedException();
+        public bool IsReadOnly => false;
 
         public void Add(T item)
         {
@@ -50,10 +50,9 @@ namespace Generics
                 for (int i = 0; i < array.Length; i++)
                 {
                     if (i >= items.Length)
-                        array[arrayIndex] = defaultValue;
+                        break;
                     else
-                        array[arrayIndex] = items[i];
-                    arrayIndex++;
+                        array[i + arrayIndex] = items[i];
                 }
             }
             else
@@ -71,62 +70,54 @@ namespace Generics
         public int IndexOf(T item)
         {
             int index = 0;
-            foreach (var i in items)
+            while (!items[index].Equals(item))
             {
-                if (i.Equals(item))
-                {
-                    return index;
-                }
                 index++;
             }
-            return -1;
+            return index;
         }
 
         public void Insert(int index, T item)
         {
             if (index < 0)
                 throw new System.ArgumentOutOfRangeException();
-            else if (index >= items.Length - 1)
+            else if (indexBase >= items.Length - 1)
             {
                 DoubleLength();
                 items[index] = item;
             }
             else
             {
-                for (int i = 0; i < items.Length; i++)
+                for (int i = indexBase; i >= index; i--)
                 {
                     if (i.Equals(index))
                     {
-                        indexBase++;
-                        for (int n = indexBase; n > index; n--)
-                        {
-                            items[n] = items[n - 1];
-                        }
                         items[index] = item;
-
+                        break;
                     }
+                    items[i] = items[i-1];
                 }
+                indexBase++;
             }
         }
 
         public bool Remove(T item)
         {
             int index = 0;
-            foreach(var i in items)
+            while (!items[index].Equals(item))
             {
-                if (i.Equals(item))
-                {
-                    items[index] = defaultValue;
-                    for (int n = index + 1; n < items.Length; n++)
-                    {
-                        items[n - 1] = items[n];
-                    }
-                    indexBase--;
-                    return true;
-                }
+                if (index == items.Length)
+                    return false;
                 index++;
+            };
+
+            items[index] = defaultValue;
+            for (int n = index + 1; n < items.Length; n++)
+            {
+                items[n - 1] = items[n];
             }
-            return false;
+            indexBase--;
+            return true;
         }
 
         public void RemoveAt(int index)
@@ -135,18 +126,13 @@ namespace Generics
                 throw new System.ArgumentOutOfRangeException();
             else
             {
-                for (int i = 0; i < items.Length; i++)
+                items[index] = defaultValue;
+                for (int i = index; i < indexBase; i++)
                 {
-                    if (i.Equals(index))
-                    {
-                        items[index] = defaultValue;
-                        for (int n = index + 1; n < items.Length; n++)
-                        {
-                            items[n] = items[index - 1];
-                        }
-                        indexBase--;
-                    }
+                    items[i] = items[index + 1];
                 }
+                indexBase--;
+                items[indexBase] = defaultValue;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Generics
@@ -6,9 +7,9 @@ namespace Generics
     public class CustomEnumerator<T> : IEnumerator<T>
     {
         int index = -1;
-        IList<T> items;
+        T[] items;
 
-        public CustomEnumerator(IList<T> array)
+        public CustomEnumerator(T[] array)
         {
             items = array;
         }
@@ -17,11 +18,14 @@ namespace Generics
         {
             get
             {
-                if (index == -1)
+                try
+                {
+                    return items[index];
+                }
+                catch (IndexOutOfRangeException)
                 {
                     return items[0];
                 }
-                return items[index];
             }
         }
 
@@ -40,12 +44,7 @@ namespace Generics
         public bool MoveNext()
         {
             index++;
-            if (index > 0)
-            {
-                if (items[index].Equals(default(T)))
-                    return false;
-            }
-            return (index < items.Count);
+            return (index < items.Length);
         }
 
         public void Reset()

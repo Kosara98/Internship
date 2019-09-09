@@ -16,18 +16,18 @@ namespace Generics
             
             IList<int> list = new CustomList<int>();
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 list.Add(i);
             }
-
-            var e = list.GetEnumerator();
+            list.Insert(2, 0);
+            list.Remove(0);
+            list.RemoveAt(3);
 
             Console.WriteLine("-------------------");
-            Console.WriteLine(list[3]);
-            while (e.MoveNext())
+            foreach (var item in list)
             {
-                Console.WriteLine(e.Current);
+                Console.WriteLine(item);
             }
         }
     }

@@ -133,10 +133,9 @@ namespace Generics
                 items[index] = defaultValue;
                 for (int i = index; i < indexBase; i++)
                 {
-                    items[i] = items[index + 1];
+                    items[i] = items[i + 1];
                 }
                 indexBase--;
-                items[indexBase] = defaultValue;
             }
         }
 

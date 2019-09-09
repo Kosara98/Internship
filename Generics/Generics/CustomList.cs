@@ -61,8 +61,12 @@ namespace Generics
 
         public IEnumerator<T> GetEnumerator()
         {
-            CustomEnumerator<T> customEnumerator = new CustomEnumerator<T>(items);
-            return customEnumerator;
+            T[] values = new T[Count];
+            for (int i = 0; i < Count; i++)
+            {
+                values[i] = items[i];
+            }
+            return new CustomEnumerator<T>(values);
             //for (int i = 0; i < Count; i++)
             //    yield return items[i];
         }

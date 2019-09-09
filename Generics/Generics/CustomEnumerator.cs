@@ -7,9 +7,9 @@ namespace Generics
     public class CustomEnumerator<T> : IEnumerator<T>
     {
         int index = -1;
-        T[] items;
+        IList<T> items;
 
-        public CustomEnumerator(T[] array)
+        public CustomEnumerator(IList<T> array)
         {
             items = array;
         }
@@ -44,7 +44,7 @@ namespace Generics
         public bool MoveNext()
         {
             index++;
-            return (index < items.Length);
+            return (index < items.Count);
         }
 
         public void Reset()

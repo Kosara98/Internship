@@ -19,8 +19,8 @@ namespace Generics
         public void Add(T item)
         {
             ChekingLengthAndDoubleIt();
-            items[indexBase] = item;
-            indexBase++;
+            items[Count] = item;
+            Count++;
         }
 
         public void Clear()

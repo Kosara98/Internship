@@ -24,7 +24,7 @@ namespace Generics
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    return items[0];
+                    throw new IndexOutOfRangeException();
                 }
             }
         }

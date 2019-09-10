@@ -10,22 +10,20 @@ namespace Generics
     {
         static void Main(string[] args)
         {
-            IList<int> list = new List<int>();
+            IList<int> list = new CustomList<int>();
 
-            for (int i = 0; i < 70; i++)
+            for (int i = 0; i < 20; i++)
             {
-                list.Add(i);
+                list.Insert(i,i);
             }
-            list.Remove(50);
-            Console.WriteLine(list.Contains(50));
-            Console.WriteLine("-------------");
-            list.Insert(50, 50);
-            Console.WriteLine(list.Contains(50));
+            Console.WriteLine("--");
+            //list.RemoveAt(5);
             Console.WriteLine("-------------------");
-            //foreach (var item in list)
-            //{
-            //    Console.WriteLine(item);
-            //}
+
+            foreach (var item in list)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }

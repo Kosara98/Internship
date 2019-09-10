@@ -8,21 +8,17 @@ namespace Generics
     {
         int indexBase = 0;
         T[] items = new T[16];
-        T defaultValue = default(T);
         T[] itemsNew;
 
         public T this[int index] { get => items[index]; set => items[index] = value;  }
 
-        public int Count => indexBase;
+        public int Count { get => indexBase; private set => indexBase = value; }
 
         public bool IsReadOnly => false;
 
         public void Add(T item)
         {
-            if (indexBase == items.Length)
-            {
-                DoubleLength();
-            }
+            ChekingLengthAndDoubleIt();
             items[indexBase] = item;
             indexBase++;
         }
@@ -30,7 +26,7 @@ namespace Generics
         public void Clear()
         {
             items = new T[16];
-            indexBase = 0;
+            Count = 0;
         }
 
         public bool Contains(T item)
@@ -49,10 +45,7 @@ namespace Generics
             {
                 for (int i = 0; i < array.Length; i++)
                 {
-                    if (i >= items.Length)
-                        break;
-                    else
-                        array[i + arrayIndex] = items[i];
+                    array[i + arrayIndex] = items[i];
                 }
             }
             else
@@ -61,67 +54,52 @@ namespace Generics
 
         public IEnumerator<T> GetEnumerator()
         {
-            T[] values = new T[Count];
-            for (int i = 0; i < Count; i++)
-            {
-                values[i] = items[i];
-            }
-            return new CustomEnumerator<T>(values);
+            return new CustomEnumerator<T>(this);
             //for (int i = 0; i < Count; i++)
             //    yield return items[i];
         }
 
         public int IndexOf(T item)
         {
-            int index = 0;
-            while (!items[index].Equals(item))
+            for (int i = 0; i < items.Length; i++)
             {
-                index++;
+                if (items[i].Equals(item))
+                    return i;
             }
-            return index;
+            return -1;
         }
 
         public void Insert(int index, T item)
         {
-            if (index < 0)
+            if (index < 0 || index > Count)
                 throw new System.ArgumentOutOfRangeException();
-            else if (indexBase >= items.Length - 1)
-            {
-                DoubleLength();
-                items[index] = item;
-            }
             else
             {
-                for (int i = indexBase; i >= index; i--)
+                ChekingLengthAndDoubleIt();
+                for (int i = Count; i > index; i--)
                 {
-                    if (i.Equals(index))
-                    {
-                        items[index] = item;
-                        break;
-                    }
                     items[i] = items[i-1];
                 }
-                indexBase++;
+                items[index] = item;
+                Count++;
             }
         }
 
         public bool Remove(T item)
         {
-            int index = 0;
-            while (!items[index].Equals(item))
+            for (int i = 0; i < items.Length; i++)
             {
-                if (index == (items.Length -1))
-                    return false;
-                index++;
-            };
-
-            items[index] = defaultValue;
-            for (int n = index + 1; n < items.Length; n++)
-            {
-                items[n - 1] = items[n];
+                if (items[i].Equals(item))
+                {
+                    for (int n = i + 1; n < items.Length; n++)
+                    {
+                        items[n - 1] = items[n];
+                    }
+                    Count--;
+                    return true;
+                }
             }
-            indexBase--;
-            return true;
+            return false;
         }
 
         public void RemoveAt(int index)
@@ -130,12 +108,11 @@ namespace Generics
                 throw new System.ArgumentOutOfRangeException();
             else
             {
-                items[index] = defaultValue;
-                for (int i = index; i < indexBase; i++)
+                for (int i = index; i < Count - 1; i++)
                 {
                     items[i] = items[i + 1];
                 }
-                indexBase--;
+                Count--;
             }
         }
 
@@ -144,14 +121,17 @@ namespace Generics
             return GetEnumerator();
         }
 
-        private void DoubleLength()
+        private void ChekingLengthAndDoubleIt()
         {
-            itemsNew = new T[items.Length * 2];
-            for (int i = 0; i < items.Length; i++)
+            if (Count == items.Length)
             {
-                itemsNew[i] = items[i];
+                itemsNew = new T[items.Length * 2];
+                for (int i = 0; i < items.Length; i++)
+                {
+                    itemsNew[i] = items[i];
+                }
+                items = itemsNew;
             }
-            items = itemsNew;
         }
     }
 }

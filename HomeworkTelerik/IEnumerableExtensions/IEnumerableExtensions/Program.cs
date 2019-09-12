@@ -19,8 +19,8 @@ namespace IEnumerableExtensions
             Console.WriteLine("The sum is: " + nums.Sum());
             Console.WriteLine("The avarege is: " + nums.Average());
             Console.WriteLine("The max is: " + nums.Max());
+            Console.WriteLine("The product is: " + nums.Product());
             Console.WriteLine("The min is: " + nums.Min());
-            Console.WriteLine("The product is: " +  nums.Product());
         }
     }
 }

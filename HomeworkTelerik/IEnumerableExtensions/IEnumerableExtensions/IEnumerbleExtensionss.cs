@@ -6,59 +6,60 @@ namespace IEnumerableExtensions
 {
     public static class IEnumerbleExtensionss
     {
-        public static T Sum<T>(this IEnumerable<T> numbers)
+        public static int Sum(this IEnumerable<int> numbers)
         {
-            T result = (dynamic)0;
-            CheckingIfTheListIsEmpty(numbers);
+            int result = 0;
 
             foreach (var item in numbers)
-                result += (dynamic)item;
+                result += item;
 
             return result;
         }
         
-        public static double Product<T>(this IEnumerable<T> numbers)
+        public static double Product(this IEnumerable<int> numbers)
         {
-            CheckingIfTheListIsEmpty(numbers);
-            double result = 1;
+            double result = 0;
 
             foreach (var item in numbers)
-                result *= (dynamic)item;
-
+            {
+                if (result == 0)
+                    result = 1;
+                result *= item;
+            }
             return result;
         }
 
-        public static T Min<T>(this IEnumerable<T> numbers)
+        public static int Min(this IEnumerable<int> numbers)
         {
             CheckingIfTheListIsEmpty(numbers);
-            T result = numbers.First();
+            int result = numbers.First();
 
             foreach (var item in numbers)
-                if (result > (dynamic)item)
+                if (result > item)
                     result = item;
 
             return result;
         }
 
-        public static T Max<T>(this IEnumerable<T> numbers)
+        public static int Max(this IEnumerable<int> numbers)
         {
             CheckingIfTheListIsEmpty(numbers);
-            T result = (dynamic)(-1);
+            int result = numbers.First();
 
             foreach (var item in numbers)
-                if (result < (dynamic)item)
+                if (result < item)
                     result = item;
 
             return result;
         }
 
-        public static double Average<T>(this IEnumerable<T> numbers)
+        public static double Average(this IEnumerable<int> numbers)
         {
             CheckingIfTheListIsEmpty(numbers);
 
-            double result = (dynamic)numbers.Sum();
+            double result = numbers.Sum();
             result = result / numbers.Count();
-            return result;
+            return 0;
         }
 
         private static void CheckingIfTheListIsEmpty<T>(IEnumerable<T> numbers)

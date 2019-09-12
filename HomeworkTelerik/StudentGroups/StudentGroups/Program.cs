@@ -12,18 +12,18 @@ namespace StudentGroups
         {
             List<Student> students = new List<Student>();
 
-            students.Add(new Student("Ivan", "Petrov", 2, "ivan.petrov@abv.bg", "+2/892646",new List<double>{ 6,5,6}, "06060606"));
-            students.Add(new Student("Petq", "Ivanova", 4, "petq.ivanova@gmail.bg", "+52/89652", new List<double> { 6, 4, 4 }, "123456"));
-            students.Add(new Student("Georgi", "Todorov", 2, "georgi.todorov@gamil.com", "+2/598996", new List<double> { 3, 2, 4 }, "025896"));
-            students.Add(new Student("Stefan", "Anestev", 1, "stefan.Anestev@abv.bg", "+2/598786", new List<double> { 5, 2, 5 }, "0213064"));
+            students.Add(new Student("Ivan", "Petrov", new Group(2, "Mathematics"), "ivan.petrov@abv.bg", "+2/892646", new List<double> { 6, 5, 6 }, "06060606"));
+            students.Add(new Student("Petq", "Ivanova", new Group(1, "Biology"), "petq.ivanova@gmail.bg", "+52/89652", new List<double> { 6, 4, 4 }, "123456"));
+            students.Add(new Student("Georgi", "Todorov", new Group(2, "Mathematics"), "georgi.todorov@gamil.com", "+2/598996", new List<double> { 3, 2, 4 }, "025896"));
+            students.Add(new Student("Stefan", "Anestev", new Group(3, "French"), "stefan.Anestev@abv.bg", "+2/598786", new List<double> { 5, 2, 5 }, "0213064"));
 
             //Problem 9 : Student groups
             var resultLinq = from student in students
-                             where student.GroupNumber == 2
+                             where student.GroupNumber.GroupNumber == 2
                              orderby student.FirstName
                              select student;
 
-            var result = students.Where(x => x.GroupNumber == 2).OrderBy(x => x.FirstName);
+            var result = students.Where(x => x.GroupNumber.GroupNumber == 2).OrderBy(x => x.FirstName);
 
             foreach (var i in resultLinq)
                 Console.WriteLine(i.FirstName);
@@ -72,7 +72,7 @@ namespace StudentGroups
                             select new { FullName = $"{student.FirstName} {student.LastName}", Marks = string.Join(",", student.Marks) };
 
             var marks = students.Where(x => x.Marks.Contains(6)).
-                Select(x => new { FullName = $"{x.FirstName} {x.LastName}", Marks = string.Join(",",x.Marks) });
+                Select(x => new { FullName = $"{x.FirstName} {x.LastName}", Marks = string.Join(",", x.Marks) });
 
             foreach (var i in marksLinq)
                 Console.WriteLine(i);
@@ -99,6 +99,46 @@ namespace StudentGroups
 
             foreach (var i in marks06)
                 Console.WriteLine(i);
+
+            //Problem 16 : Groups
+
+            var mathStudentsLinq = from student in students
+                                   where student.GroupNumber.DepartmentName == "Mathematics"
+                                   select student;
+
+            var mathStudents = students.Where(x => x.GroupNumber.DepartmentName == "Mathematics");
+
+            foreach (var i in mathStudentsLinq)
+                Console.WriteLine(i.FirstName);
+
+            Console.WriteLine("--------");
+
+            foreach (var i in mathStudents)
+                Console.WriteLine(i.FirstName);
+
+            //Problem 18 : Grouped by GroupNumber
+            var groupedLinq = from student in students
+                              group student.FirstName by student.GroupNumber.GroupNumber into g
+                              select new { Group = g.Key, Students = g.ToList() };
+      
+            var grouped = students.GroupBy(x => x.GroupNumber.GroupNumber).ToList();
+
+            foreach (var i in groupedLinq)
+                Console.WriteLine($"{i.Group} {string.Join(",", i.Students)}");
+
+            Console.WriteLine("--------");
+
+            foreach (var i in grouped)
+            {
+                Console.WriteLine(i.Key);
+                foreach (var item in i)
+                {
+                    Console.WriteLine(item.FirstName);
+                }
+            }
+
+            //Problem 19: Grouped by GroupName extensions
+            students.GroupedByGroupNumber();
         }
     }
 }

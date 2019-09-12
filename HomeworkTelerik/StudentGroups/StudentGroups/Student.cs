@@ -4,7 +4,7 @@ namespace StudentGroups
 {
     public class Student
     {
-        public Student(string firstName, string lastName, int groupNumber, string email, string phone, List<double> marks, string fn)
+        public Student(string firstName, string lastName, Group groupNumber, string email, string phone, List<double> marks, string fn)
         {
             this.FirstName = firstName;
             this.LastName = lastName;
@@ -21,6 +21,6 @@ namespace StudentGroups
         public string Phone { get; set; }
         public string Email { get; set; }
         public List<double> Marks { get; set; }
-        public int GroupNumber { get; set; }
+        public Group GroupNumber { get; set; }
     }
 }

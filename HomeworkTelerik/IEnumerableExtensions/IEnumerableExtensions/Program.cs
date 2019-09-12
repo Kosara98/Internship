@@ -10,17 +10,17 @@ namespace IEnumerableExtensions
     {
         static void Main(string[] args)
         {
-            List<int> nums = new List<int>();
-            for (int i = 10; i > 2; i--)
+            List<int> numbers = new List<int>();
+            for (int i = 0; i < 10; i++)
             {
-                nums.Add(i);
+                numbers.Add(i);
             }
 
-            Console.WriteLine("The sum is: " + nums.Sum());
-            Console.WriteLine("The avarege is: " + nums.Average());
-            Console.WriteLine("The max is: " + nums.Max());
-            Console.WriteLine("The product is: " + nums.Product());
-            Console.WriteLine("The min is: " + nums.Min());
+           Console.WriteLine("The sum is: " + numbers.Sum());
+           Console.WriteLine("The avarege is: " + numbers.Average());
+           Console.WriteLine("The max is: " + numbers.Max());
+           Console.WriteLine("The product is: " + numbers.Product());
+           Console.WriteLine("The min is: " + numbers.Min());
         }
     }
 }

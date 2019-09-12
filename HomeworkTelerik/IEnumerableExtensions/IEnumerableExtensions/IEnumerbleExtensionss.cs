@@ -6,66 +6,101 @@ namespace IEnumerableExtensions
 {
     public static class IEnumerbleExtensionss
     {
-        public static int Sum(this IEnumerable<int> numbers)
+        public static double Sum(this IEnumerable<double> numbers) 
         {
-            int result = 0;
+            double result = 0;
 
-            foreach (var item in numbers)
-                result += item;
+            if (numbers.IsNumericType())
+            {
+                foreach (var item in numbers)
+                    result += item;
+                return result;
+            }
+            else
+                throw new ArgumentException("It's not numbers");
 
-            return result;
         }
         
         public static double Product(this IEnumerable<int> numbers)
         {
-            double result = 0;
-
-            foreach (var item in numbers)
+            if (numbers.First().IsNumericType())
             {
-                if (result == 0)
-                    result = 1;
-                result *= item;
+                if (numbers.Count() == 0)
+                    return 0;
+
+                double result = 1;
+
+                foreach (var item in numbers)
+                    result *= item;
+
+                return result;
             }
-            return result;
+            else
+                throw new ArgumentException("It's not numbers");
         }
 
-        public static int Min(this IEnumerable<int> numbers)
+        public static T Min<T>(this IEnumerable<T> numbers) where T : IComparable<T>
         {
             CheckingIfTheListIsEmpty(numbers);
-            int result = numbers.First();
+            T result = numbers.First();
 
             foreach (var item in numbers)
-                if (result > item)
+                if (item.CompareTo(result) == -1)
                     result = item;
 
             return result;
         }
 
-        public static int Max(this IEnumerable<int> numbers)
+        public static T Max<T>(this IEnumerable<T> numbers) where T : IComparable<T>
         {
             CheckingIfTheListIsEmpty(numbers);
-            int result = numbers.First();
+            T result = numbers.First();
 
             foreach (var item in numbers)
-                if (result < item)
+                if (item.CompareTo(result) == 1)
                     result = item;
 
             return result;
         }
 
-        public static double Average(this IEnumerable<int> numbers)
+        public static int Average(this IEnumerable<int> numbers)
         {
-            CheckingIfTheListIsEmpty(numbers);
+            if (numbers.First().IsNumericType())
+            {
+                CheckingIfTheListIsEmpty(numbers);
 
-            double result = numbers.Sum();
-            result = result / numbers.Count();
-            return 0;
+                int result = numbers.Sum();
+                result = result / numbers.Count();
+                return result;
+            }
+            else
+                throw new ArgumentException("It's not numbers");
         }
 
         private static void CheckingIfTheListIsEmpty<T>(IEnumerable<T> numbers)
         {
             if (numbers.Count() == 0)
                 throw new ArgumentException("The list/array is empty");
+        }
+        public static bool IsNumericType<T>(this T o)
+        {
+            switch (Type.GetTypeCode(o.GetType()))
+            {
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Single:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

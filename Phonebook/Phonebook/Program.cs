@@ -16,7 +16,7 @@ namespace Phonebook
             while(true)
             {
                 input = Console.ReadLine().Split(' ');
-                if (input[0] == "End" || input[0] == "END")
+                if (input[0].Equals("end",StringComparison.InvariantCultureIgnoreCase))
                     break;
 
                 //string name = input[1];

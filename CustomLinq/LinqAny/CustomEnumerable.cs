@@ -62,8 +62,7 @@ namespace CustomLinq
 
         public static T CustomFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
-            IList<T> list = source as IList<T>;
-            foreach (var item in list)
+            foreach (var item in source)
             {
                 if (predicate(item))
                     return item;
@@ -88,8 +87,7 @@ namespace CustomLinq
 
         public static bool CustomContains<T>(this IEnumerable<T> source, T value)
         {
-            IList<T> list = source as IList<T>;
-            foreach (var item in list)
+            foreach (var item in source)
             {
                 if (item.Equals(value))
                     return true;
@@ -150,5 +148,31 @@ namespace CustomLinq
                     yield return (T)item;
             }
         }
+
+        public static IEnumerable<T> CustomIntersect<T>(this IEnumerable<T> first, IEnumerable<T> second)
+        {
+            foreach (var secondItem in second)
+            {
+                foreach (var firstItem in first)
+                {
+                    if (firstItem.Equals(secondItem))
+                        yield return firstItem;
+                }
+            }
+        }
+
+        public static IEnumerable<T> CustomWhere<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                    yield return item;
+            }
+        }
+
+        //public static IOrderedEnumerable<T> OrderBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
+        //{
+        //    IList<T> list = source as IList<T>;
+        //}
     }
 }

@@ -102,6 +102,18 @@ namespace CustomLinq
 
             foreach (var item in onlyFruits)
                 Console.WriteLine(item);
+
+            //Intersect
+            var numResult = numbers.CustomIntersect(nums);
+
+            foreach (var item in numResult)
+                Console.WriteLine(item);
+
+            //Where
+            var personWithoutPet = people.CustomWhere(x => x.PetName == "");
+
+            foreach (var item in personWithoutPet)
+                Console.WriteLine(item.LastName);
         }
     }
 }

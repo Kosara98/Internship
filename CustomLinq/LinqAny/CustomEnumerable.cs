@@ -9,10 +9,12 @@ namespace CustomLinq
     {
         public static bool CustomAny<T>(this IEnumerable<T> source)
         {
-            IEnumerator<T> enumerator = source.GetEnumerator();
-            if (enumerator.MoveNext())
-                return true;
-            return false;
+            using (IEnumerator<T> enumerator = source.GetEnumerator())
+            {
+                if (enumerator.MoveNext())
+                    return true;
+                return false;
+            }
         }
 
         public static bool CustomAny<T>(this IEnumerable<T> source, Func<T, bool> predicate)
@@ -23,7 +25,7 @@ namespace CustomLinq
                     return true;
             }
             return false;
-        } 
+        }
 
         public static bool CustomAll<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
@@ -38,7 +40,7 @@ namespace CustomLinq
         public static T CustomFirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             IList<T> list = source as IList<T>;
-            if(list.Count > 0)
+            if (list.Count > 0)
             {
                 foreach (var item in list)
                 {
@@ -68,7 +70,7 @@ namespace CustomLinq
             }
             throw new InvalidOperationException();
         }
-        
+
         public static T CustomFirst<T>(this IEnumerable<T> source)
         {
             IList<T> list = source as IList<T>;
@@ -84,7 +86,7 @@ namespace CustomLinq
                 yield return list[i];
         }
 
-        public static bool CustomContains<T> (this IEnumerable<T> source, T value)
+        public static bool CustomContains<T>(this IEnumerable<T> source, T value)
         {
             IList<T> list = source as IList<T>;
             foreach (var item in list)
@@ -95,13 +97,58 @@ namespace CustomLinq
             return false;
         }
 
-        public static IEnumerable<T> CustomConcat<T> (this IEnumerable<T> first, IEnumerable<T> second)
+        public static IEnumerable<T> CustomConcat<T>(this IEnumerable<T> first, IEnumerable<T> second)
         {
             foreach (var item in first)
                 yield return item;
 
             foreach (var item in second)
                 yield return item;
+        }
+
+        public static IEnumerable<T> CustomSkip<T>(this IEnumerable<T> source, int count)
+        {
+            if (count < 0)
+                throw new ArgumentOutOfRangeException();
+
+            using (IEnumerator<T> enumerator = source.GetEnumerator())
+            {
+                while (count > 0 && enumerator.MoveNext())
+                    count--;
+
+                if (count <= 0)
+                {
+                    while (enumerator.MoveNext())
+                        yield return enumerator.Current;
+                }
+            }
+        }
+
+        public static IEnumerable<T> CustomTake<T>(this IEnumerable<T> source, int count)
+        {
+            if (count < 0)
+                throw new ArgumentOutOfRangeException();
+
+            using (IEnumerator<T> enumerator = source.GetEnumerator())
+            {
+                while (enumerator.MoveNext() && count > 0)
+                {
+                    yield return enumerator.Current;
+                    count--;
+                }
+            }
+        }
+
+        public static IEnumerable<T> CustomOfType<T>(this IEnumerable source)
+        {
+            if (source == null)
+                throw new NullReferenceException();
+
+            foreach (var item in source)
+            {
+                if (item is T)
+                    yield return (T)item;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,13 +55,10 @@ namespace CustomLinq
 
             //Reverse
             char[] apple = { 'a', 'p', 'p', 'l', 'e' };
-
             char[] reversed = apple.CustomReverse().ToArray();
+
             foreach (char chr in reversed)
-            {
                 Console.Write(chr);
-            }
-            Console.WriteLine();
 
             //Contains
             var doesItContains = apple.Contains('p');
@@ -68,24 +66,42 @@ namespace CustomLinq
 
             //Concats
             List<int> numbers = new List<int>();
-            for (int i = 0; i < 3; i++)
-            {
+            for (int i = 0; i < 10; i++)
                 numbers.Add(i);
-            }
+
             for (int i = 0; i < 4; i++)
-            {
                 nums.Add(i);
-            }
-            var somthing = numbers.CustomConcat(nums).ToArray();
+
+            var numsAndNumbers = numbers.CustomConcat(nums).ToArray();
 
             Console.WriteLine("--------");
-            foreach(var item  in somthing)
-            {
-                Console.WriteLine(item);
-            }
 
-            //
-            
+            foreach (var item in numsAndNumbers)
+                Console.WriteLine(item);
+
+            //Skip
+            var skipTwoNumbers = numbers.OrderBy(x => x).CustomSkip(2);
+            Console.WriteLine("-----------");
+
+            //foreach (var item in skipTwoNumbers)
+            //    Console.WriteLine(item);
+
+            //Take
+            var takeTwoNumbers = numbers.CustomTake(2);
+
+            foreach (var item in takeTwoNumbers)
+                Console.WriteLine(item);
+
+            //OfType
+            ArrayList fruits = new ArrayList(3);
+            fruits.Add("Orange");
+            fruits.Add("Apple");
+            fruits.Add(3.0);
+
+            var onlyFruits = fruits.CustomOfType<string>();
+
+            foreach (var item in onlyFruits)
+                Console.WriteLine(item);
         }
     }
 }

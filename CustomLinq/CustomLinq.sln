@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinqAny", "LinqAny\LinqAny.csproj", "{ED9AD4B8-FC5D-4D1C-A23C-101202CA1F96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomLinq", "LinqAny\CustomLinq.csproj", "{ED9AD4B8-FC5D-4D1C-A23C-101202CA1F96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿namespace LinqAny
+﻿namespace CustomLinq
 {
     class Person
     {

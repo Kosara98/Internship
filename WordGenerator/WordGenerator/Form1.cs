@@ -23,6 +23,7 @@ namespace WordGenerator
         private void btn_Generate_Click(object sender, EventArgs e)
         {
             rtb_Words.Text = null;
+            btn_Check.Enabled = false;
             string[] words = GenerateWords((int)num_WordLength.Value);
             int randomNumber;
 
@@ -39,6 +40,11 @@ namespace WordGenerator
                 randomNumber = random.Next(0, words.Length);
                 rtb_Words.Text += words[randomNumber] + Environment.NewLine;
             }
+
+            if (num_NumberOfWords.Value == 5)
+                btn_Check.Enabled = true;
+            if (num_NumberOfWords.Value == 20)
+                btn_Compare.Enabled = true;
         }
 
         private string[] GenerateWords(int wordLength)
@@ -54,6 +60,37 @@ namespace WordGenerator
             {
                 string[] content = streamReader.ReadToEnd().Split('\r');
                 return content;
+            }
+        }
+
+        private void btn_Check_Click(object sender, EventArgs e)
+        {
+            string[] words = rtb_Words.Text.Split('\n','\r');
+
+            foreach (var item in words)
+            {
+                if (item.ToLower().Contains('g'))
+                {
+                    rtb_Words.Text = null;
+                    rtb_Words.Text += item + Environment.NewLine;
+                }
+            }
+        }
+
+        private void btn_Compare_Click(object sender, EventArgs e)
+        {
+            string[] words = rtb_Words.Text.Split('\n', '\r');
+            char[] firstWord = words[random.Next(1, 21)].ToCharArray();
+            char[] secondWord = words[random.Next(1, 21)].ToCharArray();
+            rtb_Words.Text = null;
+
+            foreach (var item in firstWord)
+            {
+                for (int i = 0; i < secondWord.Length; i++)
+                {
+                    if (item.Equals(secondWord[i]))
+                        rtb_Words.Text += item + Environment.NewLine;
+                }
             }
         }
     }

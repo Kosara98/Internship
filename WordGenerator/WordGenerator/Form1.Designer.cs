@@ -69,11 +69,6 @@
             // num_NumberOfWords
             // 
             this.num_NumberOfWords.Location = new System.Drawing.Point(136, 29);
-            this.num_NumberOfWords.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
             this.num_NumberOfWords.Name = "num_NumberOfWords";
             this.num_NumberOfWords.Size = new System.Drawing.Size(53, 20);
             this.num_NumberOfWords.TabIndex = 3;

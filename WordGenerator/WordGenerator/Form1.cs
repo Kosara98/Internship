@@ -23,23 +23,35 @@ namespace WordGenerator
         private void btn_Generate_Click(object sender, EventArgs e)
         {
             rtb_Words.Text = null;
-            string[] words = GenerateWords(num_WordLength.Value);
+            string[] words = GenerateWords((int)num_WordLength.Value);
             int randomNumber;
+
+            if (num_NumberOfWords.Value > words.Length)
+            {
+                MessageBox.Show("Don't have so much words");
+                num_NumberOfWords.Value = words.Length;
+            }
 
             for (int i = 0; i < num_NumberOfWords.Value; i++)
             {
-                randomNumber = random.Next(0, 15);
-                rtb_Words.Text += words[randomNumber] + Environment.NewLine;
+                randomNumber = random.Next(0, words.Length);
+                rtb_Words.Text += words[randomNumber];
             }
         }
 
-        private string[] GenerateWords(decimal wordLength)
-        { 
-            string fileName = $@"D:\Programming\Internship\WordGenerator\WordGenerator\Resources\{wordLength}letterWords.txt";
-
-            string[] words = File.ReadAllLines(fileName);
-
+        private string[] GenerateWords(int wordLength)
+        {
+            string fileName = $@"../../Resources/{wordLength}letterWords.txt";
+            string[] words = ReadAllWords(fileName);
             return words;
+        }
+
+        private string[] ReadAllWords(string path)
+        {
+            StreamReader streamReader = new StreamReader(path);
+            string[] content = streamReader.ReadToEnd().Split('\n');
+            streamReader.Close();
+            return content;
         }
     }
 }

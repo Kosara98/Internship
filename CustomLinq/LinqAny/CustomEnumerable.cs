@@ -38,26 +38,20 @@ namespace CustomLinq
         }
 
         public static T CustomFirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
-        {
-            IList<T> list = source as IList<T>;
-            if (list.Count > 0)
+        { 
+            foreach (var item in source)
             {
-                foreach (var item in list)
-                {
-                    if (predicate(item))
-                        return item;
-                }
+                if (predicate(item))
+                    return item;
             }
             return default(T);
         }
 
         public static T CustomFirstOrDefault<T>(this IEnumerable<T> source)
         {
-            IList<T> list = source as IList<T>;
-            if (list.Count == 0)
-                return default(T);
-            else
-                return list[0];
+            foreach (var item in source)
+                return item;
+            return default(T);
         }
 
         public static T CustomFirst<T>(this IEnumerable<T> source, Func<T, bool> predicate)
@@ -72,10 +66,9 @@ namespace CustomLinq
 
         public static T CustomFirst<T>(this IEnumerable<T> source)
         {
-            IList<T> list = source as IList<T>;
-            if (list.Count == 0)
-                throw new InvalidOperationException();
-            return list[0];
+            foreach (var item in source)
+                return item;
+            throw new InvalidOperationException();
         }
 
         public static IEnumerable<T> CustomReverse<T>(this IEnumerable<T> source)
@@ -169,10 +162,5 @@ namespace CustomLinq
                     yield return item;
             }
         }
-
-        //public static IOrderedEnumerable<T> OrderBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector)
-        //{
-        //    IList<T> list = source as IList<T>;
-        //}
     }
 }

@@ -29,13 +29,15 @@ namespace WordGenerator
             if (num_NumberOfWords.Value > words.Length)
             {
                 MessageBox.Show("Don't have so much words");
-                num_NumberOfWords.Value = words.Length;
+                num_NumberOfWords.Value = words.Length - 1;
+                foreach (var item in words)
+                    Console.WriteLine(item);
             }
 
             for (int i = 0; i < num_NumberOfWords.Value; i++)
             {
                 randomNumber = random.Next(0, words.Length);
-                rtb_Words.Text += words[randomNumber];
+                rtb_Words.Text += words[randomNumber] + Environment.NewLine;
             }
         }
 
@@ -50,7 +52,7 @@ namespace WordGenerator
         {
             using (StreamReader streamReader = new StreamReader(path))
             {
-                string[] content = streamReader.ReadToEnd().Split('\n');
+                string[] content = streamReader.ReadToEnd().Split('\r');
                 return content;
             }
         }

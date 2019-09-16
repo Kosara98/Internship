@@ -82,7 +82,7 @@
             0,
             0});
             this.num_WordLength.Minimum = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
@@ -90,14 +90,13 @@
             this.num_WordLength.Size = new System.Drawing.Size(53, 20);
             this.num_WordLength.TabIndex = 4;
             this.num_WordLength.Value = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
             // 
             // rtb_Words
             // 
-            this.rtb_Words.Enabled = false;
             this.rtb_Words.Location = new System.Drawing.Point(240, 12);
             this.rtb_Words.Name = "rtb_Words";
             this.rtb_Words.Size = new System.Drawing.Size(180, 170);

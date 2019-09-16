@@ -48,10 +48,11 @@ namespace WordGenerator
 
         private string[] ReadAllWords(string path)
         {
-            StreamReader streamReader = new StreamReader(path);
-            string[] content = streamReader.ReadToEnd().Split('\n');
-            streamReader.Close();
-            return content;
+            using (StreamReader streamReader = new StreamReader(path))
+            {
+                string[] content = streamReader.ReadToEnd().Split('\n');
+                return content;
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace WordGenerator
     public partial class Form1 : Form
     {
         Random random = new Random();
+        Stopwatch sw = new Stopwatch();
 
         public Form1()
         {
@@ -26,7 +28,7 @@ namespace WordGenerator
             btn_Check.Enabled = false;
             string[] words = GenerateWords((int)num_WordLength.Value);
             int randomNumber;
-
+            
             if (num_NumberOfWords.Value > words.Length)
             {
                 MessageBox.Show("Don't have so much words");
@@ -43,6 +45,7 @@ namespace WordGenerator
 
             if (num_NumberOfWords.Value == 5)
                 btn_Check.Enabled = true;
+
             if (num_NumberOfWords.Value == 20)
                 btn_Compare.Enabled = true;
         }
@@ -84,14 +87,66 @@ namespace WordGenerator
             char[] secondWord = words[random.Next(1, 21)].ToCharArray();
             rtb_Words.Text = null;
 
+            List<char> result = CompareTwoWords(firstWord, secondWord);
+
+            foreach (var item in result)
+                rtb_Words.Text += item + Environment.NewLine;
+        }
+
+        private void btn_MatchingWords_Click(object sender, EventArgs e)
+        {
+            sw.Start();
+            string[] words = rtb_Words.Text.Split('\n', '\r');
+            List<char> matching;
+            List<char> result = new List<char>();
+
+            foreach (var item in words)
+            {
+                char[] firstWord = item.ToCharArray();
+
+                foreach (var i in words)
+                {
+                    char[] secondWord = i.ToCharArray();
+
+                    if (item.Equals(i))
+                        continue;
+                    else
+                    {
+                        matching = CompareTwoWords(firstWord, secondWord);
+                        if (matching.Count > result.Count)
+                        {
+                            result.Clear();
+                            for (int index = 0; index < matching.Count; index++)
+                                result.Add(matching[index]);
+                        }     
+                    }  
+                }
+            }
+            rtb_Words.Text = null;
+
+            foreach (var item in result)
+                rtb_Words.Text += item;
+
+            sw.Stop();
+            lbl_Time.Text = "" + sw.Elapsed;
+        }
+
+        private List<char> CompareTwoWords(char[] firstWord, char[] secondWord)
+        {
+            List<char> result = new List<char>();
+            List<char> index = new List<char>();
+
             foreach (var item in firstWord)
             {
                 for (int i = 0; i < secondWord.Length; i++)
                 {
                     if (item.Equals(secondWord[i]))
-                        rtb_Words.Text += item + Environment.NewLine;
+                    {
+                        result.Add(item);
+                    }
                 }
             }
+            return result;
         }
     }
 }

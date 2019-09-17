@@ -38,6 +38,9 @@
             this.lbl_Check = new System.Windows.Forms.Label();
             this.btn_Compare = new System.Windows.Forms.Button();
             this.lbl_Compare = new System.Windows.Forms.Label();
+            this.btn_MatchingWords = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lbl_Time = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.num_NumberOfWords)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_WordLength)).BeginInit();
             this.SuspendLayout();
@@ -147,11 +150,42 @@
             this.lbl_Compare.TabIndex = 9;
             this.lbl_Compare.Text = "Compare two random words";
             // 
+            // btn_MatchingWords
+            // 
+            this.btn_MatchingWords.Location = new System.Drawing.Point(373, 279);
+            this.btn_MatchingWords.Name = "btn_MatchingWords";
+            this.btn_MatchingWords.Size = new System.Drawing.Size(69, 24);
+            this.btn_MatchingWords.TabIndex = 10;
+            this.btn_MatchingWords.Text = "Check";
+            this.btn_MatchingWords.UseVisualStyleBackColor = true;
+            this.btn_MatchingWords.Click += new System.EventHandler(this.btn_MatchingWords_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(213, 254);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(224, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "The longest matching sequence of characters";
+            // 
+            // lbl_Time
+            // 
+            this.lbl_Time.AutoSize = true;
+            this.lbl_Time.Location = new System.Drawing.Point(213, 285);
+            this.lbl_Time.Name = "lbl_Time";
+            this.lbl_Time.Size = new System.Drawing.Size(30, 13);
+            this.lbl_Time.TabIndex = 12;
+            this.lbl_Time.Text = "Time";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(454, 273);
+            this.ClientSize = new System.Drawing.Size(454, 325);
+            this.Controls.Add(this.lbl_Time);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btn_MatchingWords);
             this.Controls.Add(this.lbl_Compare);
             this.Controls.Add(this.btn_Compare);
             this.Controls.Add(this.lbl_Check);
@@ -183,6 +217,9 @@
         private System.Windows.Forms.Label lbl_Check;
         private System.Windows.Forms.Button btn_Compare;
         private System.Windows.Forms.Label lbl_Compare;
+        private System.Windows.Forms.Button btn_MatchingWords;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbl_Time;
     }
 }
 

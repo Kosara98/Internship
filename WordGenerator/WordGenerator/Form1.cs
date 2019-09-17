@@ -97,8 +97,10 @@ namespace WordGenerator
         {
             sw.Start();
             string[] words = rtb_Words.Text.Split('\n', '\r');
-            List<char> matching;
+            List<char> matching = new List<char>();
             List<char> result = new List<char>();
+            int startIndex = -1;
+            int currentIndex;
 
             foreach (var item in words)
             {
@@ -112,17 +114,39 @@ namespace WordGenerator
                         continue;
                     else
                     {
-                        matching = CompareTwoWords(firstWord, secondWord);
-                        if (matching.Count > result.Count)
+                        for (int firstIndex = 0; firstIndex < firstWord.Length; firstIndex++)
                         {
-                            result.Clear();
-                            for (int index = 0; index < matching.Count; index++)
-                                result.Add(matching[index]);
-                        }     
+                            for (int wordIndex = 0; wordIndex < secondWord.Length; wordIndex++)
+                            {
+                                if (firstWord[firstIndex].Equals(secondWord[wordIndex]))
+                                {
+                                    matching.Add(firstWord[firstIndex]);
+                                    currentIndex = firstIndex;
+                                    for (int fIndex = firstIndex + 1; fIndex < firstWord.Length; fIndex++)
+                                    {
+                                        for (int sIndex = wordIndex + 1; sIndex < secondWord.Length; sIndex++)
+                                        {
+                                            if (firstWord[fIndex].Equals(secondWord[sIndex]))
+                                                matching.Add(firstWord[fIndex]);
+                                            else
+                                                break;
+                                        }
+                                    }
+
+                                    if (matching.Count > result.Count)
+                                    {
+                                        result.Clear();
+                                        result.AddRange(matching);
+                                        startIndex = currentIndex + 1;
+                                    }
+                                    matching.Clear();
+                                }
+                            }
+                        }
                     }  
                 }
             }
-            rtb_Words.Text = null;
+            rtb_Words.Text += "" + startIndex + Environment.NewLine;
 
             foreach (var item in result)
                 rtb_Words.Text += item;
@@ -134,16 +158,13 @@ namespace WordGenerator
         private List<char> CompareTwoWords(char[] firstWord, char[] secondWord)
         {
             List<char> result = new List<char>();
-            List<char> index = new List<char>();
 
             foreach (var item in firstWord)
             {
                 for (int i = 0; i < secondWord.Length; i++)
                 {
                     if (item.Equals(secondWord[i]))
-                    {
                         result.Add(item);
-                    }
                 }
             }
             return result;

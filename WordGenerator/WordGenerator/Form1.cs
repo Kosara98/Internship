@@ -33,6 +33,7 @@ namespace WordGenerator
             {
                 MessageBox.Show("Don't have so much words");
                 num_NumberOfWords.Value = words.Length - 1;
+
                 foreach (var item in words)
                     Console.WriteLine(item);
             }
@@ -122,6 +123,7 @@ namespace WordGenerator
                                 {
                                     matching.Add(firstWord[firstIndex]);
                                     currentIndex = firstIndex;
+
                                     for (int fIndex = firstIndex + 1; fIndex < firstWord.Length; fIndex++)
                                     {
                                         for (int sIndex = wordIndex + 1; sIndex < secondWord.Length; sIndex++)
@@ -131,6 +133,7 @@ namespace WordGenerator
                                             else
                                                 break;
                                         }
+                                        break;
                                     }
 
                                     if (matching.Count > result.Count)

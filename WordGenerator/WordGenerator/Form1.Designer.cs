@@ -41,6 +41,10 @@
             this.btn_MatchingWords = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_Time = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbl_SecondWord = new System.Windows.Forms.Label();
+            this.lbl_FirstWord = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.num_NumberOfWords)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_WordLength)).BeginInit();
             this.SuspendLayout();
@@ -106,6 +110,7 @@
             // 
             this.rtb_Words.Location = new System.Drawing.Point(216, 12);
             this.rtb_Words.Name = "rtb_Words";
+            this.rtb_Words.ReadOnly = true;
             this.rtb_Words.Size = new System.Drawing.Size(226, 170);
             this.rtb_Words.TabIndex = 5;
             this.rtb_Words.Text = "";
@@ -178,11 +183,51 @@
             this.lbl_Time.TabIndex = 12;
             this.lbl_Time.Text = "Time";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(119, 194);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(70, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Second word";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(29, 194);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "First word";
+            // 
+            // lbl_SecondWord
+            // 
+            this.lbl_SecondWord.AutoSize = true;
+            this.lbl_SecondWord.Location = new System.Drawing.Point(119, 218);
+            this.lbl_SecondWord.Name = "lbl_SecondWord";
+            this.lbl_SecondWord.Size = new System.Drawing.Size(19, 13);
+            this.lbl_SecondWord.TabIndex = 15;
+            this.lbl_SecondWord.Text = "    ";
+            // 
+            // lbl_FirstWord
+            // 
+            this.lbl_FirstWord.AutoSize = true;
+            this.lbl_FirstWord.Location = new System.Drawing.Point(29, 218);
+            this.lbl_FirstWord.Name = "lbl_FirstWord";
+            this.lbl_FirstWord.Size = new System.Drawing.Size(19, 13);
+            this.lbl_FirstWord.TabIndex = 16;
+            this.lbl_FirstWord.Text = "    ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 325);
+            this.Controls.Add(this.lbl_FirstWord);
+            this.Controls.Add(this.lbl_SecondWord);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.lbl_Time);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_MatchingWords);
@@ -220,6 +265,10 @@
         private System.Windows.Forms.Button btn_MatchingWords;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lbl_Time;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbl_SecondWord;
+        private System.Windows.Forms.Label lbl_FirstWord;
     }
 }
 

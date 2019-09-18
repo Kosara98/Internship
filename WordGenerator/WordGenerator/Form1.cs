@@ -28,7 +28,9 @@ namespace WordGenerator
             btn_Check.Enabled = false;
             string[] words = GenerateWords((int)num_WordLength.Value);
             int randomNumber;
-            
+            string prevWord = null;
+
+
             if (num_NumberOfWords.Value > words.Length)
             {
                 MessageBox.Show("Don't have so much words");
@@ -36,12 +38,20 @@ namespace WordGenerator
 
                 foreach (var item in words)
                     Console.WriteLine(item);
+                    
             }
 
             for (int i = 0; i < num_NumberOfWords.Value; i++)
             {
                 randomNumber = random.Next(0, words.Length);
+
+                if (words[randomNumber].Equals(prevWord))
+                    continue;
+                if (words[randomNumber] == null)
+                    continue;
+
                 rtb_Words.Text += words[randomNumber] + Environment.NewLine;
+                prevWord = words[randomNumber];
             }
 
             if (num_NumberOfWords.Value == 5)
@@ -70,25 +80,32 @@ namespace WordGenerator
         private void btn_Check_Click(object sender, EventArgs e)
         {
             string[] words = rtb_Words.Text.Split('\n','\r');
+            rtb_Words.Text = null;
 
             foreach (var item in words)
             {
                 if (item.ToLower().Contains('g'))
-                {
-                    rtb_Words.Text = null;
                     rtb_Words.Text += item + Environment.NewLine;
-                }
             }
+
+            if(rtb_Words.Text == "")
+                rtb_Words.Text = "There is no words that contain 'g'";
         }
 
         private void btn_Compare_Click(object sender, EventArgs e)
         {
             string[] words = rtb_Words.Text.Split('\n', '\r');
-            char[] firstWord = words[random.Next(1, 21)].ToCharArray();
-            char[] secondWord = words[random.Next(1, 21)].ToCharArray();
+            string firstWord = words[random.Next(1, 19)];
+            string secondWord = words[random.Next(1, 19)];
             rtb_Words.Text = null;
+            lbl_FirstWord.Text = firstWord;
+            lbl_SecondWord.Text = secondWord;
 
             List<char> result = CompareTwoWords(firstWord, secondWord);
+
+            if (result.Count == 0)
+                rtb_Words.Text = "There is no characters that appear in both words.";
+            
 
             foreach (var item in result)
                 rtb_Words.Text += item + Environment.NewLine;
@@ -102,16 +119,14 @@ namespace WordGenerator
             List<char> result = new List<char>();
             int startIndex = -1;
             int currentIndex;
+            string fWord = null;
+            string sWord = null;
 
-            foreach (var item in words)
+            foreach (var firstWord in words)
             {
-                char[] firstWord = item.ToCharArray();
-
-                foreach (var i in words)
+                foreach (var secondWord in words)
                 {
-                    char[] secondWord = i.ToCharArray();
-
-                    if (item.Equals(i))
+                    if (firstWord.Equals(secondWord))
                         continue;
                     else
                     {
@@ -123,24 +138,30 @@ namespace WordGenerator
                                 {
                                     matching.Add(firstWord[firstIndex]);
                                     currentIndex = firstIndex;
+                                    int fIndex = firstIndex + 1;
 
-                                    for (int fIndex = firstIndex + 1; fIndex < firstWord.Length; fIndex++)
+                                    if (fIndex < firstWord.Length)
                                     {
                                         for (int sIndex = wordIndex + 1; sIndex < secondWord.Length; sIndex++)
                                         {
                                             if (firstWord[fIndex].Equals(secondWord[sIndex]))
+                                            {
                                                 matching.Add(firstWord[fIndex]);
+                                                if (fIndex < firstWord.Length - 1)
+                                                    fIndex++;
+                                            }
                                             else
                                                 break;
                                         }
-                                        break;
                                     }
-
+                                    
                                     if (matching.Count > result.Count)
                                     {
                                         result.Clear();
                                         result.AddRange(matching);
                                         startIndex = currentIndex + 1;
+                                        fWord = firstWord;
+                                        sWord = secondWord;
                                     }
                                     matching.Clear();
                                 }
@@ -155,10 +176,13 @@ namespace WordGenerator
                 rtb_Words.Text += item;
 
             sw.Stop();
+
             lbl_Time.Text = "" + sw.Elapsed;
+            lbl_FirstWord.Text = fWord;
+            lbl_SecondWord.Text = sWord;
         }
 
-        private List<char> CompareTwoWords(char[] firstWord, char[] secondWord)
+        private List<char> CompareTwoWords(string firstWord, string secondWord)
         {
             List<char> result = new List<char>();
 

@@ -26,6 +26,8 @@ namespace WordGenerator
         {
             rtb_Words.Text = null;
             btn_Check.Enabled = false;
+            lbl_FirstWord.Text = null;
+            lbl_SecondWord.Text = null;
             string[] words = GenerateWords((int)num_WordLength.Value);
             int randomNumber;
             string prevWord = null;
@@ -101,7 +103,10 @@ namespace WordGenerator
             lbl_FirstWord.Text = firstWord;
             lbl_SecondWord.Text = secondWord;
 
-            List<char> result = CompareTwoWords(firstWord, secondWord);
+            if (firstWord.Equals(secondWord))
+                secondWord = words[random.Next(1, 19)];
+
+            HashSet<char> result = CompareTwoWords(firstWord, secondWord);
 
             if (result.Count == 0)
                 rtb_Words.Text = "There is no characters that appear in both words.";
@@ -147,8 +152,11 @@ namespace WordGenerator
                                             if (firstWord[fIndex].Equals(secondWord[sIndex]))
                                             {
                                                 matching.Add(firstWord[fIndex]);
-                                                if (fIndex < firstWord.Length - 1)
-                                                    fIndex++;
+
+                                                if (fIndex == firstWord.Length - 1)
+                                                    break;
+
+                                                fIndex++;
                                             }
                                             else
                                                 break;
@@ -170,7 +178,7 @@ namespace WordGenerator
                     }  
                 }
             }
-            rtb_Words.Text += "" + startIndex + Environment.NewLine;
+            rtb_Words.Text = "" + startIndex + Environment.NewLine;
 
             foreach (var item in result)
                 rtb_Words.Text += item;
@@ -182,9 +190,9 @@ namespace WordGenerator
             lbl_SecondWord.Text = sWord;
         }
 
-        private List<char> CompareTwoWords(string firstWord, string secondWord)
+        private HashSet<char> CompareTwoWords(string firstWord, string secondWord)
         {
-            List<char> result = new List<char>();
+            HashSet<char> result = new HashSet<char>();
 
             foreach (var item in firstWord)
             {

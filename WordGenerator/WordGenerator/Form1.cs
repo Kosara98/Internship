@@ -47,9 +47,7 @@ namespace WordGenerator
             {
                 randomNumber = random.Next(0, words.Length);
 
-                if (words[randomNumber].Equals(prevWord))
-                    continue;
-                if (words[randomNumber] == null)
+                if (words[randomNumber].Equals(prevWord) || words[randomNumber] == null)
                     continue;
 
                 rtb_Words.Text += words[randomNumber] + Environment.NewLine;
@@ -196,9 +194,9 @@ namespace WordGenerator
 
             foreach (var item in firstWord)
             {
-                for (int i = 0; i < secondWord.Length; i++)
+                foreach(var secondItem in secondWord)
                 {
-                    if (item.Equals(secondWord[i]))
+                    if (item.Equals(secondItem))
                         result.Add(item);
                 }
             }

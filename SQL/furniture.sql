@@ -1,53 +1,53 @@
 create database Furniture
 
 create table Products (
-	Id int identity(1,1) primary key,
-	Name nvarchar(35),
+	Id int identity(1,1) not null primary key,
+	Name nvarchar(35) not null,
 	Description nvarchar(150),
-	Weight decimal(5,2),
-	Barcode varchar(13),
-	Price decimal(10,2)
+	Weight decimal(5,2) not null,
+	Barcode varchar(13) not null,
+	Price decimal(10,2) not null
 )
 
 create table Clients(
-	Id int identity(1,1) primary key,
-	Name nvarchar(30),
-	Address nvarchar(100),
-	Bulstat varchar(9),
-	RegisteredVat bit,
-	Mol nvarchar(35)
+	Id int identity(1,1) not null primary key,
+	Name nvarchar(30) not null,
+	Address nvarchar(100) not null,
+	Bulstat varchar(9) not null,
+	RegisteredVat bit not null,
+	Mol nvarchar(35) not null
 )
 
 create table Sales(
-	Id int identity(1,1) primary key,
-	SaleDate date,
+	Id int identity(1,1) not null primary key,
+	SaleDate date not null,
 	ProductId int not null references Products(Id),
-	Quantity int,
+	Quantity int not null,
 	ClientId int not null references Clients(Id),
-	Invoice varchar(10),
-	Price decimal(18,2)
+	Invoice varchar(10) not null,
+	Price decimal(18,2) not null
 )
 
-insert into Products(Name, Price)
-values('Bed', 100.5)
+insert into Products
+values('Bed', null, 40, 1234567891234, 100.5)
 
-insert into Products(Name, Price)
-values('Chair', 10)
+insert into Products
+values('Chair', null, 7, 1555557891234, 10)
 
-insert into Products(Name, Price)
-values('Sofa', 78)
+insert into Products
+values('Sofa', null, 30, 4545457891234, 78)
 
-insert into Products(Name, Price)
-values('Table', 50)
+insert into Products
+values('Table', null, 15, 1457897891234, 50)
 
-insert into Clients(Name, Bulstat, Mol)
-values('Ivan OOD', 123456789,'Ivan Ivanov')
+insert into Clients
+values('Ivan OOD','bul. "Tsar Boris III Obedinitel" 128', 123456789, 1,'Ivan Ivanov')
 
-insert into Clients(Name, Bulstat, Mol)
-values('Petar OOD', 987654321,'Petar Dimov')
+insert into Clients
+values('Petar OOD','bul. "Tsar Boris III Obedinitel" 12', 987654321, 0,'Petar Dimov')
 
-insert into Clients(Name, Bulstat, Mol)
-values('BRR OOD', 112233789,'Denislav Todorov')
+insert into Clients
+values('BRR OOD','bul. "Tsar Boris III Obedinitel" 31', 112233789, 1,'Denislav Todorov')
 
 insert into Sales
 values (convert(datetime, '18-09-2019',105), 2, 3, 1, 12345412, 27)

@@ -61,8 +61,6 @@ values (convert(datetime, '15-05-2019',105), 4, 3, 2, 25254412, 200)
 insert into Sales
 values (convert(datetime, '01-07-2019',105), 3, 1, 3, 65658412, 78)
 
-select * from Sales
-
 /* search product by part of the name*/
 
 select * from Products

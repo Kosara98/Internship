@@ -1,96 +1,92 @@
-CREATE TABLE PRODUCTS (
-	PRODUCT_ID INT NOT NULL UNIQUE,
-	NAME VARCHAR(20) NOT NULL,
-	DESCRIPTION VARCHAR(100),
-	WEIGHT NUMERIC(5,2),
-	BARCODE VARCHAR(10),
-	PRICE NUMERIC(10,2),
-	CONSTRAINT PK_PRODUCT_ID PRIMARY KEY(PRODUCT_ID)
+create database furniture
+
+create table product (
+	id int identity(1,1) primary key,
+	name nvarchar(35),
+	description nvarchar(150),
+	weight decimal(5,2),
+	barcode numeric(13),
+	price decimal(10,2)
 )
 
-CREATE TABLE CLIENTS(
-	CLIENT_ID INT NOT NULL UNIQUE,
-	NAME VARCHAR(20) NOT NULL,
-	ADDRESS VARCHAR(30),
-	BULSTAT INT,
-	REGISTERED_DDS VARCHAR(1),
-	MOL VARCHAR(20),
-	CONSTRAINT PK_CLIENT_ID PRIMARY KEY(CLIENT_ID)
+create table client(
+	id int identity(1,1) primary key,
+	name nvarchar(30),
+	address nvarchar(100),
+	bulstat numeric(9),
+	registered_vat tinyint,
+	mol nvarchar(35)
 )
 
-CREATE TABLE SALES(
-	SALE_ID INT NOT NULL UNIQUE,
-	SALE_DATE DATE,
-	PRODUCT_ID INT, 
-	QUANTITY INT,
-	CLIENT_ID INT,
-	BILL INT,
-	PRICE NUMERIC(20,2),
-	CONSTRAINT PK_SALES_ID PRIMARY KEY(SALE_ID),
-	CONSTRAINT FK_PRODUCT_ID FOREIGN KEY (PRODUCT_ID) REFERENCES PRODUCTS(PRODUCT_ID),
-	CONSTRAINT FK_CLENT_ID FOREIGN KEY (CLIENT_ID) REFERENCES CLIENTS(CLIENT_ID)
+create table sale(
+	id int identity(1,1) primary key,
+	sale_date date,
+	product_id int not null references product(id),
+	quantity int,
+	client_id int not null references client(id),
+	invoice int,
+	price decimal(13,2)
 )
 
-INSERT INTO PRODUCTS (PRODUCT_ID, NAME, PRICE)
-VALUES (1,'Bed',100.5)
+insert into product(name, price)
+values('Bed', 100.5)
 
-INSERT INTO PRODUCTS (PRODUCT_ID, NAME, PRICE)
-VALUES (2,'Chair',9)
+insert into product(name, price)
+values('Chair', 10)
 
-INSERT INTO PRODUCTS (PRODUCT_ID, NAME, PRICE)
-VALUES (3,'Sofa',78)
+insert into product(name, price)
+values('Sofa', 78)
 
-INSERT INTO PRODUCTS (PRODUCT_ID, NAME, PRICE)
-VALUES (4,'Table', 50)
+insert into product(name, price)
+values('Table', 50)
 
+insert into client(name, bulstat, mol)
+values('Ivan OOD', 123456789,'Ivan Ivanov')
 
-INSERT INTO CLIENTS(CLIENT_ID, NAME, BULSTAT, MOL)
-VALUES (1,'Ivan OOD', 1234556694, 'Ivan Ivanov')
+insert into client(name, bulstat, mol)
+values('Petar OOD', 987654321,'Petar Dimov')
 
-INSERT INTO CLIENTS(CLIENT_ID, NAME, BULSTAT, MOL)
-VALUES (2,'Petar OOD', 94328435, 'Petar Dimov')
+insert into client(name, bulstat, mol)
+values('BRR OOD', 112233789,'Denislav Todorov')
 
-INSERT INTO CLIENTS(CLIENT_ID, NAME, BULSTAT, MOL)
-VALUES (3,'BST OOD', 32131442, 'Denislav Todorov')
+insert into sale
+values (convert(datetime, '18-09-2019',105), 2, 3, 1, 12345412, 27)
 
-INSERT INTO SALES 
-VALUES (1, CONVERT(datetime, '18-9-2019', 105), 2, 3, 1, 129432523, 27)
+insert into sale
+values (convert(datetime, '20-08-2019',105), 1, 2, 1, 48545412, 201)
 
-INSERT INTO SALES 
-VALUES (2, CONVERT(datetime, '20-8-2019', 105), 1, 2, 1, 43278324, 201)
+insert into sale
+values (convert(datetime, '15-05-2019',105), 4, 3, 2, 25254412, 200)
 
-INSERT INTO SALES 
-VALUES (3, CONVERT(datetime, '15-5-2019', 105), 4, 3, 2, 21214425, 200)
+insert into sale
+values (convert(datetime, '01-07-2019',105), 3, 1, 3, 65658412, 78)
 
-INSERT INTO SALES 
-VALUES (4, CONVERT(datetime, '1-07-2019', 105), 3, 1, 3, 754399234, 78)
-
-SELECT * FROM SALES
+select * from sale
 
 /* search product by part of the name*/
 
-SELECT * FROM PRODUCTS
-WHERE NAME LIKE '%ed'
+select * from product
+where name like '%ed'
 
 /* search product and their price and buyer by bill*/
 
-SELECT PR.NAME, PR.PRICE, CS.NAME
-FROM PRODUCTS PR JOIN (SELECT C.NAME,S.PRODUCT_ID, S.BILL
-						FROM CLIENTS C JOIN SALES S
-						ON C.CLIENT_ID = S.CLIENT_ID) AS CS
-ON PR.PRODUCT_ID = CS.PRODUCT_ID
-WHERE CS.BILL = 129432523
+select pr.name as product_name, pr.price, cs.name as client_name
+from product pr join (select c.name, s.product_id, s.invoice
+						from client c join sale s
+						on c.id = s.client_id) as cs
+on pr.id = cs.product_id
+where cs.invoice = 12345412
 
 /* name of the company that bought something for the last month*/
 
-SELECT C.NAME
-FROM CLIENTS C JOIN SALES S
-ON C.CLIENT_ID = S.CLIENT_ID
-WHERE S.SALE_DATE > '2019-08-18'
+select c.name as company_name
+from client c join sale s
+on c.id = s.client_id
+where s.sale_date > '2019-08-18'
 
 /* quantity of every product that is bought for the last one month*/
 
-SELECT PR.NAME, S.QUANTITY
-FROM PRODUCTS PR JOIN SALES S
-ON PR.PRODUCT_ID = S.PRODUCT_ID
-WHERE S.SALE_DATE > '2019-08-18'
+select pr.name as product_name, s.quantity 
+from product pr join sale s
+on pr.id = s.product_id
+where s.sale_date > '2019-08-18'

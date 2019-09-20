@@ -16,7 +16,130 @@ namespace CorrectSymbols
             Console.WriteLine("Write the sequence you want to check");
             string source = Console.ReadLine();
 
-            Console.WriteLine(CheckForSymbols(template, source));
+           // Console.WriteLine(CheckForSymbols(template, source));
+            Console.WriteLine(CheckTwo(template,source));
+        }
+
+        public static bool CheckTwo(string template, string source)
+        {
+            int inputIndex = 0;
+            int templateIndex = 0;
+            int countSymbols = 0;
+            string nextPartTemplate = null;
+            string nextPartSource = null;
+
+            do
+            {
+                if (source.Length > 1)
+                {
+                    while (source[inputIndex].Equals(template[inputIndex]))
+                    {
+                        inputIndex++;
+
+                        if (inputIndex == template.Length - 1)
+                            return true;
+                    }
+
+                    if (template[inputIndex] == '*' || template[inputIndex] == '?')
+                    {
+                        for (int i = inputIndex; i < template.Length; i++)
+                        {
+                            if (template[i].Equals('*'))
+                            {
+                                templateIndex++;
+
+                                if (template[i + 1].Equals('?'))
+                                    templateIndex++;
+
+                                if (i + 1 < template.Length)
+                                {
+                                    if (!template[i + 1].Equals('*'))
+                                        break;
+                                }
+                            }
+
+                            if (template[i].Equals('?'))
+                            {
+                                countSymbols++;
+
+                                if (template[i + 1].Equals('*'))
+                                    inputIndex++;
+
+                                if (i + 1 < template.Length)
+                                {
+                                    if (!template[i + 1].Equals('?'))
+                                        break;
+                                }
+                            }
+                        }
+                        if (template[inputIndex] == '*')
+                        {
+                            templateIndex += inputIndex;
+
+                            while (!source[inputIndex].Equals(template[templateIndex]))
+                            {
+                                inputIndex++;
+
+                                if (templateIndex == template.Length - 1)
+                                    return true;
+                                if (inputIndex == source.Length && templateIndex < template.Length - 1)
+                                    return false;
+                            }
+
+                            for (int i = templateIndex; i < template.Length; i++)
+                                nextPartTemplate += template[i];
+
+                            if (!nextPartTemplate.Contains("?") && !nextPartTemplate.Contains("*"))
+                                return true;
+
+                            templateIndex = inputIndex;
+
+                        }
+                        else if (template[inputIndex] == '?')
+                        {
+                            templateIndex += inputIndex + countSymbols;
+
+                            if (templateIndex < template.Length && templateIndex < source.Length)
+                            {   
+                                while (source[templateIndex].Equals(template[templateIndex]))
+                                {
+                                    templateIndex++;
+                                    if (templateIndex == template.Length && templateIndex == source.Length)
+                                        return true;
+
+                                    if (template[templateIndex].Equals('?') || template[templateIndex].Equals('*'))
+                                    {
+                                        for (int i = templateIndex; i < template.Length; i++)
+                                            nextPartTemplate += template[i];
+
+                                        break;
+                                    }
+
+                                }
+                            }
+                            if (nextPartTemplate == null)
+                                return false;
+                        }
+
+                        for (int i = templateIndex; i < source.Length; i++)
+                            nextPartSource += source[i];
+
+                        inputIndex = 0;
+                        templateIndex = 0;
+                        template = nextPartTemplate;
+                        source = nextPartSource;
+                        nextPartTemplate = null;
+                        nextPartSource = null;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    return false;
+
+            } while (template.Length > 0);
+
+            return true;
         }
 
         public static bool CheckForSymbols(string template, string source)
@@ -33,6 +156,7 @@ namespace CorrectSymbols
                     return true;
             }
             
+            // '*'
             AnotherCase:
             if (template[index] == '*')
             {
@@ -63,6 +187,8 @@ namespace CorrectSymbols
                 if (source[index].Equals(template[templateIndex]))
                     return true;
             }
+
+            // '??'
             if (template.Contains("?"))
             {
                 if (template[index + 1] == '*')

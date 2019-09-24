@@ -30,7 +30,7 @@ namespace CorrectSymbols
 
             do
             {
-                if (source.Length > 1)
+                if (source.Length > 0)
                 {
                     while (source[inputIndex].Equals(template[inputIndex]))
                     {
@@ -53,8 +53,15 @@ namespace CorrectSymbols
                                 {
                                     if (template[i + 1].Equals('?') || template[i + 1].Equals('*'))
                                     {
-                                        countSymbols++;
-                                        templateIndex++;
+                                        do
+                                        {
+                                            countSymbols++;
+                                            templateIndex++;
+                                            i++;
+
+                                            if (i + 1 == template.Length)
+                                                break;
+                                        } while ( template[i].Equals('?') || template[i].Equals('*'));
                                     }
                                 }
                                 
@@ -72,11 +79,7 @@ namespace CorrectSymbols
                                 if (i + 1 < template.Length - 1)
                                 {
                                     if (template[i + 1].Equals('*'))
-                                    {
-                                        inputIndex += countSymbols;
-                                        countSymbols = 0;
-                                    }
-                                        
+                                        inputIndex += countSymbols;                                        
                                 }
 
                                 if (i + 1 < template.Length)
@@ -91,16 +94,21 @@ namespace CorrectSymbols
 
                         if (template[inputIndex] == '*')
                         {
-                            templateIndex++;
+                            if (templateIndex >= template.Length - 1 )
+                                return true;
+
+                            if (countSymbols > 0)
+                                inputIndex += countSymbols;
 
                             do
                             {
                                 inputIndex++;
-                                if (templateIndex == template.Length - 1 && inputIndex == source.Length)
-                                    return true;
-                                if (inputIndex == source.Length - 1 && templateIndex < template.Length - 1)
-                                    return false;
 
+                                if (inputIndex == source.Length && templateIndex == template.Length - 1 )
+                                    return true;
+                                if (inputIndex >= source.Length && templateIndex < template.Length - 1 )
+                                    return false;
+                                
                             } while (!source[inputIndex].Equals(template[templateIndex]));
 
                             for (int i = templateIndex; i < template.Length; i++)
@@ -110,7 +118,6 @@ namespace CorrectSymbols
                                 return true;
 
                             templateIndex = inputIndex;
-
                         }
                         else if (template[inputIndex] == '?')
                         {

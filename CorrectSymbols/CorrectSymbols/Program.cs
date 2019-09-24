@@ -36,8 +36,10 @@ namespace CorrectSymbols
                     {
                         inputIndex++;
 
-                        if (inputIndex == template.Length - 1)
+                        if (inputIndex == template.Length - 1 && inputIndex == source.Length - 1)
                             return true;
+                        if (inputIndex == source.Length - 1 && inputIndex == template.Length)
+                            return false;
                     }
 
                     if (template[inputIndex] == '*' || template[inputIndex] == '?')
@@ -47,10 +49,15 @@ namespace CorrectSymbols
                             if (template[i].Equals('*'))
                             {
                                 templateIndex++;
-
-                                if (template[i + 1].Equals('?'))
-                                    templateIndex++;
-
+                                if (i + 1 < template.Length - 1)
+                                {
+                                    if (template[i + 1].Equals('?') || template[i + 1].Equals('*'))
+                                    {
+                                        countSymbols++;
+                                        templateIndex++;
+                                    }
+                                }
+                                
                                 if (i + 1 < template.Length)
                                 {
                                     if (!template[i + 1].Equals('*'))
@@ -62,8 +69,15 @@ namespace CorrectSymbols
                             {
                                 countSymbols++;
 
-                                if (template[i + 1].Equals('*'))
-                                    inputIndex++;
+                                if (i + 1 < template.Length - 1)
+                                {
+                                    if (template[i + 1].Equals('*'))
+                                    {
+                                        inputIndex += countSymbols;
+                                        countSymbols = 0;
+                                    }
+                                        
+                                }
 
                                 if (i + 1 < template.Length)
                                 {
@@ -72,19 +86,22 @@ namespace CorrectSymbols
                                 }
                             }
                         }
+
+                        templateIndex = inputIndex + countSymbols;
+
                         if (template[inputIndex] == '*')
                         {
-                            templateIndex += inputIndex;
+                            templateIndex++;
 
-                            while (!source[inputIndex].Equals(template[templateIndex]))
+                            do
                             {
                                 inputIndex++;
-
-                                if (templateIndex == template.Length - 1)
+                                if (templateIndex == template.Length - 1 && inputIndex == source.Length)
                                     return true;
-                                if (inputIndex == source.Length && templateIndex < template.Length - 1)
+                                if (inputIndex == source.Length - 1 && templateIndex < template.Length - 1)
                                     return false;
-                            }
+
+                            } while (!source[inputIndex].Equals(template[templateIndex]));
 
                             for (int i = templateIndex; i < template.Length; i++)
                                 nextPartTemplate += template[i];
@@ -97,8 +114,6 @@ namespace CorrectSymbols
                         }
                         else if (template[inputIndex] == '?')
                         {
-                            templateIndex += inputIndex + countSymbols;
-
                             if (templateIndex < template.Length && templateIndex < source.Length)
                             {   
                                 while (source[templateIndex].Equals(template[templateIndex]))
@@ -114,7 +129,6 @@ namespace CorrectSymbols
 
                                         break;
                                     }
-
                                 }
                             }
                             if (nextPartTemplate == null)
@@ -126,6 +140,7 @@ namespace CorrectSymbols
 
                         inputIndex = 0;
                         templateIndex = 0;
+                        countSymbols = 0;
                         template = nextPartTemplate;
                         source = nextPartSource;
                         nextPartTemplate = null;
@@ -156,7 +171,6 @@ namespace CorrectSymbols
                     return true;
             }
             
-            // '*'
             AnotherCase:
             if (template[index] == '*')
             {
@@ -188,7 +202,6 @@ namespace CorrectSymbols
                     return true;
             }
 
-            // '??'
             if (template.Contains("?"))
             {
                 if (template[index + 1] == '*')
@@ -197,7 +210,6 @@ namespace CorrectSymbols
                     goto AnotherCase;
                 }
                 
-
                 if (template[index] == '?')
                 {
                     for (int i = index; i < template.Length; i++)

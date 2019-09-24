@@ -100,6 +100,8 @@ namespace CorrectSymbols
                             if (countSymbols > 0)
                                 inputIndex += countSymbols;
 
+                            templateIndex++;
+
                             do
                             {
                                 inputIndex++;
@@ -121,6 +123,9 @@ namespace CorrectSymbols
                         }
                         else if (template[inputIndex] == '?')
                         {
+                            if (templateIndex == template.Length && templateIndex == source.Length)
+                                return true;
+
                             if (templateIndex < template.Length && templateIndex < source.Length)
                             {   
                                 while (source[templateIndex].Equals(template[templateIndex]))

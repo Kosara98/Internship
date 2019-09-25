@@ -13,7 +13,7 @@ create table Clients(
 	Id int identity(1,1) not null primary key,
 	Name nvarchar(30) not null,
 	Address nvarchar(100) not null,
-	Bulstat varchar(9) not null,
+	Bulstat varchar(9) not null unique,
 	RegisteredVat bit not null,
 	Mol nvarchar(35) not null
 )
@@ -23,7 +23,7 @@ create table Sales(
 	SaleDate date not null,
 	Quantity int not null,
 	ClientId int not null references Clients(Id),
-	Invoice varchar(10) not null,
+	Invoice varchar(10) not null unique,
 	Price decimal(18,2) not null
 )
 
@@ -87,16 +87,12 @@ select * from Products
 where Name like '%ed'
 
 /* search product and their price and buyer by bill*/
-
-select b.Name, b.Price, c.Name
-from Clients c join (select a.Name, a.Price, s.ClientId, s.Invoice
-					from Sales s join (select pr.Name,pr.Id, pr.Price, ps.SaleId
-										from Products pr join ProductSales ps
-										on pr.Id = ps.ProductId) as a
-					on s.Id = a.SaleId) as b
-on c.Id = b.ClientId
-where b.Invoice = 48545412
-			
+		
+select pr.Name, pr.Price, c.Name
+from ProductSales ps  join Sales s on s.Id = ps.SaleId
+					  join Products pr on pr.Id = ps.ProductId
+					  join Clients c on c.Id = s.ClientId
+where s.Invoice = 48545412
 /* name of the company that bought something for the last month*/
 
 select c.Name as CompanyName
@@ -106,9 +102,7 @@ where s.SaleDate > '2019-08-18'
 
 /* quantity of every product that is bought for the last one month*/
 
-select s.Quantity, a.Name
-from Sales s join (select pr.Name, ps.SaleId
-					from Products pr join ProductSales ps
-					on pr.Id = ps.ProductId) as a
-on s.Id = a.SaleId
+select s.Quantity, pr.Name
+from ProductSales ps join Sales s on s.Id = ps.SaleId
+					join Products pr on pr.Id = ps.ProductId
 where s.SaleDate > '2019-08-18'

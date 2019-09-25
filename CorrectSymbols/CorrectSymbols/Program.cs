@@ -29,7 +29,7 @@ namespace CorrectSymbols
 
             do
             {
-                if (source.Length > 0)
+                if (source.Length > 0 && template.Length > 0)
                 {
                     while (source[inputIndex].Equals(template[inputIndex]))
                     {
@@ -64,6 +64,8 @@ namespace CorrectSymbols
                                             }
 
                                         } while ( template[i].Equals('?') || template[i].Equals('*'));
+
+                                        templateIndex--;
                                     }
                                 }
                                 
@@ -82,6 +84,17 @@ namespace CorrectSymbols
                                 {
                                     if (template[i + 1].Equals('*'))
                                     {
+                                        do
+                                        {
+                                            templateIndex++;
+                                            i++;
+
+                                            if (i + 1 == template.Length)
+                                                break;
+
+                                        } while (template[i].Equals('?') || template[i].Equals('*'));
+
+                                        templateIndex--;
                                         inputIndex += countSymbols;
                                         countSymbols = 0;
                                     }
@@ -102,7 +115,7 @@ namespace CorrectSymbols
                         {
                             if (templateIndex >= template.Length)
                                 return true;
-
+                            
                             if (countSymbols > 0)
                                 inputIndex += countSymbols;
 
@@ -112,13 +125,8 @@ namespace CorrectSymbols
 
                                 if (inputIndex == source.Length && templateIndex == template.Length - 1  )
                                     return true;
-                                if (inputIndex >= source.Length && templateIndex <= template.Length - 1 || source.Length < template.Length)
-                                {
-                                    if (template[template.Length- 1].Equals(source[source.Length - 1]))
-                                        return true;
-
+                                if (inputIndex >= source.Length && templateIndex <= template.Length - 1 )
                                     return false;
-                                }
                             } while (!source[inputIndex].Equals(template[templateIndex]));
 
                             for (int i = templateIndex; i < template.Length; i++)

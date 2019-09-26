@@ -123,19 +123,10 @@ where s.SaleDate > dateadd(month, -1, getdate())
 
 /* quantity of every product that is bought for the last one month*/
 
-select  sum(ps.Quantity), pr.Name
+select isnull(sum(ps.Quantity),0), pr.Name
 from Products pr
 left join ProductSales ps  on pr.Id = ps.ProductId
 left join Sales s on (s.Id = ps.SaleId)
 and s.SaleDate > dateadd(month, -1, getdate())
---where s.SaleDate > dateadd(month, -1, getdate()) 
 group by pr.Id, pr.Name
-
-select pr.Name
-from Products pr
-left join ProductSales ps  on pr.Id = ps.ProductId
-left join Sales s on s.Id = ps.SaleId
---where  s.SaleDate > dateadd(month, -1, getdate())
-group by pr.Id, pr.Name
-having s.SaleDate >dateadd(month, -1, getdate())
 

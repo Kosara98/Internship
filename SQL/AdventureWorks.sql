@@ -4,7 +4,7 @@ select distinct sh.SalesOrderNumber, sh.OrderDate, p.Name
 from SalesLT.SalesOrderHeader sh
 join SalesLT.SalesOrderDetail sd on sh.SalesOrderId = sd.SalesOrderID
 join SalesLT.Product p on sd.ProductID = p.ProductID
-where OrderDate = '2011-10-01'
+where OrderDate >= '2011-10-01' and OrderDate < '2011-10-02'
 
 /*The order numbers and the quantity of products made on 1.10.2011*/
 
@@ -12,7 +12,7 @@ select distinct sh.SalesOrderNumber, count(sd.SalesOrderId)
 from SalesLT.SalesOrderHeader sh
 join SalesLT.SalesOrderDetail sd on sh.SalesOrderId = sd.SalesOrderID
 join SalesLT.Product p on sd.ProductID = p.ProductID
-where OrderDate = '2011-10-01'
+where OrderDate >= '2011-10-01' and OrderDate < '2011-10-02'
 group by sh.SalesOrderNumber
 
 /*Order numbers made on 1.10.2011 with quantity of products between 3 and 9*/
@@ -21,7 +21,7 @@ select distinct sh.SalesOrderNumber, count(sd.SalesOrderId)
 from SalesLT.SalesOrderHeader sh
 join SalesLT.SalesOrderDetail sd on sh.SalesOrderId = sd.SalesOrderID
 join SalesLT.Product p on sd.ProductID = p.ProductID
-where OrderDate = '2011-10-01'
+where OrderDate >= '2011-10-01' and OrderDate < '2011-10-02'
 group by sh.SalesOrderNumber
 having count(sd.SalesOrderId) between 3 and 9
 

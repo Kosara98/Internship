@@ -5,8 +5,6 @@ namespace FurnitureShop
 {
     public class Sales
     {
-       
-
         public DateTime SaleDate { get; set; }
         public string Client { get; set; }
         public List<string> Products { get; set; }

@@ -12,15 +12,36 @@ namespace FurnitureShop
 {
     public partial class Form1 : Form
     {
+        Products product = new Products();
+        Clients client = new Clients();
+        Sales sale = new Sales();
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void btn_Insert_Click(object sender, EventArgs e)
+        private void newClientToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Add insertForm = new Add();
-            insertForm.Show();
+            NewClient newClient = new NewClient();
+            newClient.Show();
+        }
+
+        private void newProductToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewProduct newProduct = new NewProduct();
+            newProduct.Show();
+        }
+
+        private void newSaleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewSale newSale = new NewSale();
+            newSale.Show();
+        }
+
+        private void btnShow_Click(object sender, EventArgs e)
+        {
+            string text = cbTables.SelectedText;
         }
     }
 }

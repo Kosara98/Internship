@@ -10,35 +10,17 @@ using System.Windows.Forms;
 
 namespace FurnitureShop
 {
-    public partial class Add : Form
+    public partial class NewSale : Form
     {
-        public Add()
+        Sales sale = new Sales();
+
+        public NewSale()
         {
             InitializeComponent();
+            
         }
 
-        private void rbClient_CheckedChanged(object sender, EventArgs e)
-        {
-            pClient.Visible = true;
-            pSales.Visible = false;
-            pProduct.Visible = false;
-        }
-
-        private void rbProduct_CheckedChanged(object sender, EventArgs e)
-        {
-            pClient.Visible = false;
-            pSales.Visible = false;
-            pProduct.Visible = true;
-        }
-
-        private void rbSales_CheckedChanged(object sender, EventArgs e)
-        {
-            pClient.Visible = false;
-            pSales.Visible = true;
-            pProduct.Visible = false;
-        }
-
-        private void btnAddMore_Click(object sender, EventArgs e)
+        private void btnAddMore_Click_1(object sender, EventArgs e)
         {
             // For name of the product
             ComboBox cb = new ComboBox();
@@ -67,7 +49,7 @@ namespace FurnitureShop
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            Close();
+            
         }
     }
 }

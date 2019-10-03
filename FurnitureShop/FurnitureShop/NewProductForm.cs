@@ -10,11 +10,12 @@ using System.Windows.Forms;
 
 namespace FurnitureShop
 {
-    public partial class NewProduct : Form
+    public partial class NewProductForm : Form
     {
-        Products product = new Products();
+        Product product = new Product();
+        ProductConnection productConnection = new ProductConnection();
 
-        public NewProduct()
+        public NewProductForm()
         {
             InitializeComponent();
 
@@ -33,7 +34,7 @@ namespace FurnitureShop
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            product.Insert();
+            productConnection.Insert(product.Name, product.Description, product.Weight, product.Barcode, product.Price);
 
             tbNameProduct.Text = "";
             tbBarcode.Text = "";

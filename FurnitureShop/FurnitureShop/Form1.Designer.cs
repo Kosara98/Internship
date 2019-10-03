@@ -43,9 +43,12 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(17, 48);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 51);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(10);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(384, 145);
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.Size = new System.Drawing.Size(537, 228);
             this.dataGridView1.TabIndex = 3;
             // 
             // cbTables
@@ -56,7 +59,7 @@
             "Products",
             "Clients",
             "Sales"});
-            this.cbTables.Location = new System.Drawing.Point(172, 20);
+            this.cbTables.Location = new System.Drawing.Point(289, 12);
             this.cbTables.Name = "cbTables";
             this.cbTables.Size = new System.Drawing.Size(141, 21);
             this.cbTables.TabIndex = 8;
@@ -67,7 +70,7 @@
             this.addToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(431, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(537, 24);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -104,7 +107,7 @@
             // 
             // btnShow
             // 
-            this.btnShow.Location = new System.Drawing.Point(326, 19);
+            this.btnShow.Location = new System.Drawing.Point(443, 11);
             this.btnShow.Name = "btnShow";
             this.btnShow.Size = new System.Drawing.Size(75, 23);
             this.btnShow.TabIndex = 10;
@@ -116,7 +119,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 233);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(537, 279);
             this.Controls.Add(this.btnShow);
             this.Controls.Add(this.cbTables);
             this.Controls.Add(this.dataGridView1);

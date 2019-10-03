@@ -1,6 +1,6 @@
 ﻿namespace FurnitureShop
 {
-    partial class NewProduct
+    partial class NewProductForm
     {
         /// <summary>
         /// Required designer variable.

@@ -10,11 +10,12 @@ using System.Windows.Forms;
 
 namespace FurnitureShop
 {
-    public partial class NewClient : Form
+    public partial class NewClientForm : Form
     {
-        Clients client = new Clients();
+        Client client = new Client();
+        ClientConnection clientConnection = new ClientConnection();
 
-        public NewClient()
+        public NewClientForm()
         {
             InitializeComponent();
 
@@ -33,13 +34,13 @@ namespace FurnitureShop
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            client.Insert();
+            clientConnection.Insert(client.Name, client.Address, client.Bulstat, client.RegisteredVat, client.Mol);
 
             tbNameClient.Text = "";
             tbAdress.Text = "";
             tbMol.Text = "";
             tbBulstat.Text = "";
-            cbVat.Text = "";
+            cbVat.SelectedIndex = -1;
         }
     }
 }

@@ -1,23 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace FurnitureShop
 {
     public class ClientConnection
     {
-        string sqlConnection = "Data Source = LAPTOP-59C4S0U9; Initial Catalog = Furniture; Integrated Security = True";
+        string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
         string query;
 
         public void Insert(string name, string address, string bulstat, char registeredVat, string mol)
         {
             int vat = registeredVat == 'Y' ? 1 : 0;
 
-            query = "insert into Clients values ('" + name + "','" + address + "','" + bulstat + "', '" + vat + "', '" + mol + "')";
+            query = "insert into Clients values (@name, @address,'" + bulstat + "', '" + vat + "', @mol)";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
                 SqlCommand command = new SqlCommand(query, connection);
+
+                SqlParameter sqlParameterName = new SqlParameter();
+                sqlParameterName.ParameterName = "@name";
+                sqlParameterName.Value = name;
+
+                SqlParameter sqlParameterAddress = new SqlParameter();
+                sqlParameterAddress.ParameterName = "@address";
+                sqlParameterAddress.Value = address;
+
+                SqlParameter sqlParameterMol = new SqlParameter();
+                sqlParameterMol.ParameterName = "@mol";
+                sqlParameterMol.Value = mol;
+
+                command.Parameters.Add(sqlParameterName);
+                command.Parameters.Add(sqlParameterAddress);
+                command.Parameters.Add(sqlParameterMol);
+
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
             }

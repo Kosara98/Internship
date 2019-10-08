@@ -5,8 +5,8 @@ namespace FurnitureShop
 {
     public class Sale
     {
-        public DateTime SaleDate { get; set; }
-        public int Quantity { get; set; }
+        public DateTime SaleDate { get; set; } = DateTime.Now;
         public string Invoice { get; set; }
+        public Dictionary<int, int> Products = new Dictionary<int, int>();
     }
 }

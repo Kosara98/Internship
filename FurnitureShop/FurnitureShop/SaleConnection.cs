@@ -1,21 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Configuration;
+
 
 namespace FurnitureShop
 {
     public class SaleConnection
     {
-        string sqlConnection = "Data Source = LAPTOP-59C4S0U9; Initial Catalog = Furniture; Integrated Security = True";
+        string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
         string query;
 
-        public void Insert(DateTime saleDate, string invoice, int quantity, int productId, int clientId)
+        public void Insert(DateTime saleDate, string invoice, int clientId, Dictionary<int, int> Products)
         {
             int saleId;
-            string priceQuery = "(select Price from Products where Id = " + productId + ")";
-            
+            string date = saleDate.Day + "-" + saleDate.Month + "-" + saleDate.Year;
+
             //Insert for table Sales
-            query = "insert into Sales values ('" + saleDate + "'," + clientId + ",'" + invoice + "')";
+            query = "insert into Sales values ('" + date + "'," + clientId + ",'" + invoice + "')";
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
                 SqlCommand command = new SqlCommand(query, connection);
@@ -33,20 +36,25 @@ namespace FurnitureShop
             }
 
             //Insert for table ProductSales
-            query = "insert into ProductSales values (" + productId + "," + saleId + "," + quantity + "," + priceQuery + ")";
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
+            foreach (KeyValuePair<int,int> item in Products)
             {
-                SqlCommand command = new SqlCommand(query, connection);
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                string priceQuery = "(select Price from Products where Id = " + (item.Key + 1) + ")";
+                query = "insert into ProductSales values (" + (item.Key + 1) + "," + saleId + "," + item.Value + "," + priceQuery + ")";
+
+                using (SqlConnection connection = new SqlConnection(sqlConnection))
+                {
+                    SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                }
             }
         }
 
         public DataTable SelectTable()
         {
             DataTable table = new DataTable();
-            query = 
-                " select s.Invoice, p.Name as Product, ps.Quantity, c.Name as Client, s.SaleDate, ps.TotalPrice from ProductSales ps join Sales s on ps.SaleId = s.Id join Products p on ps.ProductId = p.Id join Clients c on s.ClientId = c.Id order by s.SaleDate";
+            query =
+                " select s.SaleDate, s.Invoice, p.Name as Product, ps.Quantity, c.Name as Client, ps.TotalPrice from ProductSales ps join Sales s on ps.SaleId = s.Id join Products p on ps.ProductId = p.Id join Clients c on s.ClientId = c.Id order by s.SaleDate desc";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {

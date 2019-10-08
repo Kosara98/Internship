@@ -12,6 +12,7 @@ namespace FurnitureShop
 {
     public partial class NewSaleForm : Form
     {
+        string message;
         string newNameComboBox = "cb";
         string newNameLabel = "lb";
         string newNameNumeric = "num";
@@ -28,19 +29,17 @@ namespace FurnitureShop
 
             cbClient.Items.AddRange(clientConnection.FillComboBox().ToArray());
             cbProduct.Items.AddRange(productConnection.FillComboBox().ToArray());
-
-            Binding bindingQuantity = new Binding("Value", sale, "Quantity");
+            
             Binding bindingInvoice = new Binding("Text", sale, "Invoice");
-            Binding bindingData = new Binding("Value", sale, "SaleDate");
+            Binding bindingDatе = new Binding("Text", sale, "SaleDate");
 
+            dateTimePicker1.DataBindings.Add(bindingDatе);
             tbInvoice.DataBindings.Add(bindingInvoice);
-            numQuantity.DataBindings.Add(bindingQuantity);
-            dateTimePicker1.DataBindings.Add(bindingData);
         }
 
         private void btnAddMore_Click_1(object sender, EventArgs e)
         {
-            // For name of the product
+            //Name of the product
             ComboBox cb = new ComboBox();
             cb.Name = newNameComboBox;
             cb.Left = 112;
@@ -50,7 +49,7 @@ namespace FurnitureShop
             cb.Size = cbProduct.Size;
             cb.Items.AddRange(productConnection.FillComboBox().ToArray());
 
-            //For quantity of the product
+            //Quantity of the product
             Label lb = new Label();
             lb.Name = newNameLabel;
             lb.Text = "Quantity";
@@ -63,6 +62,7 @@ namespace FurnitureShop
             numUp.Left = 251;
             numUp.Top = top;
             numUp.Size = numQuantity.Size;
+            numUp.Minimum = 1;
 
             pSales.Controls.Add(cb);
             pSales.Controls.Add(lb);
@@ -71,30 +71,40 @@ namespace FurnitureShop
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            saleConnection.Insert(sale.SaleDate, sale.Invoice,sale.Quantity,cbProduct.SelectedIndex,cbClient.SelectedIndex);
+            int index = 0;
+            List<int> quantity = new List<int>();
 
-            //Return form to default
-            cbClient.SelectedIndex = -1;
-            tbInvoice.Text = "";
-            cbProduct.SelectedIndex = -1;
-            numQuantity.Value = 0;
-
-            foreach (Control item in pSales.Controls.OfType<ComboBox>().ToList())
+            if (tbInvoice.Text == null || cbClient.SelectedIndex == -1 || cbProduct.SelectedIndex == -1 || numQuantity.Value == 0)
             {
-                if (item.Name == newNameComboBox)
-                    pSales.Controls.Remove(item);
+                message = "Fill in all the information";
+                MessageBox.Show(message);
             }
-
-            foreach (Control item in pSales.Controls.OfType<Label>().ToList())
+            else if (tbInvoice.TextLength < 10 || tbInvoice.Text.Any(c => !char.IsDigit(c)))
             {
-                if (item.Name == newNameLabel)
-                    pSales.Controls.Remove(item);
+                message = "The invoice must be 10 numbers";
+                MessageBox.Show(message);
             }
-
-            foreach (Control item in pSales.Controls.OfType<NumericUpDown>().ToList())
+            else
             {
-                if (item.Name == newNameNumeric)
-                    pSales.Controls.Remove(item);
+                foreach (NumericUpDown item in pSales.Controls.OfType<NumericUpDown>().ToList())
+                    quantity.Add(Convert.ToInt32(item.Value));
+
+                foreach (ComboBox item in pSales.Controls.OfType<ComboBox>().ToList())
+                {
+                    if (item.Name == "cbClient")
+                        continue;
+
+                    sale.Products.Add(item.SelectedIndex, quantity[index]);
+                    index++;
+                }
+
+                saleConnection.Insert(sale.SaleDate, sale.Invoice, cbClient.SelectedIndex, sale.Products);
+
+                sale.Products.Clear();
+
+                message = "Successfully added new sale!";
+                MessageBox.Show(message);
+                Close();
             }
         }
     }

@@ -81,7 +81,7 @@
             0});
             this.numWeight.Name = "numWeight";
             this.numWeight.Size = new System.Drawing.Size(94, 20);
-            this.numWeight.TabIndex = 14;
+            this.numWeight.TabIndex = 13;
             // 
             // numPrice
             // 
@@ -94,7 +94,7 @@
             0});
             this.numPrice.Name = "numPrice";
             this.numPrice.Size = new System.Drawing.Size(120, 20);
-            this.numPrice.TabIndex = 13;
+            this.numPrice.TabIndex = 14;
             // 
             // tbBarcode
             // 
@@ -167,14 +167,14 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // NewProduct
+            // NewProductForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(402, 227);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.pProduct);
-            this.Name = "NewProduct";
+            this.Name = "NewProductForm";
             this.Text = "NewProduct";
             this.pProduct.ResumeLayout(false);
             this.pProduct.PerformLayout();

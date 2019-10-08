@@ -32,7 +32,6 @@
             this.cbVat = new System.Windows.Forms.ComboBox();
             this.tbNameClient = new System.Windows.Forms.TextBox();
             this.tbMol = new System.Windows.Forms.TextBox();
-            this.tbBulstat = new System.Windows.Forms.TextBox();
             this.tbAdress = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,15 +39,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.tbBulstat = new System.Windows.Forms.TextBox();
             this.pClient.SuspendLayout();
             this.SuspendLayout();
             // 
             // pClient
             // 
+            this.pClient.Controls.Add(this.tbBulstat);
             this.pClient.Controls.Add(this.cbVat);
             this.pClient.Controls.Add(this.tbNameClient);
             this.pClient.Controls.Add(this.tbMol);
-            this.pClient.Controls.Add(this.tbBulstat);
             this.pClient.Controls.Add(this.tbAdress);
             this.pClient.Controls.Add(this.label1);
             this.pClient.Controls.Add(this.label2);
@@ -75,10 +75,10 @@
             // tbNameClient
             // 
             this.tbNameClient.Location = new System.Drawing.Point(112, 13);
-            this.tbNameClient.MaxLength = 9;
+            this.tbNameClient.MaxLength = 35;
             this.tbNameClient.Name = "tbNameClient";
             this.tbNameClient.Size = new System.Drawing.Size(256, 20);
-            this.tbNameClient.TabIndex = 16;
+            this.tbNameClient.TabIndex = 10;
             // 
             // tbMol
             // 
@@ -86,15 +86,7 @@
             this.tbMol.MaxLength = 35;
             this.tbMol.Name = "tbMol";
             this.tbMol.Size = new System.Drawing.Size(258, 20);
-            this.tbMol.TabIndex = 15;
-            // 
-            // tbBulstat
-            // 
-            this.tbBulstat.Location = new System.Drawing.Point(112, 72);
-            this.tbBulstat.MaxLength = 9;
-            this.tbBulstat.Name = "tbBulstat";
-            this.tbBulstat.Size = new System.Drawing.Size(159, 20);
-            this.tbBulstat.TabIndex = 11;
+            this.tbMol.TabIndex = 18;
             // 
             // tbAdress
             // 
@@ -102,7 +94,7 @@
             this.tbAdress.MaxLength = 100;
             this.tbAdress.Name = "tbAdress";
             this.tbAdress.Size = new System.Drawing.Size(256, 20);
-            this.tbAdress.TabIndex = 10;
+            this.tbAdress.TabIndex = 15;
             // 
             // label1
             // 
@@ -159,14 +151,22 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // NewClient
+            // tbBulstat
+            // 
+            this.tbBulstat.Location = new System.Drawing.Point(112, 72);
+            this.tbBulstat.MaxLength = 9;
+            this.tbBulstat.Name = "tbBulstat";
+            this.tbBulstat.Size = new System.Drawing.Size(159, 20);
+            this.tbBulstat.TabIndex = 16;
+            // 
+            // NewClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(414, 189);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.pClient);
-            this.Name = "NewClient";
+            this.Name = "NewClientForm";
             this.Text = "NewClient";
             this.pClient.ResumeLayout(false);
             this.pClient.PerformLayout();
@@ -180,7 +180,6 @@
         private System.Windows.Forms.ComboBox cbVat;
         private System.Windows.Forms.TextBox tbNameClient;
         private System.Windows.Forms.TextBox tbMol;
-        private System.Windows.Forms.TextBox tbBulstat;
         private System.Windows.Forms.TextBox tbAdress;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -188,5 +187,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.TextBox tbBulstat;
     }
 }

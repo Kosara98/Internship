@@ -94,12 +94,11 @@ namespace FurnitureShop
                     if (item.Name == "cbClient")
                         continue;
 
-                    sale.Products.Add(item.SelectedIndex, quantity[index]);
+                    sale.Products.Add(item.Text, quantity[index]);
                     index++;
                 }
 
-                saleConnection.Insert(sale.SaleDate, sale.Invoice, cbClient.SelectedIndex, sale.Products);
-
+                saleConnection.Insert(sale.SaleDate, sale.Invoice, cbClient.Text, sale.Products);
                 sale.Products.Clear();
 
                 message = "Successfully added new sale!";

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System;
 
 namespace FurnitureShop
 {
@@ -13,31 +14,20 @@ namespace FurnitureShop
         public void Insert(string name, string address, string bulstat, char registeredVat, string mol)
         {
             int vat = registeredVat == 'Y' ? 1 : 0;
-
-            query = "insert into Clients values (@name, @address,'" + bulstat + "', '" + vat + "', @mol)";
+            query = $"insert into Clients values (@name, @address, @bulstat,'{vat}', @mol)";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
-                SqlCommand command = new SqlCommand(query, connection);
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@address", address);
+                    command.Parameters.AddWithValue("@bulstat", bulstat);
+                    command.Parameters.AddWithValue("@mol", mol);
 
-                SqlParameter sqlParameterName = new SqlParameter();
-                sqlParameterName.ParameterName = "@name";
-                sqlParameterName.Value = name;
-
-                SqlParameter sqlParameterAddress = new SqlParameter();
-                sqlParameterAddress.ParameterName = "@address";
-                sqlParameterAddress.Value = address;
-
-                SqlParameter sqlParameterMol = new SqlParameter();
-                sqlParameterMol.ParameterName = "@mol";
-                sqlParameterMol.Value = mol;
-
-                command.Parameters.Add(sqlParameterName);
-                command.Parameters.Add(sqlParameterAddress);
-                command.Parameters.Add(sqlParameterMol);
-
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                }
             }
         }
         
@@ -48,32 +38,45 @@ namespace FurnitureShop
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
-
-                while (reader.Read())
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    string name = reader.GetString(0);
-                    result.Add(name);
+                    command.Connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        string name = reader.GetString(0);
+                        result.Add(name);
+                    }
                 }
             }
             return result;
         }
 
-        public DataTable SelectTable()
+        public List<Client> SelectTable()
         {
-            DataTable table = new DataTable();
+            List<Client> clients = new List<Client>();
             query = "select Name, Address, Bulstat, RegisteredVat, Mol from Clients";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
+            using (SqlCommand command = new SqlCommand(query, connection))
             {
-                SqlCommand command = new SqlCommand(query, connection);
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                dataAdapter.Fill(table);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var client = new Client();
+                        client.Name = (string)reader["Name"];
+                        client.Address = (string)reader["Address"];
+                        client.Bulstat = (string)reader["Bulstat"];
+                        client.RegisteredVat = (bool)reader["RegisteredVat"] ? 'Y' : 'N';
+                        client.Mol = (string)reader["Mol"];
+                        clients.Add(client);
+                    }
+                }
             }
-
-            return table;
+            return clients;
         }
     }
 }

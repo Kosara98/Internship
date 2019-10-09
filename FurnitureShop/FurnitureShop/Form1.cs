@@ -42,11 +42,23 @@ namespace FurnitureShop
         private void btnShow_Click(object sender, EventArgs e)
         {
             if (cbTables.SelectedIndex == 0)
-                dataGridView1.DataSource = new BindingSource(productConnection.SelectTable(), null);
+            {
+                var bindingList = new BindingList<Product>(productConnection.SelectTable());
+                var source = new BindingSource(bindingList, null);
+                dataGridView1.DataSource = source;
+            }
             else if (cbTables.SelectedIndex == 1)
-                dataGridView1.DataSource = new BindingSource(clientConnection.SelectTable(), null);
+            {
+                var bindingList = new BindingList<Client>(clientConnection.SelectTable());
+                var source = new BindingSource(bindingList, null);
+                dataGridView1.DataSource = source;
+            }
             else if (cbTables.SelectedIndex == 2)
-                dataGridView1.DataSource = new BindingSource(saleConnection.SelectTable(), null);
+            {
+                var bindingList = new BindingList<Sale>(saleConnection.SelectTable());
+                var source = new BindingSource(bindingList, null);
+                dataGridView1.DataSource = source;
+            }
         }
     }
 }

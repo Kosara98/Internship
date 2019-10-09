@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.pClient = new System.Windows.Forms.Panel();
+            this.tbBulstat = new System.Windows.Forms.TextBox();
             this.cbVat = new System.Windows.Forms.ComboBox();
             this.tbNameClient = new System.Windows.Forms.TextBox();
             this.tbMol = new System.Windows.Forms.TextBox();
@@ -39,7 +40,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.tbBulstat = new System.Windows.Forms.TextBox();
             this.pClient.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,6 +59,14 @@
             this.pClient.Name = "pClient";
             this.pClient.Size = new System.Drawing.Size(413, 147);
             this.pClient.TabIndex = 19;
+            // 
+            // tbBulstat
+            // 
+            this.tbBulstat.Location = new System.Drawing.Point(112, 72);
+            this.tbBulstat.MaxLength = 9;
+            this.tbBulstat.Name = "tbBulstat";
+            this.tbBulstat.Size = new System.Drawing.Size(159, 20);
+            this.tbBulstat.TabIndex = 16;
             // 
             // cbVat
             // 
@@ -151,18 +159,11 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // tbBulstat
-            // 
-            this.tbBulstat.Location = new System.Drawing.Point(112, 72);
-            this.tbBulstat.MaxLength = 9;
-            this.tbBulstat.Name = "tbBulstat";
-            this.tbBulstat.Size = new System.Drawing.Size(159, 20);
-            this.tbBulstat.TabIndex = 16;
-            // 
             // NewClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(414, 189);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.pClient);

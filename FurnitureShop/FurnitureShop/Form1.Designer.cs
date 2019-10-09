@@ -44,10 +44,9 @@
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 51);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 43);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(10);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.Size = new System.Drawing.Size(537, 228);
             this.dataGridView1.TabIndex = 3;
             // 
@@ -120,7 +119,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(537, 279);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(537, 271);
             this.Controls.Add(this.btnShow);
             this.Controls.Add(this.cbTables);
             this.Controls.Add(this.dataGridView1);

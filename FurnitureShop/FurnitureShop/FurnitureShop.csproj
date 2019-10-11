@@ -47,48 +47,49 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
-    <Compile Include="ClientConnection.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Connections\ClientConnection.cs" />
+    <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewClientForm.cs">
+    <Compile Include="Forms\NewClientForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewClientForm.Designer.cs">
+    <Compile Include="Forms\NewClientForm.Designer.cs">
       <DependentUpon>NewClientForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewProductForm.cs">
+    <Compile Include="Forms\NewProductForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewProductForm.Designer.cs">
+    <Compile Include="Forms\NewProductForm.Designer.cs">
       <DependentUpon>NewProductForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="NewSaleForm.cs">
+    <Compile Include="Forms\NewSaleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewSaleForm.Designer.cs">
+    <Compile Include="Forms\NewSaleForm.Designer.cs">
       <DependentUpon>NewSaleForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Product.cs" />
-    <Compile Include="ProductConnection.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Connections\ProductConnection.cs" />
+    <Compile Include="Models\ProductSaleViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sale.cs" />
-    <Compile Include="SaleConnection.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <Compile Include="Models\Sale.cs" />
+    <Compile Include="Connections\SaleConnection.cs" />
+    <EmbeddedResource Include="Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewClientForm.resx">
+    <EmbeddedResource Include="Forms\NewClientForm.resx">
       <DependentUpon>NewClientForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewProductForm.resx">
+    <EmbeddedResource Include="Forms\NewProductForm.resx">
       <DependentUpon>NewProductForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewSaleForm.resx">
+    <EmbeddedResource Include="Forms\NewSaleForm.resx">
       <DependentUpon>NewSaleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -113,5 +114,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

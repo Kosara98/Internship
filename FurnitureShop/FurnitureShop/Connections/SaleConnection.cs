@@ -9,16 +9,15 @@ namespace FurnitureShop
 {
     public class SaleConnection
     {
-        string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
-        string query;
+        internal string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
 
-        public void Insert(DateTime saleDate, string invoice, string clientName, Dictionary<string, int> Products)
+        public void Insert(DateTime saleDate, string invoice, string clientName, Dictionary<int, int> Products)
         {
             int saleId;
             string date = $"{saleDate.Day}-{saleDate.Month}-{saleDate.Year}";
 
             //Insert for table Sales
-            query = $"insert into Sales select '{date}',Id, @invoice from Clients where Name = @clientName";
+            string query = $"insert into Sales select '{date}',Id, @invoice from Clients where Name = @clientName";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
@@ -27,7 +26,7 @@ namespace FurnitureShop
                     command.Parameters.AddWithValue("@invoice", invoice);
                     command.Parameters.AddWithValue("@clientName", clientName);
                     connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
+                    command.ExecuteNonQuery();
                 }
             }
 
@@ -45,18 +44,18 @@ namespace FurnitureShop
             }
 
             //Insert for table ProductSales
-            foreach (KeyValuePair<string,int> item in Products)
+            foreach (KeyValuePair<int,int> item in Products)
             {
                 query = $"insert into ProductSales " +
                     $" select Id, {saleId}, {item.Value},Price" +
                     $" from Products" +
-                    $" where Name = @productName";
+                    $" where Id = @id";
                 
                 using (SqlConnection connection = new SqlConnection(sqlConnection))
                 {
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@productName", item.Key);
+                        command.Parameters.AddWithValue("@id", item.Key);
                         connection.Open();
                         SqlDataReader reader = command.ExecuteReader();
                     }
@@ -64,10 +63,10 @@ namespace FurnitureShop
             }
         }
 
-        public List<Sale> SelectTable()
+        public IEnumerable<Sale> ShowAllSales()
         {
             List<Sale> sales = new List<Sale>();
-            query =
+            string query =
                 "select s.SaleDate, s.Invoice, p.Name as Product, ps.Quantity, c.Name as Client, ps.TotalPrice " +
                 "from ProductSales ps " +
                 "join Sales s on ps.SaleId = s.Id " +
@@ -84,6 +83,7 @@ namespace FurnitureShop
                     while (reader.Read())
                     {
                         var sale = new Sale();
+                        sale.SaleDate = (DateTime)reader["SaleDate"];
                         sale.Invoice = (string)reader["Invoice"];
                         sale.Product = (string)reader["Product"];
                         sale.Quantity = (int)reader["Quantity"];

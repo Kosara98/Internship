@@ -8,13 +8,12 @@ namespace FurnitureShop
 {
     public class ClientConnection
     {
-        string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
-        string query;
+        internal string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
 
         public void Insert(string name, string address, string bulstat, char registeredVat, string mol)
         {
             int vat = registeredVat == 'Y' ? 1 : 0;
-            query = $"insert into Clients values (@name, @address, @bulstat,'{vat}', @mol)";
+            string query = $"insert into Clients values (@name, @address, @bulstat,'{vat}', @mol)";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             {
@@ -24,39 +23,16 @@ namespace FurnitureShop
                     command.Parameters.AddWithValue("@address", address);
                     command.Parameters.AddWithValue("@bulstat", bulstat);
                     command.Parameters.AddWithValue("@mol", mol);
-
                     connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
+                    command.ExecuteNonQuery();                    
                 }
             }
         }
-        
-        public List<string> FillComboBox()
-        {
-            List<string> result = new List<string>();
-            query = "select Name from Clients";
 
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        string name = reader.GetString(0);
-                        result.Add(name);
-                    }
-                }
-            }
-            return result;
-        }
-
-        public List<Client> SelectTable()
+        public IEnumerable<Client> ShowAllClients()
         {
             List<Client> clients = new List<Client>();
-            query = "select Name, Address, Bulstat, RegisteredVat, Mol from Clients";
+            string query = "select Id,Name, Address, Bulstat, RegisteredVat, Mol from Clients";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             using (SqlCommand command = new SqlCommand(query, connection))
@@ -67,6 +43,7 @@ namespace FurnitureShop
                     while (reader.Read())
                     {
                         var client = new Client();
+                        client.Id = (int)reader["Id"];
                         client.Name = (string)reader["Name"];
                         client.Address = (string)reader["Address"];
                         client.Bulstat = (string)reader["Bulstat"];

@@ -12,7 +12,6 @@ namespace FurnitureShop
 {
     public partial class NewProductForm : Form
     {
-        string message;
         Product product = new Product();
         ProductConnection productConnection = new ProductConnection();
 
@@ -35,27 +34,16 @@ namespace FurnitureShop
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (tbNameProduct.Text == null || tbBarcode.Text == null || numPrice.Value == 0 || numWeight.Value == 0)
-            {
-                message = "Fill in all the information";
-                MessageBox.Show(message);
-            }
+            if (tbNameProduct.Text == null ||  numPrice.Value == 0 || numWeight.Value == 0)
+                MessageBox.Show("Fill in all the information");
             else if (tbBarcode.TextLength < 13)
-            {
-                message = "The barcode must be 13 characters";
-                MessageBox.Show(message);
-            }
+                MessageBox.Show("The barcode must be 13 characters");
             else if (tbNameProduct.Text.Any(c => !char.IsLetter(c)))
-            {
-                message = "The name should not contains numbers.";
-                MessageBox.Show(message);
-            }
+                MessageBox.Show("The name should not contains numbers.");
             else
             {
                 productConnection.Insert(product.Name, product.Description, product.Weight, product.Barcode, product.Price);
-
-                message = "Successfully added new product!";
-                MessageBox.Show(message);
+                MessageBox.Show("Successfully added new product!");
                 Close();
             }
         }

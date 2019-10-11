@@ -12,7 +12,6 @@ namespace FurnitureShop
 {
     public partial class NewClientForm : Form
     {
-        string message;
         Client client = new Client();
         ClientConnection clientConnection = new ClientConnection();
 
@@ -35,27 +34,16 @@ namespace FurnitureShop
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (tbAdress.Text == null || tbBulstat.Text == null || tbMol.Text == null || tbNameClient.Text == null || cbVat.SelectedIndex == -1)
-            {
-                message = "Fill in all the information";
-                MessageBox.Show(message);
-            }
+            if (tbAdress.Text == null || tbMol.Text == null || tbNameClient.Text == null || cbVat.SelectedIndex == -1)
+                MessageBox.Show("Fill in all the information");
             else if (tbBulstat.TextLength < 9 || tbBulstat.Text.Any(c => !char.IsDigit(c)))
-            {
-                message = "The bulstat must be 9 numbers";
-                MessageBox.Show(message);
-            }
+                MessageBox.Show("The bulstat must be 9 numbers");
             else if (tbMol.Text.Any(c => !char.IsLetter(c)))
-            {
-                message = "The name and the mol should not contains numbers.";
-                MessageBox.Show(message);
-            }
+                MessageBox.Show("The name and the mol should not contains numbers.");
             else
             {
                 clientConnection.Insert(client.Name, client.Address, client.Bulstat, client.RegisteredVat, client.Mol);
-
-                message = "Successfully added new client!";
-                MessageBox.Show(message);
+                MessageBox.Show("Successfully added new client!");
                 Close();
             }
         }

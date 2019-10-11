@@ -45,7 +45,7 @@ namespace FurnitureShop
         private void btnShow_Click(object sender, EventArgs e)
         {
             if (cbTables.SelectedIndex == 0)
-                dataGridView1.DataSource = new BindingSource(productConnection.ShowAllPRoducts(), null); 
+                dataGridView1.DataSource = new BindingSource(productConnection.ShowAllProducts(), null); 
             else if (cbTables.SelectedIndex == 1)
                 dataGridView1.DataSource = new BindingSource(clientConnection.ShowAllClients(), null);
             else if (cbTables.SelectedIndex == 2)

@@ -12,8 +12,8 @@ namespace FurnitureShop
 {
     public partial class NewProductForm : Form
     {
-        Product product = new Product();
-        ProductConnection productConnection = new ProductConnection();
+        private Product product = new Product();
+        private ProductConnection productConnection = new ProductConnection();
 
         public NewProductForm()
         {

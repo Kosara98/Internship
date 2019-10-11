@@ -12,8 +12,8 @@ namespace FurnitureShop
 {
     public partial class NewClientForm : Form
     {
-        Client client = new Client();
-        ClientConnection clientConnection = new ClientConnection();
+        private Client client = new Client();
+        private ClientConnection clientConnection = new ClientConnection();
 
         public NewClientForm()
         {

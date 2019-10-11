@@ -27,7 +27,7 @@ namespace FurnitureShop
             cbClient.DisplayMember = "Name";
             cbClient.ValueMember = "Id";
 
-            cbProduct.DataSource = productConnection.ShowAllPRoducts();
+            cbProduct.DataSource = productConnection.ShowAllProducts();
             cbProduct.DisplayMember = "Name";
             cbProduct.ValueMember = "Id";
 
@@ -58,7 +58,7 @@ namespace FurnitureShop
             cb.Top = top;
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.Size = cbProduct.Size;
-            cb.DataSource = productConnection.ShowAllPRoducts();
+            cb.DataSource = productConnection.ShowAllProducts();
             cb.DisplayMember = "Name";
             cb.ValueMember = "Id";
             cb.DataBindings.Add(new Binding("SelectedValue", newProductSaleViewModel, "ProductId"));

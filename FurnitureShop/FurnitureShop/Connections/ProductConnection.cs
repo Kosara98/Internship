@@ -29,7 +29,7 @@ namespace FurnitureShop
             }
         }
 
-        public IEnumerable<Product> ShowAllPRoducts()
+        public IEnumerable<Product> ShowAllProducts()
         {
             List<Product> products = new List<Product>();
             string query = "select Id, Name, Description, Barcode, Weight, Price from Products";

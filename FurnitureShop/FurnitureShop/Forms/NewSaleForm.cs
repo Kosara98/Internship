@@ -23,11 +23,11 @@ namespace FurnitureShop
         {
             InitializeComponent();
 
-            cbClient.DataSource = clientConnection.ShowAllClients();
+            cbClient.DataSource = clientConnection.ShowAll();
             cbClient.DisplayMember = "Name";
             cbClient.ValueMember = "Id";
 
-            cbProduct.DataSource = productConnection.ShowAllProducts();
+            cbProduct.DataSource = productConnection.ShowAll();
             cbProduct.DisplayMember = "Name";
             cbProduct.ValueMember = "Id";
 
@@ -58,7 +58,7 @@ namespace FurnitureShop
             cb.Top = top;
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.Size = cbProduct.Size;
-            cb.DataSource = productConnection.ShowAllProducts();
+            cb.DataSource = productConnection.ShowAll();
             cb.DisplayMember = "Name";
             cb.ValueMember = "Id";
             cb.DataBindings.Add(new Binding("SelectedValue", newProductSaleViewModel, "ProductId"));
@@ -108,37 +108,38 @@ namespace FurnitureShop
             else if (pSales.Controls.OfType<ComboBox>().ToList().Count() > 2)
             {
                 bool hasBeenChosen = false;
-                var controls = new List<ComboBox>();
+                List<ComboBox> controls = pSales.Controls.OfType<ComboBox>().ToList();
 
-                foreach (var item in pSales.Controls.OfType<ComboBox>().ToList())
+                for (int i = 1; i < controls.Count(); i++)
                 {
                     if (hasBeenChosen == true)
                         break;
                     else
-                        foreach (var combo in pSales.Controls.OfType<ComboBox>().ToList())
-                        {
-                            if (item.SelectedText == combo.SelectedText && hasBeenChosen == false)
+                        for (int index = i + 1; index < controls.Count(); index++)
+                            if (controls[i].SelectedIndex == controls[index].SelectedIndex && hasBeenChosen == false)
                             {
                                 MessageBox.Show("Selected Option has already been chosen");
                                 hasBeenChosen = true;
                                 break;
                             }
-                            else
-                                break;
-                        }
                 }
+                if (hasBeenChosen == false)
+                    InsertSale();
             }
             else
-            {
-                foreach (var item in productSales)
-                    sale.Products.Add(item.ProductId, item.Quantity);
+                InsertSale();
+        }
 
-                saleConnection.Insert(sale.SaleDate, sale.Invoice, cbClient.Text, sale.Products);
-                sale.Products.Clear();
+        private void InsertSale()
+        {
+            foreach (var item in productSales)
+                sale.Products.Add(item.ProductId, item.Quantity);
 
-                MessageBox.Show("Successfully added new sale!");
-                Close();
-            }
+            saleConnection.Insert(sale.SaleDate, sale.Invoice, cbClient.Text, sale.Products);
+            sale.Products.Clear();
+
+            MessageBox.Show("Successfully added new sale!");
+            Close();
         }
     }
 }

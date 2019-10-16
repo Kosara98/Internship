@@ -1,6 +1,6 @@
 ﻿namespace FurnitureShop
 {
-    partial class NewProductForm
+    partial class ProductUpdateForm
     {
         /// <summary>
         /// Required designer variable.
@@ -39,7 +39,7 @@
             this.lblWeight = new System.Windows.Forms.Label();
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
             this.pProduct.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPrice)).BeginInit();
@@ -57,10 +57,10 @@
             this.pProduct.Controls.Add(this.lblWeight);
             this.pProduct.Controls.Add(this.lblDescription);
             this.pProduct.Controls.Add(this.lblName);
-            this.pProduct.Location = new System.Drawing.Point(12, 38);
+            this.pProduct.Location = new System.Drawing.Point(12, 39);
             this.pProduct.Name = "pProduct";
             this.pProduct.Size = new System.Drawing.Size(391, 184);
-            this.pProduct.TabIndex = 16;
+            this.pProduct.TabIndex = 17;
             // 
             // rtbDescription
             // 
@@ -157,26 +157,26 @@
             this.lblName.TabIndex = 4;
             this.lblName.Text = "Name";
             // 
-            // btnAdd
+            // btnUpdate
             // 
-            this.btnAdd.Location = new System.Drawing.Point(282, 11);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(98, 21);
-            this.btnAdd.TabIndex = 21;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnUpdate.Location = new System.Drawing.Point(282, 12);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(98, 21);
+            this.btnUpdate.TabIndex = 22;
+            this.btnUpdate.Text = "Update";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // NewProductForm
+            // ProductUpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(402, 227);
-            this.Controls.Add(this.btnAdd);
+            this.ClientSize = new System.Drawing.Size(396, 226);
+            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.pProduct);
-            this.Name = "NewProductForm";
-            this.Text = "New Product";
+            this.Name = "ProductUpdateForm";
+            this.Text = "Product Update";
             this.pProduct.ResumeLayout(false);
             this.pProduct.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWeight)).EndInit();
@@ -198,6 +198,6 @@
         private System.Windows.Forms.Label lblWeight;
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnUpdate;
     }
 }

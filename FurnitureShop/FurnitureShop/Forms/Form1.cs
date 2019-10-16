@@ -17,6 +17,8 @@ namespace FurnitureShop
         private ProductConnection productConnection = new ProductConnection();
         private ClientConnection clientConnection = new ClientConnection();
         private SaleConnection saleConnection = new SaleConnection();
+        private ProductUpdateForm productUpdateForm = new ProductUpdateForm();
+        private ClientUpdateForm clientUpdateForm = new ClientUpdateForm();
 
         public Form1()
         {
@@ -45,11 +47,20 @@ namespace FurnitureShop
         private void btnShow_Click(object sender, EventArgs e)
         {
             if (cbTables.SelectedIndex == 0)
-                dataGridView1.DataSource = new BindingSource(productConnection.ShowAllProducts(), null); 
+            {
+                dataGrid.DataSource = new BindingSource(productConnection.ShowAll(), null); ;
+                dataGrid.Columns["Id"].Visible = false;
+            }
             else if (cbTables.SelectedIndex == 1)
-                dataGridView1.DataSource = new BindingSource(clientConnection.ShowAllClients(), null);
+            {
+                dataGrid.DataSource = new BindingSource(clientConnection.ShowAll(), null);
+                dataGrid.Columns["Id"].Visible = false;
+            }
             else if (cbTables.SelectedIndex == 2)
-                dataGridView1.DataSource = new BindingSource(saleConnection.ShowAllSales(), null);
+                dataGrid.DataSource = new BindingSource(saleConnection.ShowAll(), null);
+
+            btnDelete.Enabled = false;
+            btnUpdate.Enabled = false;
         }
 
         private static void Form1_UIThreadException(object sender, ThreadExceptionEventArgs t)
@@ -80,6 +91,59 @@ namespace FurnitureShop
             errorMsg += e.Message + "\n\nStack Trace:\n" + e.StackTrace;
             return MessageBox.Show(errorMsg, title, MessageBoxButtons.OK,
                 MessageBoxIcon.Stop);
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (cbTables.SelectedIndex == 0)
+            {
+                BindingSource bindingSource = new BindingSource(productConnection.ShowAll(), null);
+                Product currentProduct = (Product)bindingSource.Current;
+                productConnection.Delete(currentProduct.Barcode);
+            }
+            else if (cbTables.SelectedIndex == 1)
+            {
+                BindingSource bindingSource = new BindingSource(clientConnection.ShowAll(), null);
+                Client currentClient = (Client)bindingSource.Current;
+                clientConnection.Delete(currentClient.Bulstat);
+            }
+            else if (cbTables.SelectedIndex == 2)
+            {
+                BindingSource bindingSource = new BindingSource(saleConnection.ShowAll(), null);
+                Sale currentSale = (Sale)bindingSource.Current;
+                saleConnection.Delete(currentSale.Invoice);
+            }
+            btnShow.PerformClick();
+        }
+
+        private void CellSelected(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (cbTables.SelectedIndex != 2)
+                btnUpdate.Enabled = true;
+            btnDelete.Enabled = true;
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (cbTables.SelectedIndex == 0)
+            {
+                BindingSource bindingSource = new BindingSource(productConnection.ShowAll(), null);
+                Product currentProduct = (Product)bindingSource.Current;
+
+                productUpdateForm.SetInfo
+                    (currentProduct.Id,currentProduct.Name,currentProduct.Barcode,currentProduct.Weight,currentProduct.Price, currentProduct.Description);
+                productUpdateForm.Show();
+            }
+            else if (cbTables.SelectedIndex == 1)
+            {
+                BindingSource bindingSource = new BindingSource(clientConnection.ShowAll(), null);
+                Client currentClient = (Client)bindingSource.Current;
+
+                clientUpdateForm.SetInfo
+                    (currentClient.Id,currentClient.Name,currentClient.Address,currentClient.Bulstat,currentClient.Mol,currentClient.RegisteredVat);
+                clientUpdateForm.Show();
+            }
+            btnShow.PerformClick();
         }
     }
 }

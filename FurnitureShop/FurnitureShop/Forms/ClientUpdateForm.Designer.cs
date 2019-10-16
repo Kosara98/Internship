@@ -1,6 +1,6 @@
 ﻿namespace FurnitureShop
 {
-    partial class NewClientForm
+    partial class ClientUpdateForm
     {
         /// <summary>
         /// Required designer variable.
@@ -39,7 +39,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
             this.pClient.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,7 +58,7 @@
             this.pClient.Location = new System.Drawing.Point(12, 39);
             this.pClient.Name = "pClient";
             this.pClient.Size = new System.Drawing.Size(413, 147);
-            this.pClient.TabIndex = 19;
+            this.pClient.TabIndex = 20;
             // 
             // tbBulstat
             // 
@@ -149,26 +149,26 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Name";
             // 
-            // btnAdd
+            // btnUpdate
             // 
-            this.btnAdd.Location = new System.Drawing.Point(282, 12);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(98, 21);
-            this.btnAdd.TabIndex = 20;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnUpdate.Location = new System.Drawing.Point(282, 12);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(98, 21);
+            this.btnUpdate.TabIndex = 21;
+            this.btnUpdate.Text = "Update";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // NewClientForm
+            // ClientUpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(395, 188);
-            this.Controls.Add(this.btnAdd);
+            this.ClientSize = new System.Drawing.Size(399, 189);
+            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.pClient);
-            this.Name = "NewClientForm";
-            this.Text = "New Client";
+            this.Name = "ClientUpdateForm";
+            this.Text = "Client Update";
             this.pClient.ResumeLayout(false);
             this.pClient.PerformLayout();
             this.ResumeLayout(false);
@@ -178,6 +178,7 @@
         #endregion
 
         private System.Windows.Forms.Panel pClient;
+        private System.Windows.Forms.TextBox tbBulstat;
         private System.Windows.Forms.ComboBox cbVat;
         private System.Windows.Forms.TextBox tbNameClient;
         private System.Windows.Forms.TextBox tbMol;
@@ -187,7 +188,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.TextBox tbBulstat;
+        private System.Windows.Forms.Button btnUpdate;
     }
 }

@@ -5,58 +5,58 @@ create table Products (
 	Name nvarchar(35) not null,
 	Description nvarchar(150),
 	Weight decimal(5,2) not null,
-	Barcode varchar(13) not null,
+	Barcode varchar(13) not null unique,
 	Price decimal(10,2) not null
 )
 
 create table Clients(
-	Id int identity(1,1) not null primary key,
+	Id int identity(1,1) not null,
 	Name nvarchar(30) not null,
 	Address nvarchar(100) not null,
 	Bulstat varchar(9) not null unique,
 	RegisteredVat bit not null,
-	Mol nvarchar(35) not null
+	Mol nvarchar(35) not null,
+	isDeleted bit default(0)
 )
 
 create table Sales(
-	Id int identity(1,1) not null primary key,
+	Id int identity(1,1) not null,
 	SaleDate date not null,
-	ClientId int not null references Clients(Id),
+	ClientName nvarchar(30) not null,
 	Invoice varchar(10) not null unique,
 )
 
 create table ProductSales(
-	ProductId int not null references Products(Id),
-	SaleId int not null references Sales(Id),
+	ProductName nvarchar(35) not null,
+	SaleId int not null,
 	Quantity int not null,
 	Price decimal(10,2) not null,
 	TotalPrice as ([Quantity] * [Price]),
-	primary key(ProductId, SaleId)
 )
 
 insert into ProductSales
-values (4, 3, 3, (select price from Products where Id = 4))
+values ('Table', 3, 3, (select price from Products where Id = 4))
 
 insert into ProductSales
-values (4, 2, 3, (select price from Products where Id = 4))
+values ('Table', 2, 3, (select price from Products where Id = 4))
 
 insert into ProductSales
-values (1, 3, 3, (select price from Products where Id = 1))
+values ('Bed', 3, 3, (select price from Products where Id = 1))
 
 insert into ProductSales
-values (2, 2, 3, (select price from Products where Id = 2))
+values ('Chair', 2, 3, (select price from Products where Id = 2))
 
 insert into ProductSales
-values (1, 5, 10, (select price from Products where Id = 1))
+values ('Bed', 5, 10, (select price from Products where Id = 1))
 
 insert into ProductSales
-values (3, 6, 7, (select price from Products where Id = 3))
+values ('Sofa', 6, 7, (select price from Products where Id = 3))
 
 insert into ProductSales
-values (2, 6, 4, (select price from Products where Id = 2))
+values ('Chair', 6, 4, (select price from Products where Id = 2))
 
 insert into ProductSales
-values (2, 5, 4, (select price from Products where Id = 2))
+values ('Chair', 5, 4, (select price from Products where Id = 2))
 
 insert into Products
 values('Bed', null, 40, 1234567891234, 100.5)
@@ -74,31 +74,31 @@ insert into Products
 values('Wardrobe', null, 60, 12345777234, 80)
 
 insert into Clients
-values('Ivan OOD','bul. "Tsar Boris III Obedinitel" 128', 123456789, 1,'Ivan Ivanov')
+values('Ivan OOD','bul. "Tsar Boris III Obedinitel" 128', 123456789, 1,'Ivan Ivanov', 0)
 
 insert into Clients
-values('Petar OOD','bul. "Tsar Boris III Obedinitel" 12', 987654321, 0,'Petar Dimov')
+values('Petar OOD','bul. "Tsar Boris III Obedinitel" 12', 987654321, 0,'Petar Dimov', 0)
 
 insert into Clients
-values('BRR OOD','bul. "Tsar Boris III Obedinitel" 31', 112233789, 1,'Denislav Todorov')
+values('BRR OOD','bul. "Tsar Boris III Obedinitel" 31', 112233789, 1,'Denislav Todorov', 0)
 
 insert into Sales
-values (convert(datetime, '18-09-2019',105), 1, 12345412)
+values (convert(datetime, '18-09-2019',105), 'Ivan OOD', 12345412)
 
 insert into Sales
-values (convert(datetime, '20-08-2019',105), 1, 48545412)
+values (convert(datetime, '20-08-2019',105), 'Ivan OOD', 48545412)
 
 insert into Sales
-values (convert(datetime, '15-05-2019',105), 2, 25254412)
+values (convert(datetime, '15-05-2019',105), 'Petar OOD', 25254412)
 
 insert into Sales
-values (convert(datetime, '01-07-2019',105), 3, 65658412)
+values (convert(datetime, '01-07-2019',105), 'BRR OOD', 65658412)
 
 insert into Sales
-values (convert(datetime, '5-09-2019',105), 2, 12333332)
+values (convert(datetime, '5-09-2019',105), 'Petar OOD', 12333332)
 
 insert into Sales
-values (convert(datetime, '25-09-2019',105), 3, 12666332)
+values (convert(datetime, '25-09-2019',105), 'BRR OOD', 12666332)
 
 /* search product by part of the name*/
 
@@ -129,4 +129,16 @@ left join ProductSales ps  on pr.Id = ps.ProductId
 left join Sales s on (s.Id = ps.SaleId)
 and s.SaleDate > dateadd(month, -1, getdate())
 group by pr.Id, pr.Name
+
+
+select Id,Name
+from Clients
+where isDeleted = 0
+
+select * from Clients
+
+update Clients
+set isDeleted = 1
+where Id = 3
+
 

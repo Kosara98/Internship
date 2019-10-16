@@ -6,36 +6,27 @@ using System;
 
 namespace FurnitureShop
 {
-    public class ClientConnection
+    public class ClientConnection : Connection
     {
-        internal string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
+        private string insertQuery = "insert into Clients values (@name, @address, @bulstat, @vat, @mol, 0)";
+        private string showAllQuery = "select Id,Name, Address, Bulstat, RegisteredVat, Mol " +
+                                "from Clients " +
+                                "where isDeleted = 0";
+        private string deleteQuery = "update Clients set isDeleted = 1 where Bulstat = @bulstat";
+        private string updateQuery = "update Clients set Name = @name, Address = @address, Bulstat = @bulstat, RegisteredVat = @vat, Mol = @mol " +
+                                "where Id = @id";
 
         public void Insert(string name, string address, string bulstat, char registeredVat, string mol)
         {
-            int vat = registeredVat == 'Y' ? 1 : 0;
-            string query = $"insert into Clients values (@name, @address, @bulstat,'{vat}', @mol)";
-
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@name", name);
-                    command.Parameters.AddWithValue("@address", address);
-                    command.Parameters.AddWithValue("@bulstat", bulstat);
-                    command.Parameters.AddWithValue("@mol", mol);
-                    connection.Open();
-                    command.ExecuteNonQuery();                    
-                }
-            }
+            InsertOrUpdate(name, address, bulstat, registeredVat, mol, updateQuery, -1);
         }
 
-        public IEnumerable<Client> ShowAllClients()
+        public IEnumerable<Client> ShowAll()
         {
             List<Client> clients = new List<Client>();
-            string query = "select Id,Name, Address, Bulstat, RegisteredVat, Mol from Clients";
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(query, connection))
+            using (SqlCommand command = new SqlCommand(showAllQuery, connection))
             {
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -54,6 +45,41 @@ namespace FurnitureShop
                 }
             }
             return clients;
+        }
+
+        public void Delete(string bulstat)
+        {
+            using (SqlConnection connection = new SqlConnection(sqlConnection))
+            using (SqlCommand command = new SqlCommand(deleteQuery, connection))
+            {
+                command.Parameters.AddWithValue("@bulstat", bulstat);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Update(string name, string address, string bulstat, char registeredVat, string mol, int id)
+        {
+            InsertOrUpdate(name, address, bulstat, registeredVat, mol, updateQuery, id);
+        }
+
+        private void InsertOrUpdate(string name, string address, string bulstat, char registeredVat, string mol, string query, int id)
+        {
+            int vat = registeredVat == 'Y' ? 1 : 0;
+
+            using (SqlConnection connection = new SqlConnection(sqlConnection))
+            using (SqlCommand command = new SqlCommand(insertQuery, connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@address", address);
+                command.Parameters.AddWithValue("@bulstat", bulstat);
+                command.Parameters.AddWithValue("@vat", vat);
+                command.Parameters.AddWithValue("@mol", mol);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

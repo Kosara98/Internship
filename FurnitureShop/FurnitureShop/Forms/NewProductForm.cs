@@ -38,7 +38,7 @@ namespace FurnitureShop
                 MessageBox.Show("Fill in all the information");
             else if (tbBarcode.TextLength < 13)
                 MessageBox.Show("The barcode must be 13 characters");
-            else if (tbNameProduct.Text.Any(c => !char.IsLetter(c)))
+            else if (tbNameProduct.Text.Any(c => char.IsNumber(c)))
                 MessageBox.Show("The name should not contains numbers.");
             else
             {

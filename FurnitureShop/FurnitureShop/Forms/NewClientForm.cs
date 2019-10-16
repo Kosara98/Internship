@@ -38,8 +38,8 @@ namespace FurnitureShop
                 MessageBox.Show("Fill in all the information");
             else if (tbBulstat.TextLength < 9 || tbBulstat.Text.Any(c => !char.IsDigit(c)))
                 MessageBox.Show("The bulstat must be 9 numbers");
-            else if (tbMol.Text.Any(c => !char.IsLetter(c)))
-                MessageBox.Show("The name and the mol should not contains numbers.");
+            else if (tbMol.Text.Any(c => char.IsNumber(c)))
+                MessageBox.Show("Тhe mol should not contains numbers.");
             else
             {
                 clientConnection.Insert(client.Name, client.Address, client.Bulstat, client.RegisteredVat, client.Mol);

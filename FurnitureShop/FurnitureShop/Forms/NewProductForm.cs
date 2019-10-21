@@ -42,7 +42,7 @@ namespace FurnitureShop
                 MessageBox.Show("The name should not contains numbers.");
             else
             {
-                productConnection.Insert(product.Name, product.Description, product.Weight, product.Barcode, product.Price);
+                productConnection.Insert(product);
                 MessageBox.Show("Successfully added new product!");
                 Close();
             }

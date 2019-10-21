@@ -11,20 +11,12 @@ namespace FurnitureShop
         private string insertQuery = "insert into Products values (@name, @description, @weight, @barcode, @price, 0)";
         private string showAllQuery = "select Id, Name, Description, Barcode, Weight, Price " +
                 "from Products " +
-                "where isDeleted = 0";
-        private string deleteQuery = "update Products set isDeleted = 1 where Barcode = @barcode";
+                "where IsDeleted = 0";
+        private string deleteQuery = "update Products set IsDeleted = 1 where Id = @id";
         private string updateQuery = "update Products set Name = @name, Description = @description, Weight = @weight, Barcode = @barcode, Price = @price " +
                 "where Id = @id";
 
-        public void Insert(string name, string description, decimal weight, string barcode, decimal price)
-        {
-            if (description == null)
-                insertQuery = "insert into Products values (@name, null, @weight, @barcode, @price, 0)";
-
-            InsertOrUpdate(name, description, weight, barcode, price, insertQuery, -1);
-        }
-
-        public IEnumerable<Product> ShowAll()
+        public IEnumerable<Product> GetAll()
         {
             List<Product> products = new List<Product>();
 
@@ -53,43 +45,44 @@ namespace FurnitureShop
             return products;
         }
 
-        public void Delete(string barcode)
+        public void Insert(Product product)
         {
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(deleteQuery, connection))
-            {
-                command.Parameters.AddWithValue("@barcode", barcode);
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@barcode", product.Barcode);
+            parameters.Add("@name", product.Name);
+            parameters.Add("@weight", product.Weight);
+            parameters.Add("@price", product.Price);
+
+            if (product.Description != null)
+                parameters.Add("@description", product.Description);
+            else
+                parameters.Add("@description", "");
+
+            ExecuteQuery(parameters, insertQuery);
         }
 
-        public void Update(string name, string description, decimal weight, string barcode, decimal price, int id)
+        public void Delete(Product product)
         {
-            if (description == null)
-                updateQuery = "update Products set Name = @name, Description = null, Weight = @weight, Barcode = @barcode, Price = @price " +
-                "where Id = @id";
-
-            InsertOrUpdate(name, description, weight, barcode, price, updateQuery, id);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@id", product.Id);
+            ExecuteQuery(parameters, deleteQuery);
         }
 
-        private void InsertOrUpdate(string name, string description, decimal weight, string barcode, decimal price, string query, int id)
+        public void Update(Product product)
         {
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                if (description != null)
-                    command.Parameters.AddWithValue("@description", description);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@id", product.Id);
+            parameters.Add("@barcode", product.Barcode);
+            parameters.Add("@name", product.Name);
+            parameters.Add("@weight", product.Weight);
+            parameters.Add("@price", product.Price);
 
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@barcode", barcode);
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@weight", weight);
-                command.Parameters.AddWithValue("@price", price);
+            if (product.Description != null)
+                parameters.Add("@description", product.Description);
+            else
+                parameters.Add("@description", "");
 
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
+            ExecuteQuery(parameters, updateQuery);
         }
     }
 }

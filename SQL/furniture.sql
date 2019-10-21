@@ -129,16 +129,3 @@ left join ProductSales ps  on pr.Id = ps.ProductId
 left join Sales s on (s.Id = ps.SaleId)
 and s.SaleDate > dateadd(month, -1, getdate())
 group by pr.Id, pr.Name
-
-
-select Id,Name
-from Clients
-where isDeleted = 0
-
-select * from Clients
-
-update Clients
-set isDeleted = 1
-where Id = 3
-
-

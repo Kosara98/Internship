@@ -23,11 +23,11 @@ namespace FurnitureShop
         {
             InitializeComponent();
 
-            cbClient.DataSource = clientConnection.ShowAll();
+            cbClient.DataSource = clientConnection.GetAll();
             cbClient.DisplayMember = "Name";
             cbClient.ValueMember = "Id";
 
-            cbProduct.DataSource = productConnection.ShowAll();
+            cbProduct.DataSource = productConnection.GetAll();
             cbProduct.DisplayMember = "Name";
             cbProduct.ValueMember = "Id";
 
@@ -58,7 +58,7 @@ namespace FurnitureShop
             cb.Top = top;
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.Size = cbProduct.Size;
-            cb.DataSource = productConnection.ShowAll();
+            cb.DataSource = productConnection.GetAll();
             cb.DisplayMember = "Name";
             cb.ValueMember = "Id";
             cb.DataBindings.Add(new Binding("SelectedValue", newProductSaleViewModel, "ProductId"));
@@ -135,7 +135,8 @@ namespace FurnitureShop
             foreach (var item in productSales)
                 sale.Products.Add(item.ProductId, item.Quantity);
 
-            saleConnection.Insert(sale.SaleDate, sale.Invoice, cbClient.Text, sale.Products);
+            sale.Client = cbClient.Text;
+            saleConnection.Insert(sale);
             sale.Products.Clear();
 
             MessageBox.Show("Successfully added new sale!");

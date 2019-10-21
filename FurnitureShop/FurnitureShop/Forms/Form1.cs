@@ -14,16 +14,22 @@ namespace FurnitureShop
 {
     public partial class Form1 : Form
     {
-        private ProductConnection productConnection = new ProductConnection();
-        private ClientConnection clientConnection = new ClientConnection();
-        private SaleConnection saleConnection = new SaleConnection();
+        private static ProductConnection productConnection = new ProductConnection();
+        private static ClientConnection clientConnection = new ClientConnection();
+        private static SaleConnection saleConnection = new SaleConnection();
         private ProductUpdateForm productUpdateForm = new ProductUpdateForm();
         private ClientUpdateForm clientUpdateForm = new ClientUpdateForm();
+        private BindingSource productSource = new BindingSource(productConnection.GetAll(), null);
+        private BindingSource clientSource = new BindingSource(clientConnection.GetAll(), null);
+        private BindingSource saleSource = new BindingSource(saleConnection.GetAll(), null);
 
         public Form1()
         {
             Application.ThreadException += new ThreadExceptionEventHandler(Form1_UIThreadException);
             InitializeComponent();
+
+            productUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
+            clientUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
         }
 
         private void newClientToolStripMenuItem_Click(object sender, EventArgs e)
@@ -46,19 +52,28 @@ namespace FurnitureShop
 
         private void btnShow_Click(object sender, EventArgs e)
         {
+            BindingSource newProductSource = new BindingSource(productConnection.GetAll(), null);
+            BindingSource newClientSource = new BindingSource(clientConnection.GetAll(), null);
+            BindingSource newSaleSource = new BindingSource(saleConnection.GetAll(), null);
+            productSource = newProductSource;
+            clientSource = newClientSource;
+            saleSource = newSaleSource;
+
             if (cbTables.SelectedIndex == 0)
             {
-                dataGrid.DataSource = new BindingSource(productConnection.ShowAll(), null); ;
+                dataGrid.DataSource = productSource;
                 dataGrid.Columns["Id"].Visible = false;
             }
             else if (cbTables.SelectedIndex == 1)
             {
-                dataGrid.DataSource = new BindingSource(clientConnection.ShowAll(), null);
+                dataGrid.DataSource = clientSource;
                 dataGrid.Columns["Id"].Visible = false;
             }
             else if (cbTables.SelectedIndex == 2)
-                dataGrid.DataSource = new BindingSource(saleConnection.ShowAll(), null);
-
+            {
+                dataGrid.DataSource = saleSource;
+                dataGrid.Columns["Id"].Visible = false;
+            }
             btnDelete.Enabled = false;
             btnUpdate.Enabled = false;
         }
@@ -97,21 +112,21 @@ namespace FurnitureShop
         {
             if (cbTables.SelectedIndex == 0)
             {
-                BindingSource bindingSource = new BindingSource(productConnection.ShowAll(), null);
-                Product currentProduct = (Product)bindingSource.Current;
-                productConnection.Delete(currentProduct.Barcode);
+                Product currentProduct = (Product)productSource.Current;
+                productConnection.Delete(currentProduct);
+                MessageBox.Show("Successfully deleted the product!");
             }
             else if (cbTables.SelectedIndex == 1)
             {
-                BindingSource bindingSource = new BindingSource(clientConnection.ShowAll(), null);
-                Client currentClient = (Client)bindingSource.Current;
-                clientConnection.Delete(currentClient.Bulstat);
+                Client currentClient = (Client)clientSource.Current;
+                clientConnection.Delete(currentClient);
+                MessageBox.Show("Successfully deleted the client!");
             }
             else if (cbTables.SelectedIndex == 2)
             {
-                BindingSource bindingSource = new BindingSource(saleConnection.ShowAll(), null);
-                Sale currentSale = (Sale)bindingSource.Current;
-                saleConnection.Delete(currentSale.Invoice);
+                Sale currentSale = (Sale)saleSource.Current;
+                saleConnection.Delete(currentSale);
+                MessageBox.Show("Successfully deleted the sale!");
             }
             btnShow.PerformClick();
         }
@@ -127,22 +142,20 @@ namespace FurnitureShop
         {
             if (cbTables.SelectedIndex == 0)
             {
-                BindingSource bindingSource = new BindingSource(productConnection.ShowAll(), null);
-                Product currentProduct = (Product)bindingSource.Current;
-
-                productUpdateForm.SetInfo
-                    (currentProduct.Id,currentProduct.Name,currentProduct.Barcode,currentProduct.Weight,currentProduct.Price, currentProduct.Description);
+                Product currentProduct = (Product)productSource.Current;
+                productUpdateForm.SetInfo(currentProduct);
                 productUpdateForm.Show();
             }
             else if (cbTables.SelectedIndex == 1)
             {
-                BindingSource bindingSource = new BindingSource(clientConnection.ShowAll(), null);
-                Client currentClient = (Client)bindingSource.Current;
-
-                clientUpdateForm.SetInfo
-                    (currentClient.Id,currentClient.Name,currentClient.Address,currentClient.Bulstat,currentClient.Mol,currentClient.RegisteredVat);
+                Client currentClient = (Client)clientSource.Current;
+                clientUpdateForm.SetInfo(currentClient);
                 clientUpdateForm.Show();
             }
+        }
+
+        private void childForm_Closed(object sender, EventArgs e)
+        {
             btnShow.PerformClick();
         }
     }

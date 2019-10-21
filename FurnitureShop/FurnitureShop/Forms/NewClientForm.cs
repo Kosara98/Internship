@@ -42,7 +42,7 @@ namespace FurnitureShop
                 MessageBox.Show("Тhe mol should not contains numbers.");
             else
             {
-                clientConnection.Insert(client.Name, client.Address, client.Bulstat, client.RegisteredVat, client.Mol);
+                clientConnection.Insert(client);
                 MessageBox.Show("Successfully added new client!");
                 Close();
             }

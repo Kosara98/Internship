@@ -13,7 +13,7 @@ namespace FurnitureShop
     public partial class ClientUpdateForm : Form
     {
         private ClientConnection clientConnection = new ClientConnection();
-        private int clientId;
+        private Client updatedClient;
 
         public ClientUpdateForm()
         {
@@ -30,20 +30,20 @@ namespace FurnitureShop
                 MessageBox.Show("Тhe mol should not contains numbers.");
             else
             {
-                clientConnection.Update(tbNameClient.Text, tbAdress.Text, tbBulstat.Text, Convert.ToChar(cbVat.SelectedText), tbMol.Text, clientId);
+                clientConnection.Update(updatedClient);
                 MessageBox.Show("Successfully updated the client!");
                 Close();
             }
         }
 
-        public void SetInfo(int id, string name, string address, string bulstat, string mol, char vat)
+        public void SetInfo(Client client)
         {
-            clientId = id;
-            tbNameClient.Text = name;
-            tbAdress.Text = address;
-            tbBulstat.Text = bulstat;
-            tbMol.Text = mol;
-            cbVat.SelectedIndex = vat == 'Y' ? 1 : 0;
+            updatedClient = client;
+            tbNameClient.Text = client.Name;
+            tbAdress.Text = client.Address;
+            tbBulstat.Text = client.Bulstat;
+            tbMol.Text = client.Mol;
+            cbVat.SelectedIndex = client.RegisteredVat == 'Y' ? 1 : 0;
         }
     }
 }

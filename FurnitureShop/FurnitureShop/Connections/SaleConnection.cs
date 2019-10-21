@@ -16,54 +16,14 @@ namespace FurnitureShop
                                                 " from Products" +
                                                 " where Id = @id";
         private string showAllQuery =
-                                "select s.SaleDate, s.Invoice, ps.ProductName as Product, ps.Quantity, s.ClientName as Client, ps.TotalPrice " +
+                                "select s.Id, s.SaleDate, s.Invoice, ps.ProductName as Product, ps.Quantity, s.ClientName as Client, ps.TotalPrice " +
                                 "from ProductSales ps " +
                                 "join Sales s on ps.SaleId = s.Id " +
-                                "where s.isDeleted = 0 " +
+                                "where s.IsDeleted = 0 " +
                                 "order by s.SaleDate desc";
-        private string deleteQuery = "update Sales set isDeleted = 1 where Id = @invoice";
+        private string deleteQuery = "update Sales set IsDeleted = 1 where Id = @id";
 
-        public void Insert(DateTime saleDate, string invoice, string clientName, Dictionary<int, int> Products)
-        {
-            int saleId;
-            string date = $"{saleDate.Month}-{saleDate.Day}-{saleDate.Year}";
-
-            //Insert for table Sales
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(insertQuerySales, connection))
-            {
-                command.Parameters.AddWithValue("@invoice", invoice);
-                command.Parameters.AddWithValue("@clientName", clientName);
-                command.Parameters.AddWithValue("@date", date);
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-
-            //Query for saleId
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(selectSaleIdQuery, connection))
-            {
-                command.Parameters.AddWithValue("@invoice", invoice);
-                connection.Open();
-                saleId = (int)command.ExecuteScalar();
-            }
-
-            //Insert for table ProductSales
-            foreach (KeyValuePair<int,int> item in Products)
-            {
-                using (SqlConnection connection = new SqlConnection(sqlConnection))
-                using (SqlCommand command = new SqlCommand(insertQueryProductSales, connection))
-                {
-                    command.Parameters.AddWithValue("@id", item.Key);
-                    command.Parameters.AddWithValue("@saleId", saleId);
-                    command.Parameters.AddWithValue("@quantity", item.Value);
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                }
-            }
-        }
-
-        public IEnumerable<Sale> ShowAll()
+        public IEnumerable<Sale> GetAll()
         {
             List<Sale> sales = new List<Sale>();
 
@@ -76,6 +36,7 @@ namespace FurnitureShop
                     while (reader.Read())
                     {
                         var sale = new Sale();
+                        sale.Id = (int)reader["Id"];
                         sale.SaleDate = (DateTime)reader["SaleDate"];
                         sale.Invoice = (string)reader["Invoice"];
                         sale.Product = (string)reader["Product"];
@@ -89,15 +50,46 @@ namespace FurnitureShop
             return sales;
         }
 
-        public void Delete(string invoice)
+        public void Insert(Sale sale)
         {
+            int saleId;
+
+            //Insert for table Sales
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@invoice", sale.Invoice);
+            parameters.Add("@clientName", sale.Client);
+            parameters.Add("@date", sale.SaleDate);
+            ExecuteQuery(parameters, insertQuerySales);
+
+            //Query for saleId
             using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(deleteQuery, connection))
+            using (SqlCommand command = new SqlCommand(selectSaleIdQuery, connection))
             {
-                command.Parameters.AddWithValue("@invoice", invoice);
+                command.Parameters.AddWithValue("@invoice", sale.Invoice);
                 connection.Open();
-                command.ExecuteNonQuery();
+                saleId = (int)command.ExecuteScalar();
             }
+
+            //Insert for table ProductSales
+            foreach (KeyValuePair<int,int> item in sale.Products)
+            {
+                using (SqlConnection connection = new SqlConnection(sqlConnection))
+                using (SqlCommand command = new SqlCommand(insertQueryProductSales, connection))
+                {
+                    command.Parameters.AddWithValue("@id", item.Key);
+                    command.Parameters.AddWithValue("@saleId", saleId);
+                    command.Parameters.AddWithValue("@quantity", item.Value);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                }
+            }
+        }
+
+        public void Delete(Sale sale)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@id", sale.Id);
+            ExecuteQuery(parameters, deleteQuery);
         }
     }
 }

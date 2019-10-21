@@ -11,17 +11,12 @@ namespace FurnitureShop
         private string insertQuery = "insert into Clients values (@name, @address, @bulstat, @vat, @mol, 0)";
         private string showAllQuery = "select Id,Name, Address, Bulstat, RegisteredVat, Mol " +
                                 "from Clients " +
-                                "where isDeleted = 0";
-        private string deleteQuery = "update Clients set isDeleted = 1 where Bulstat = @bulstat";
+                                "where IsDeleted = 0";
+        private string deleteQuery = "update Clients set IsDeleted = 1 where Id = @id";
         private string updateQuery = "update Clients set Name = @name, Address = @address, Bulstat = @bulstat, RegisteredVat = @vat, Mol = @mol " +
                                 "where Id = @id";
 
-        public void Insert(string name, string address, string bulstat, char registeredVat, string mol)
-        {
-            InsertOrUpdate(name, address, bulstat, registeredVat, mol, updateQuery, -1);
-        }
-
-        public IEnumerable<Client> ShowAll()
+        public IEnumerable<Client> GetAll()
         {
             List<Client> clients = new List<Client>();
 
@@ -46,40 +41,35 @@ namespace FurnitureShop
             }
             return clients;
         }
-
-        public void Delete(string bulstat)
+        
+        public void Insert(Client client)
         {
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(deleteQuery, connection))
-            {
-                command.Parameters.AddWithValue("@bulstat", bulstat);
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@name", client.Name);
+            parameters.Add("@address", client.Address);
+            parameters.Add("@bulstat", client.Bulstat);
+            parameters.Add("@vat", client.RegisteredVat == 'Y' ? 1 : 0);
+            parameters.Add("@mol", client.Mol);
+            ExecuteQuery(parameters, insertQuery);
         }
 
-        public void Update(string name, string address, string bulstat, char registeredVat, string mol, int id)
+        public void Delete(Client client)
         {
-            InsertOrUpdate(name, address, bulstat, registeredVat, mol, updateQuery, id);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@id", client.Id);
+            ExecuteQuery(parameters, deleteQuery);
         }
 
-        private void InsertOrUpdate(string name, string address, string bulstat, char registeredVat, string mol, string query, int id)
+        public void Update(Client client)
         {
-            int vat = registeredVat == 'Y' ? 1 : 0;
-
-            using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(insertQuery, connection))
-            {
-                command.Parameters.AddWithValue("@id", id);
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@address", address);
-                command.Parameters.AddWithValue("@bulstat", bulstat);
-                command.Parameters.AddWithValue("@vat", vat);
-                command.Parameters.AddWithValue("@mol", mol);
-
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@id", client.Id);
+            parameters.Add("@name", client.Name);
+            parameters.Add("@address", client.Address);
+            parameters.Add("@bulstat", client.Bulstat);
+            parameters.Add("@vat", client.RegisteredVat == 'Y' ? 1 : 0);
+            parameters.Add("@mol", client.Mol);
+            ExecuteQuery(parameters, updateQuery);
         }
     }
 }

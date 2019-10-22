@@ -30,6 +30,11 @@ namespace FurnitureShop
                 MessageBox.Show("Тhe mol should not contains numbers.");
             else
             {
+                updatedClient.Name = tbNameClient.Text;
+                updatedClient.Address = tbAdress.Text;
+                updatedClient.Bulstat = tbBulstat.Text;
+                updatedClient.Mol = tbMol.Text;
+                updatedClient.RegisteredVat = cbVat.SelectedIndex == 1 ? 'Y' : 'N';
                 clientConnection.Update(updatedClient);
                 MessageBox.Show("Successfully updated the client!");
                 Close();

@@ -9,26 +9,12 @@ namespace FurnitureShop
 {
     public class SaleConnection : Connection
     {
-        private string insertQuerySales = "insert into Sales values(@date, @clientName, @invoice, 0)";
-        private string selectSaleIdQuery = "select Id from Sales where Invoice = @invoice";
-        private string insertQueryProductSales = "insert into ProductSales " +
-                                                " select Name, @saleId, @quantity, Price" +
-                                                " from Products" +
-                                                " where Id = @id";
-        private string showAllQuery =
-                                "select s.Id, s.SaleDate, s.Invoice, ps.ProductName as Product, ps.Quantity, s.ClientName as Client, ps.TotalPrice " +
-                                "from ProductSales ps " +
-                                "join Sales s on ps.SaleId = s.Id " +
-                                "where s.IsDeleted = 0 " +
-                                "order by s.SaleDate desc";
-        private string deleteQuery = "update Sales set IsDeleted = 1 where Id = @id";
-
         public IEnumerable<Sale> GetAll()
         {
             List<Sale> sales = new List<Sale>();
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(showAllQuery, connection))
+            using (SqlCommand command = new SqlCommand(showAllSalesQuery, connection))
             {
                 connection.Open();
                 using (var reader = command.ExecuteReader())
@@ -55,11 +41,11 @@ namespace FurnitureShop
             int saleId;
 
             //Insert for table Sales
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("@invoice", sale.Invoice);
-            parameters.Add("@clientName", sale.Client);
-            parameters.Add("@date", sale.SaleDate);
-            ExecuteQuery(parameters, insertQuerySales);
+            Dictionary<string, object> parametersInsert = new Dictionary<string, object>();
+            parametersInsert.Add("@invoice", sale.Invoice);
+            parametersInsert.Add("@clientName", sale.Client);
+            parametersInsert.Add("@date", sale.SaleDate);
+            ExecuteQuery(parametersInsert, insertQuerySales);
 
             //Query for saleId
             using (SqlConnection connection = new SqlConnection(sqlConnection))
@@ -73,15 +59,11 @@ namespace FurnitureShop
             //Insert for table ProductSales
             foreach (KeyValuePair<int,int> item in sale.Products)
             {
-                using (SqlConnection connection = new SqlConnection(sqlConnection))
-                using (SqlCommand command = new SqlCommand(insertQueryProductSales, connection))
-                {
-                    command.Parameters.AddWithValue("@id", item.Key);
-                    command.Parameters.AddWithValue("@saleId", saleId);
-                    command.Parameters.AddWithValue("@quantity", item.Value);
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                }
+                Dictionary<string, object> parametersProductSales = new Dictionary<string, object>();
+                parametersProductSales.Add("@id", item.Key);
+                parametersProductSales.Add("@saleId", saleId);
+                parametersProductSales.Add("@quantity", item.Value);
+                ExecuteQuery(parametersProductSales, insertQueryProductSales);
             }
         }
 
@@ -89,7 +71,7 @@ namespace FurnitureShop
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", sale.Id);
-            ExecuteQuery(parameters, deleteQuery);
+            ExecuteQuery(parameters, deleteSaleQuery);
         }
     }
 }

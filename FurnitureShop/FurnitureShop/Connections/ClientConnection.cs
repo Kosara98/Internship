@@ -8,20 +8,12 @@ namespace FurnitureShop
 {
     public class ClientConnection : Connection
     {
-        private string insertQuery = "insert into Clients values (@name, @address, @bulstat, @vat, @mol, 0)";
-        private string showAllQuery = "select Id,Name, Address, Bulstat, RegisteredVat, Mol " +
-                                "from Clients " +
-                                "where IsDeleted = 0";
-        private string deleteQuery = "update Clients set IsDeleted = 1 where Id = @id";
-        private string updateQuery = "update Clients set Name = @name, Address = @address, Bulstat = @bulstat, RegisteredVat = @vat, Mol = @mol " +
-                                "where Id = @id";
-
         public IEnumerable<Client> GetAll()
         {
             List<Client> clients = new List<Client>();
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(showAllQuery, connection))
+            using (SqlCommand command = new SqlCommand(showAllClietnsQuery, connection))
             {
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -50,14 +42,14 @@ namespace FurnitureShop
             parameters.Add("@bulstat", client.Bulstat);
             parameters.Add("@vat", client.RegisteredVat == 'Y' ? 1 : 0);
             parameters.Add("@mol", client.Mol);
-            ExecuteQuery(parameters, insertQuery);
+            ExecuteQuery(parameters, insertClientQuery);
         }
 
         public void Delete(Client client)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", client.Id);
-            ExecuteQuery(parameters, deleteQuery);
+            ExecuteQuery(parameters, deleteClientQuery);
         }
 
         public void Update(Client client)
@@ -69,7 +61,7 @@ namespace FurnitureShop
             parameters.Add("@bulstat", client.Bulstat);
             parameters.Add("@vat", client.RegisteredVat == 'Y' ? 1 : 0);
             parameters.Add("@mol", client.Mol);
-            ExecuteQuery(parameters, updateQuery);
+            ExecuteQuery(parameters, updateClientQuery);
         }
     }
 }

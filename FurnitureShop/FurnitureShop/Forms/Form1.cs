@@ -17,8 +17,6 @@ namespace FurnitureShop
         private static ProductConnection productConnection = new ProductConnection();
         private static ClientConnection clientConnection = new ClientConnection();
         private static SaleConnection saleConnection = new SaleConnection();
-        private ProductUpdateForm productUpdateForm = new ProductUpdateForm();
-        private ClientUpdateForm clientUpdateForm = new ClientUpdateForm();
         private BindingSource productSource = new BindingSource(productConnection.GetAll(), null);
         private BindingSource clientSource = new BindingSource(clientConnection.GetAll(), null);
         private BindingSource saleSource = new BindingSource(saleConnection.GetAll(), null);
@@ -27,26 +25,26 @@ namespace FurnitureShop
         {
             Application.ThreadException += new ThreadExceptionEventHandler(Form1_UIThreadException);
             InitializeComponent();
-
-            productUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
-            clientUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
         }
 
         private void newClientToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewClientForm newClient = new NewClientForm();
+            newClient.FormClosed += new FormClosedEventHandler(childForm_Closed);
             newClient.Show();
         }
 
         private void newProductToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewProductForm newProduct = new NewProductForm();
+            newProduct.FormClosed += new FormClosedEventHandler(childForm_Closed);
             newProduct.Show();
         }
 
         private void newSaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewSaleForm newSale = new NewSaleForm();
+            newSale.FormClosed += new FormClosedEventHandler(childForm_Closed);
             newSale.Show();
         }
 
@@ -140,6 +138,12 @@ namespace FurnitureShop
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
+            ProductUpdateForm productUpdateForm = new ProductUpdateForm();
+            productUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
+
+            ClientUpdateForm clientUpdateForm = new ClientUpdateForm();
+            clientUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
+
             if (cbTables.SelectedIndex == 0)
             {
                 Product currentProduct = (Product)productSource.Current;

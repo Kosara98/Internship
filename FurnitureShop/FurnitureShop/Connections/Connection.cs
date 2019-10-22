@@ -1,20 +1,21 @@
 ﻿using System.Data.SqlClient;
 using System.Configuration;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 
 namespace FurnitureShop
 {
-    public abstract class Connection
+    public abstract class Connection : Queries
     {
         protected string sqlConnection = ConfigurationManager.ConnectionStrings["FurnitureConnection"].ConnectionString;
 
-        public void ExecuteQuery(Dictionary<string, object> parameters, string query)
+        public virtual void ExecuteQuery(Dictionary<string, object> parameters, string query)
         {
             using (SqlConnection connection = new SqlConnection(sqlConnection))
             using (SqlCommand command = new SqlCommand(query, connection))
             {
-                foreach (KeyValuePair<string, object> item in parameters)
-                    command.Parameters.AddWithValue(item.Key, item.Value);
+                foreach (var item in parameters)
+                    command.Parameters.AddWithValue(item.Key, item.Value ?? SqlString.Null);
 
                 connection.Open();
                 command.ExecuteNonQuery();

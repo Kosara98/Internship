@@ -67,7 +67,7 @@
             this.rtbDescription.Location = new System.Drawing.Point(112, 108);
             this.rtbDescription.Name = "rtbDescription";
             this.rtbDescription.Size = new System.Drawing.Size(256, 66);
-            this.rtbDescription.TabIndex = 15;
+            this.rtbDescription.TabIndex = 14;
             this.rtbDescription.Text = "";
             // 
             // numWeight
@@ -94,7 +94,7 @@
             0});
             this.numPrice.Name = "numPrice";
             this.numPrice.Size = new System.Drawing.Size(120, 20);
-            this.numPrice.TabIndex = 14;
+            this.numPrice.TabIndex = 15;
             // 
             // tbBarcode
             // 

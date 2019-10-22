@@ -94,6 +94,12 @@
     <Compile Include="Forms\ProductUpdateForm.Designer.cs">
       <DependentUpon>ProductUpdateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SaleUpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SaleUpdateForm.Designer.cs">
+      <DependentUpon>SaleUpdateForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Forms\ClientUpdateForm.resx">
       <DependentUpon>ClientUpdateForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -121,6 +127,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\SaleUpdateForm.resx">
+      <DependentUpon>SaleUpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -97,6 +97,7 @@ namespace FurnitureShop
             foreach (Control item in pSales.Controls.OfType<Control>().ToList())
                 if (item.Name == "cb" || item.Name == "lb" || item.Name == "num" || item.Name == "btnClear")
                     pSales.Controls.Remove(item); 
+
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -133,7 +134,12 @@ namespace FurnitureShop
         private void InsertSale()
         {
             foreach (var item in productSales)
-                sale.Products.Add(item.ProductId, item.Quantity);
+            {
+                if (sale.Products.ContainsKey(item.ProductId))
+                    continue;
+                else
+                    sale.Products.Add(item.ProductId, item.Quantity);
+            }
 
             sale.Client = cbClient.Text;
             saleConnection.Insert(sale);

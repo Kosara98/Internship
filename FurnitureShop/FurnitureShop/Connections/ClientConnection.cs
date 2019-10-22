@@ -6,14 +6,14 @@ using System;
 
 namespace FurnitureShop
 {
-    public class ClientConnection : Connection
+    public class ClientConnection : Connection<Client>
     {
-        public IEnumerable<Client> GetAll()
+        public override IEnumerable<Client> GetAll()
         {
             List<Client> clients = new List<Client>();
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(showAllClietnsQuery, connection))
+            using (SqlCommand command = new SqlCommand(Queries.showAllClietnsQuery, connection))
             {
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -34,7 +34,7 @@ namespace FurnitureShop
             return clients;
         }
         
-        public void Insert(Client client)
+        public override void Insert(Client client)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@name", client.Name);
@@ -42,17 +42,17 @@ namespace FurnitureShop
             parameters.Add("@bulstat", client.Bulstat);
             parameters.Add("@vat", client.RegisteredVat == 'Y' ? 1 : 0);
             parameters.Add("@mol", client.Mol);
-            ExecuteQuery(parameters, insertClientQuery);
+            ExecuteQuery(parameters, Queries.insertClientQuery);
         }
 
-        public void Delete(Client client)
+        public override void Delete(Client client)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", client.Id);
-            ExecuteQuery(parameters, deleteClientQuery);
+            ExecuteQuery(parameters, Queries.deleteClientQuery);
         }
 
-        public void Update(Client client)
+        public override void Update(Client client)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", client.Id);
@@ -61,7 +61,7 @@ namespace FurnitureShop
             parameters.Add("@bulstat", client.Bulstat);
             parameters.Add("@vat", client.RegisteredVat == 'Y' ? 1 : 0);
             parameters.Add("@mol", client.Mol);
-            ExecuteQuery(parameters, updateClientQuery);
+            ExecuteQuery(parameters, Queries.updateClientQuery);
         }
     }
 }

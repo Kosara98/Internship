@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Configuration;
 using System;
 
 namespace FurnitureShop
 {
-    public class ProductConnection : Connection
+    public class ProductConnection : Connection<Product>
     {
-        public IEnumerable<Product> GetAll()
+        public override IEnumerable<Product> GetAll()
         {
             List<Product> products = new List<Product>();
 
             using (SqlConnection connection = new SqlConnection(sqlConnection))
-            using (SqlCommand command = new SqlCommand(showAllProductsQuery, connection))
+            using (SqlCommand command = new SqlCommand(Queries.showAllProductsQuery, connection))
             {
                 connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -37,7 +35,7 @@ namespace FurnitureShop
             return products;
         }
 
-        public void Insert(Product product)
+        public override void Insert(Product product)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@barcode", product.Barcode);
@@ -45,17 +43,17 @@ namespace FurnitureShop
             parameters.Add("@weight", product.Weight);
             parameters.Add("@price", product.Price);
             parameters.Add("@description", product.Description);
-            ExecuteQuery(parameters, insertProductQuery);
+            ExecuteQuery(parameters, Queries.insertProductQuery);
         }
 
-        public void Delete(Product product)
+        public override void Delete(Product product)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", product.Id);
-            ExecuteQuery(parameters, deleteProductQuery);
+            ExecuteQuery(parameters, Queries.deleteProductQuery);
         }
 
-        public void Update(Product product)
+        public override void Update(Product product)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", product.Id);
@@ -64,7 +62,7 @@ namespace FurnitureShop
             parameters.Add("@weight", product.Weight);
             parameters.Add("@price", product.Price);
             parameters.Add("@description", product.Description);
-            ExecuteQuery(parameters, updateProductQuery);
+            ExecuteQuery(parameters, Queries.updateProductQuery);
         }
     }
 }

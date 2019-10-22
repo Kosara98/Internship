@@ -1,6 +1,6 @@
 ﻿namespace FurnitureShop
 {
-    partial class NewSaleForm
+    partial class SaleUpdateForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,69 +28,51 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnAdd = new System.Windows.Forms.Button();
             this.pSales = new System.Windows.Forms.Panel();
             this.tbInvoice = new System.Windows.Forms.TextBox();
-            this.cbClient = new System.Windows.Forms.ComboBox();
             this.btnAddMore = new System.Windows.Forms.Button();
             this.numQuantity = new System.Windows.Forms.NumericUpDown();
             this.lblQuantity = new System.Windows.Forms.Label();
             this.cbProduct = new System.Windows.Forms.ComboBox();
             this.lblProduct = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label6 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.tbClient = new System.Windows.Forms.TextBox();
+            this.tbDate = new System.Windows.Forms.TextBox();
             this.pSales.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnAdd
-            // 
-            this.btnAdd.Location = new System.Drawing.Point(267, 12);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(98, 21);
-            this.btnAdd.TabIndex = 24;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
             // pSales
             // 
             this.pSales.AutoScroll = true;
+            this.pSales.Controls.Add(this.tbDate);
+            this.pSales.Controls.Add(this.tbClient);
             this.pSales.Controls.Add(this.tbInvoice);
-            this.pSales.Controls.Add(this.cbClient);
             this.pSales.Controls.Add(this.btnAddMore);
             this.pSales.Controls.Add(this.numQuantity);
             this.pSales.Controls.Add(this.lblQuantity);
             this.pSales.Controls.Add(this.cbProduct);
             this.pSales.Controls.Add(this.lblProduct);
-            this.pSales.Controls.Add(this.dateTimePicker1);
             this.pSales.Controls.Add(this.label6);
             this.pSales.Controls.Add(this.label9);
             this.pSales.Controls.Add(this.label10);
             this.pSales.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pSales.Location = new System.Drawing.Point(0, 41);
+            this.pSales.Location = new System.Drawing.Point(0, 42);
             this.pSales.Name = "pSales";
-            this.pSales.Size = new System.Drawing.Size(389, 187);
-            this.pSales.TabIndex = 23;
+            this.pSales.Size = new System.Drawing.Size(388, 187);
+            this.pSales.TabIndex = 24;
             // 
             // tbInvoice
             // 
+            this.tbInvoice.Enabled = false;
             this.tbInvoice.Location = new System.Drawing.Point(112, 69);
             this.tbInvoice.MaxLength = 10;
             this.tbInvoice.Name = "tbInvoice";
             this.tbInvoice.Size = new System.Drawing.Size(253, 20);
             this.tbInvoice.TabIndex = 20;
-            // 
-            // cbClient
-            // 
-            this.cbClient.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbClient.FormattingEnabled = true;
-            this.cbClient.Location = new System.Drawing.Point(112, 40);
-            this.cbClient.Name = "cbClient";
-            this.cbClient.Size = new System.Drawing.Size(253, 21);
-            this.cbClient.TabIndex = 18;
             // 
             // btnAddMore
             // 
@@ -100,7 +82,6 @@
             this.btnAddMore.TabIndex = 23;
             this.btnAddMore.Text = "Add..";
             this.btnAddMore.UseVisualStyleBackColor = true;
-            this.btnAddMore.Click += new System.EventHandler(this.btnAddMore_Click_1);
             // 
             // numQuantity
             // 
@@ -146,15 +127,6 @@
             this.lblProduct.TabIndex = 17;
             this.lblProduct.Text = "Product";
             // 
-            // dateTimePicker1
-            // 
-            this.dateTimePicker1.CustomFormat = "d-mm-yyyy";
-            this.dateTimePicker1.Location = new System.Drawing.Point(112, 14);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(253, 20);
-            this.dateTimePicker1.TabIndex = 16;
-            this.dateTimePicker1.Value = new System.DateTime(2019, 10, 7, 0, 0, 0, 0);
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -182,17 +154,44 @@
             this.label10.TabIndex = 4;
             this.label10.Text = "Date";
             // 
-            // NewSaleForm
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(267, 12);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(98, 21);
+            this.btnAdd.TabIndex = 25;
+            this.btnAdd.Text = "Update";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // tbClient
+            // 
+            this.tbClient.Enabled = false;
+            this.tbClient.Location = new System.Drawing.Point(112, 43);
+            this.tbClient.MaxLength = 10;
+            this.tbClient.Name = "tbClient";
+            this.tbClient.Size = new System.Drawing.Size(253, 20);
+            this.tbClient.TabIndex = 24;
+            // 
+            // tbDate
+            // 
+            this.tbDate.Enabled = false;
+            this.tbDate.Location = new System.Drawing.Point(112, 13);
+            this.tbDate.MaxLength = 10;
+            this.tbDate.Name = "tbDate";
+            this.tbDate.Size = new System.Drawing.Size(253, 20);
+            this.tbDate.TabIndex = 25;
+            // 
+            // SaleUpdateForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(389, 228);
-            this.Controls.Add(this.pSales);
+            this.ClientSize = new System.Drawing.Size(388, 229);
             this.Controls.Add(this.btnAdd);
-            this.Name = "NewSaleForm";
-            this.Text = "New Sale";
+            this.Controls.Add(this.pSales);
+            this.Name = "SaleUpdateForm";
+            this.Text = "Sale Update";
             this.pSales.ResumeLayout(false);
             this.pSales.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).EndInit();
@@ -201,18 +200,19 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button btnAdd;
+
         private System.Windows.Forms.Panel pSales;
-        private System.Windows.Forms.ComboBox cbClient;
+        private System.Windows.Forms.TextBox tbInvoice;
         private System.Windows.Forms.Button btnAddMore;
-        private System.Windows.Forms.NumericUpDown numQuantity;
         private System.Windows.Forms.Label lblQuantity;
-        private System.Windows.Forms.ComboBox cbProduct;
         private System.Windows.Forms.Label lblProduct;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox tbInvoice;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.NumericUpDown numQuantity;
+        private System.Windows.Forms.ComboBox cbProduct;
+        private System.Windows.Forms.TextBox tbDate;
+        private System.Windows.Forms.TextBox tbClient;
     }
 }

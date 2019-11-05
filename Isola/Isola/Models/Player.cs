@@ -5,13 +5,12 @@ namespace Isola
     public class Player
     {
         public string Name { get; set; }
-        public int Turn { get; set; }
         public int Row { get; set; }
         public int Column { get; set; }
 
-        public List<KeyValuePair<int, int>> LeaglMoves(Board currentBoard)
+        public List<KeyValuePair<int, int>> LegalMoves(Board currentBoard)
         {
-            List<KeyValuePair<int,int>> legalMoves = new List<KeyValuePair<int, int>>();
+            List<KeyValuePair<int, int>> legalMoves = new List<KeyValuePair<int, int>>();
             List<KeyValuePair<int, int>> possibleMoves = new List<KeyValuePair<int, int>>();
 
             int minRow = Row - 1 >= 0 ? Row - 1 : Row;
@@ -22,11 +21,11 @@ namespace Isola
             for (int i = minRow; i <= maxRow; i++)
                 for (int j = minColumn; j <= maxColumn; j++)
                     if (i != Row || j != Column)
-                        possibleMoves.Add(new KeyValuePair<int,int>(i, j));
+                        possibleMoves.Add(new KeyValuePair<int, int>(i, j));
 
             foreach (var item in possibleMoves)
                 if (!currentBoard.Eliminated.Contains(item))
-                        legalMoves.Add(item);
+                    legalMoves.Add(item);
 
             return legalMoves;
         }

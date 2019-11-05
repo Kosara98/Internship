@@ -15,9 +15,9 @@ namespace Isola
         private int countMoves = 0;
         private Board board;
         private Player player;
-        private List<Player> players = new List<Player>();
         private Button[,] matrixBoard;
-        private byte turn = 0;
+        private List<Player> players;
+        private byte playerNumber = 1;
 
         public BoardGameForm()
         {
@@ -26,8 +26,10 @@ namespace Isola
 
         public void BoardMaking(Board newBoard, List<Player> listOfPlayers)
         {
-            board = newBoard;
             players = listOfPlayers;
+            board = newBoard;
+            board.Eliminated = new List<KeyValuePair<int, int>>();
+            player = players[1];
             matrixBoard = new Button[board.Size, board.Size];
 
             int top = 0;
@@ -49,7 +51,7 @@ namespace Isola
                         Top = top,
                         Parent = panel
                     };
-                    matrixBoard[x, y].Tag = $"{x}_{y}";
+                    matrixBoard[x, y].Tag = new KeyValuePair<int,int>(x,y);
                     matrixBoard[x, y].Click += Button_Click;
                 }
             }
@@ -69,90 +71,118 @@ namespace Isola
         {
             foreach (var item in matrixBoard)
             {
-                if (item.Tag.ToString() == $"0_{board.Size / 2}")
-                {
-                    item.Text = players[1].Name.ToString();
-                    players[1].Row = 0;
-                    players[1].Column = board.Size / 2;
-                }
-                if (item.Tag.ToString() == $"{board.Size - 1}_{board.Size / 2}")
+                if (item.Tag.Equals(new KeyValuePair<int,int>(0,board.Size/2)))
                 {
                     item.Text = players[0].Name.ToString();
-                    players[0].Row = board.Size - 1;
+                    players[0].Row = 0;
                     players[0].Column = board.Size / 2;
+                }
+                if (item.Tag.Equals(new KeyValuePair<int,int>(board.Size - 1, board.Size / 2)))
+                {
+                    item.Text = player.Name.ToString();
+                    player.Row = board.Size - 1;
+                    player.Column = board.Size / 2;
                 }
             }
         }
 
         private void Button_Click(object sender, EventArgs e)
         {
-            player = players[turn];
+            player = players[playerNumber];
             Button currentButton = (Button)sender;
-            string[] currentLocation = new string[2];
-
-            currentLocation = currentButton.Tag.ToString().Split('_');
-            int row = Convert.ToInt32(currentLocation[0]);
-            int column = Convert.ToInt32(currentLocation[1]);
-
-            List<KeyValuePair<int, int>> legalMoves = player.LeaglMoves(board);
-
+            KeyValuePair<int,int> currentLocation = (KeyValuePair<int,int>)currentButton.Tag;
+            int row = currentLocation.Key;
+            int column = currentLocation.Value;
+            
             if (countMoves == 0)
-            {
-                if (legalMoves.Contains(new KeyValuePair<int,int>(row,column)))
-                {
-                    if (currentButton.Text == "")
-                    {
-                        //clear the previous lovation of the player
-                        foreach (var button in matrixBoard)
-                            if (button.Tag.ToString() == $"{player.Row}_{player.Column}")
-                                button.Text = "";
-
-                        //setting the new location of the player
-                        foreach (var item in legalMoves)
-                            if (currentButton.Tag.ToString() == $"{item.Key}_{item.Value}")
-                            {
-                                currentButton.Text = player.Name;
-                                player.Row = row;
-                                player.Column = column;
-                            }
-
-                        countMoves++;
-                    }
-                    else
-                        MessageBox.Show("You can't be on the same spot as your opponent.");
-                }
-                else
-                    MessageBox.Show("You can move with only one cell");
-            }
+                MovePlayer(currentButton, row, column);
             else if (countMoves == 1)
             {
-                countMoves = 0;
-                currentButton.Enabled = false;
-                board.Eliminated.Add(new KeyValuePair<int, int>(row, column));
-                Player opponent;
-
-                if (turn == 0)
+                if (EliminatedCell(currentButton, row, column))
                 {
-                    opponent = players[1];
-                    turn = 1;
-                }
-                else
-                {
-                    opponent = players[0];
-                    turn = 0;
-                }
-
-                List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LeaglMoves(board);
-
-                if (legalMovesOpponent.Count <= 1 )
-                {
-                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(player.Row,player.Column)))
+                    countMoves = 0;
+                    if (IsItEnded())
                     {
                         MessageBox.Show($"{player.Name} WON");
                         Close();
                     }
-                }
+                } 
             }
+        }
+        
+        private bool IsItEnded()
+        {
+            if (players[0].GetType() != players[1].GetType())
+            {
+                //
+            }
+            else
+            {
+                Player opponent;
+
+                if (playerNumber == 0)
+                {
+                    opponent = players[1];
+                    playerNumber = 1;
+                }
+                else
+                {
+                    opponent = players[0];
+                    playerNumber = 0;
+                }
+
+                List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(board);
+
+                if (legalMovesOpponent.Count <= 1)
+                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(player.Row, player.Column)))
+                        return true;
+            }
+            
+            return false;
+        }
+
+        private bool EliminatedCell(Button button, int row, int column)
+        {
+            if (button.Text != "")
+                MessageBox.Show("Can't eliminated the cell when there is a player.");
+            else
+            {
+                button.Enabled = false;
+                board.Eliminated.Add(new KeyValuePair<int, int>(row, column));
+                return true;
+            }
+            return false;
+        }
+
+        private void MovePlayer(Button button, int row, int column)
+        {
+            List<KeyValuePair<int, int>> legalMoves = player.LegalMoves(board);
+            
+            if (legalMoves.Contains(new KeyValuePair<int, int>(row, column)))
+            {
+                if (button.Text == "")
+                {
+                    //clear the previous location of the player
+                    foreach (var cell in matrixBoard)
+                        if (cell.Tag.Equals(new KeyValuePair<int,int>(player.Row,player.Column)))
+                            cell.Text = "";
+
+                    //setting the new location of the player
+                    foreach (var item in legalMoves)
+                        if (button.Tag.Equals(new KeyValuePair<int,int>(item.Key, item.Value)))
+                        {
+                            button.Text = player.Name;
+                            player.Row = row;
+                            player.Column = column;
+                        }
+
+                    countMoves++;
+                }
+                else
+                    MessageBox.Show("You can't be on the same spot as your opponent.");
+            }
+            else
+                MessageBox.Show("You can move with only one cell");
         }
     }
 }

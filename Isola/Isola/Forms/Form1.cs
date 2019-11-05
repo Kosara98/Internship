@@ -16,12 +16,14 @@ namespace Isola
         private List<Player> players = new List<Player>();
         private int[] size = { 3, 5, 7 };
         private int[] turn = { 1, 2 };
+        private string[] vs = { "Player VS Player", "Player VS Computer" };
 
         public Form1()
         {
             InitializeComponent();
             cbSize.DataSource = size;
             cbTurn.DataSource = turn;
+            cbPlayerVs.DataSource = vs;
         }
 
         private void btnPlay_Click(object sender, EventArgs e)
@@ -31,24 +33,23 @@ namespace Isola
             BoardGameForm boardForm = new BoardGameForm();
             boardForm.FormClosed += new FormClosedEventHandler(ChildForm_Closed);
             Player playerOne = new Player();
-            Player playerTwo = new Player();
+            playerOne.Name = "U";
 
-            if ((int)cbTurn.SelectedItem == 1)
+            if ((string)cbPlayerVs.SelectedItem == "Player VS Player")
             {
-                playerOne.Turn = 1;
-                playerTwo.Turn = 2;
+                Player playerTwo = new Player();
+                playerTwo.Name = "U2";
+                playerOne.Name = "U1";
+                players.Add(playerTwo);
             }
             else
             {
-                playerOne.Turn = 2;
-                playerTwo.Turn = 1;
+                AI playerTwo = new AI();
+                playerTwo.Name = "A";
+                players.Add(playerTwo);
             }
-            playerOne.Name = playerOne.Turn.ToString();
-            playerTwo.Name = playerTwo.Turn.ToString();
 
             players.Add(playerOne);
-            players.Add(playerTwo);
-            
             board.Size = (int)cbSize.SelectedItem;
             boardForm.BoardMaking(board, players);
             boardForm.Show();
@@ -58,6 +59,14 @@ namespace Isola
         private void ChildForm_Closed(object sender, FormClosedEventArgs e)
         {
             Show();
+        }
+
+        private void cbPlayers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if ((string)cbPlayerVs.SelectedItem == "Player VS Player")
+                cbTurn.Enabled = false;
+            else
+                cbTurn.Enabled = true;
         }
     }
 }

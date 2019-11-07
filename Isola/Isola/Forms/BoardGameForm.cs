@@ -15,22 +15,28 @@ namespace Isola
         private int countMoves = 0;
         private Board board;
         private Player player;
+        private AI ai;
         private Button[,] matrixBoard;
         private List<Player> players;
         private byte playerNumber = 1;
+        private int turn;
 
         public BoardGameForm()
         {
             InitializeComponent();
         }
 
-        public void BoardMaking(Board newBoard, List<Player> listOfPlayers)
+        public void BoardMaking(Board newBoard, List<Player> listOfPlayers, int aiTurn)
         {
+            turn = aiTurn;
             players = listOfPlayers;
             board = newBoard;
             board.Eliminated = new List<KeyValuePair<int, int>>();
             player = players[1];
             matrixBoard = new Button[board.Size, board.Size];
+
+            if (players[0].GetType() != players[1].GetType())
+                ai = (AI)players[0];
 
             int top = 0;
             int left = 0;
@@ -106,34 +112,76 @@ namespace Isola
                         MessageBox.Show($"{player.Name} WON");
                         Close();
                     }
+                    else if (players[0].GetType() != players[1].GetType())
+                        AIMoves();
                 } 
+            }
+        }
+
+        private void AIMoves()
+        {
+            KeyValuePair<int, int> newLocation = ai.MovePlayer(board, player);
+            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board, player);
+            
+            foreach (var item in matrixBoard)
+            {
+                if (item.Tag.Equals(newLocation))
+                    item.Text = ai.Name;
+                else if (item.Text == ai.Name)
+                    item.Text = "";
+                if (item.Tag.Equals(eliminatedCell))
+                    item.Enabled = false;
+            }
+            
+            if (IsItEnded())
+            {
+                MessageBox.Show($"{ai.Name} WON");
+                Close();
             }
         }
         
         private bool IsItEnded()
         {
+            Player opponent = new Player();
+
             if (players[0].GetType() != players[1].GetType())
             {
-                //
-            }
-            else
-            {
-                Player opponent;
-
-                if (playerNumber == 0)
+                playerNumber = 1;
+                if (turn == 0)
                 {
                     opponent = players[1];
-                    playerNumber = 1;
+                    turn = 1;
                 }
                 else
                 {
                     opponent = players[0];
-                    playerNumber = 0;
+                    turn = 0;
+                } 
+            }
+            else if (playerNumber == 0)
+            {
+                opponent = players[1];
+                playerNumber = 1;
+            }
+            else
+            {
+                opponent = players[0];
+                playerNumber = 0;
+            }
+
+            List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(board);
+            
+            if (legalMovesOpponent.Count <= 1)
+            {
+                if (legalMovesOpponent.Count == 0)
+                    return true;
+
+                if (players[0].GetType() != players[1].GetType())
+                {
+                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(player.Row, player.Column)) || legalMovesOpponent.Contains(new KeyValuePair<int, int>(ai.Row,ai.Column)))
+                        return true;
                 }
-
-                List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(board);
-
-                if (legalMovesOpponent.Count <= 1)
+                else
                     if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(player.Row, player.Column)))
                         return true;
             }

@@ -28,6 +28,7 @@ namespace Isola
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
+            int chosenTurn = 0;
             List<Player> newPlayers = new List<Player>();
             players = newPlayers;
             BoardGameForm boardForm = new BoardGameForm();
@@ -47,11 +48,12 @@ namespace Isola
                 AI playerTwo = new AI();
                 playerTwo.Name = "A";
                 players.Add(playerTwo);
+                chosenTurn = (int)cbTurn.SelectedItem;
             }
 
             players.Add(playerOne);
             board.Size = (int)cbSize.SelectedItem;
-            boardForm.BoardMaking(board, players);
+            boardForm.BoardMaking(board, players, chosenTurn);
             boardForm.Show();
             Hide();
         }

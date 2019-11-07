@@ -8,6 +8,7 @@ namespace Isola
         public int Size { get; set; }
         public int[,] BoardMatrix { get; set; }
         public List<KeyValuePair<int, int>> Eliminated;
+        
 
         public Board()
         {

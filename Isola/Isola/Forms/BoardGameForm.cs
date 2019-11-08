@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -71,6 +72,11 @@ namespace Isola
 
             panel.Size = new Size(this.Size.Width, this.Size.Height + 50);
             SetUpPlayers();
+
+            if (turn == 1)
+                AIMoves();
+            else
+                turn = 0;
         }
 
         private void SetUpPlayers()
@@ -149,12 +155,12 @@ namespace Isola
                 playerNumber = 1;
                 if (turn == 0)
                 {
-                    opponent = players[1];
+                    opponent = players[0];
                     turn = 1;
                 }
                 else
                 {
-                    opponent = players[0];
+                    opponent = players[1];
                     turn = 0;
                 } 
             }

@@ -72,11 +72,14 @@ namespace Isola
 
             panel.Size = new Size(this.Size.Width, this.Size.Height + 50);
             SetUpPlayers();
-
+            
             if (turn == 1)
-                AIMoves();
-            else
                 turn = 0;
+            else if (turn == 2)
+            {
+                AIMoves();
+                turn = 1;
+            }
         }
 
         private void SetUpPlayers()
@@ -127,7 +130,7 @@ namespace Isola
         private void AIMoves()
         {
             KeyValuePair<int, int> newLocation = ai.MovePlayer(board, player);
-            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board, player);
+            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board);
             
             foreach (var item in matrixBoard)
             {

@@ -9,18 +9,29 @@ namespace Isola
         private Board board;
         private Player opponent;
         private Random random = new Random();
+        private KeyValuePair<int, int> result;
+        private List<KeyValuePair<int, int>> opponentMoves;
 
         public KeyValuePair<int,int> MovePlayer(Board currentBoard, Player player)
         {
             opponent = player;
             board = currentBoard;
-
+            opponentMoves = opponent.LegalMoves(board);
             List<KeyValuePair<int, int>> possibleMoves = LegalMoves(board);
 
-            if (possibleMoves.Contains(new KeyValuePair<int, int>(opponent.Row, opponent.Column)))
-                possibleMoves.Remove(new KeyValuePair<int, int>(opponent.Row, opponent.Column));
+            CheckingAndRemovingLocation(possibleMoves, opponent);
+            CheckingAndRemovingLocation(opponentMoves, this);
             
-            KeyValuePair<int, int> result = MostWaysOut(possibleMoves);
+            if (opponentMoves.Count() == 1)
+                foreach (var item in opponentMoves)
+                    if (possibleMoves.Contains(item))
+                    {
+                        Row = item.Key;
+                        Column = item.Value;
+                        return item;
+                    }
+                        
+            result = MostWaysOut(possibleMoves);
 
             Row = result.Key;
             Column = result.Value;
@@ -32,12 +43,33 @@ namespace Isola
         {
             List<KeyValuePair<int, int>> freeCells = new List<KeyValuePair<int, int>>();
             List<KeyValuePair<int,int>> aiMoves = LegalMoves(board);
-            List<KeyValuePair<int, int>> opponentMoves = opponent.LegalMoves(board);
             KeyValuePair<int, int> location = new KeyValuePair<int, int>(Row, Column);
-            KeyValuePair<int, int> result = new KeyValuePair<int, int>();
+            opponentMoves = opponent.LegalMoves(board);
+
+            CheckingAndRemovingLocation(aiMoves, opponent);
 
             if (opponentMoves.Contains(new KeyValuePair<int, int>(Row, Column)))
             {
+                opponentMoves.Remove(new KeyValuePair<int, int>(Row, Column));
+
+                if (opponentMoves.Count() <= 2)
+                {
+                    if (opponentMoves.Count() == 1)
+                    {
+                        board.Eliminated.Add(opponentMoves[0]);
+                        return opponentMoves[0];
+                    }
+                    else
+                    {
+                        if (opponentMoves.Contains(location))
+                        {
+                            opponentMoves.Remove(location);
+                            board.Eliminated.Add(opponentMoves[0]);
+                            return opponentMoves[0];
+                        }
+                    }
+                }
+
                 if (aiMoves.Count == opponentMoves.Count && aiMoves.Count <= 4)
                     if (aiMoves.Count % 2 == 0)
                     {
@@ -52,16 +84,12 @@ namespace Isola
                                     freeCells.Add(cell);
                             }
                         int index = random.Next(freeCells.Count);
+                        board.Eliminated.Add(freeCells[index]);
                         return freeCells[index];
                     }
-                opponentMoves.Remove(new KeyValuePair<int, int>(Row, Column));
             }
-                
-            do
-            {
-                result = MostWaysOut(opponentMoves);
-            } while (board.Eliminated.Contains(result));
 
+            result = MostWaysOut(opponentMoves);
             Row = location.Key;
             Column = location.Value;
 
@@ -81,9 +109,8 @@ namespace Isola
                 Column = item.Value;
                 futurePossibleMoves = LegalMoves(board);
 
-                if (futurePossibleMoves.Contains(new KeyValuePair<int, int>(opponent.Row, opponent.Column)))
-                    futurePossibleMoves.Remove(new KeyValuePair<int, int>(opponent.Row, opponent.Column));
-
+                CheckingAndRemovingLocation(futurePossibleMoves, opponent);
+                
                 if (futurePossibleMoves.Count() >= mostWaysOut)
                 {
                     if (mostWaysOut == futurePossibleMoves.Count())
@@ -98,6 +125,12 @@ namespace Isola
             }
             int index = random.Next(sameNumberOfWaysOut.Count());
             return sameNumberOfWaysOut[index];
+        }
+
+        private void CheckingAndRemovingLocation(List<KeyValuePair<int, int>> currentMoves, Player opponent)
+        {
+            if (currentMoves.Contains(new KeyValuePair<int, int>(opponent.Row, opponent.Column)))
+                currentMoves.Remove(new KeyValuePair<int, int>(opponent.Row, opponent.Column));
         }
     }
 }

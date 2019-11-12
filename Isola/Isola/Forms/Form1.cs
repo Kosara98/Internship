@@ -53,6 +53,9 @@ namespace Isola
 
             players.Add(playerOne);
             board.Size = (int)cbSize.SelectedItem;
+            if (cbTurn.Enabled == false)
+                chosenTurn = 0;
+
             boardForm.BoardMaking(board, players, chosenTurn);
             boardForm.Show();
             Hide();

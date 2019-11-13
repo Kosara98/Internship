@@ -39,7 +39,7 @@
             // lbSize
             // 
             this.lbSize.AutoSize = true;
-            this.lbSize.Location = new System.Drawing.Point(28, 78);
+            this.lbSize.Location = new System.Drawing.Point(12, 73);
             this.lbSize.Name = "lbSize";
             this.lbSize.Size = new System.Drawing.Size(27, 13);
             this.lbSize.TabIndex = 1;
@@ -49,7 +49,7 @@
             // 
             this.cbSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbSize.FormattingEnabled = true;
-            this.cbSize.Location = new System.Drawing.Point(73, 75);
+            this.cbSize.Location = new System.Drawing.Point(59, 68);
             this.cbSize.Name = "cbSize";
             this.cbSize.Size = new System.Drawing.Size(121, 21);
             this.cbSize.TabIndex = 2;
@@ -58,7 +58,7 @@
             // 
             this.cbTurn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbTurn.FormattingEnabled = true;
-            this.cbTurn.Location = new System.Drawing.Point(73, 116);
+            this.cbTurn.Location = new System.Drawing.Point(59, 102);
             this.cbTurn.Name = "cbTurn";
             this.cbTurn.Size = new System.Drawing.Size(121, 21);
             this.cbTurn.TabIndex = 3;
@@ -66,7 +66,7 @@
             // lbTurn
             // 
             this.lbTurn.AutoSize = true;
-            this.lbTurn.Location = new System.Drawing.Point(28, 119);
+            this.lbTurn.Location = new System.Drawing.Point(12, 105);
             this.lbTurn.Name = "lbTurn";
             this.lbTurn.Size = new System.Drawing.Size(29, 13);
             this.lbTurn.TabIndex = 4;
@@ -74,7 +74,7 @@
             // 
             // btnPlay
             // 
-            this.btnPlay.Location = new System.Drawing.Point(96, 158);
+            this.btnPlay.Location = new System.Drawing.Point(76, 141);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(75, 23);
             this.btnPlay.TabIndex = 5;
@@ -86,7 +86,7 @@
             // 
             this.cbPlayerVs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbPlayerVs.FormattingEnabled = true;
-            this.cbPlayerVs.Location = new System.Drawing.Point(73, 31);
+            this.cbPlayerVs.Location = new System.Drawing.Point(59, 31);
             this.cbPlayerVs.Name = "cbPlayerVs";
             this.cbPlayerVs.Size = new System.Drawing.Size(121, 21);
             this.cbPlayerVs.TabIndex = 6;
@@ -97,7 +97,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(247, 218);
+            this.ClientSize = new System.Drawing.Size(223, 199);
             this.Controls.Add(this.cbPlayerVs);
             this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.lbTurn);

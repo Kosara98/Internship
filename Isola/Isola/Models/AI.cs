@@ -51,27 +51,15 @@ namespace Isola
             if (opponentMoves.Contains(new KeyValuePair<int, int>(Row, Column)))
             {
                 opponentMoves.Remove(new KeyValuePair<int, int>(Row, Column));
-
-                if (opponentMoves.Count() <= 2)
+                
+                if (opponentMoves.Count() == 1)
                 {
-                    if (opponentMoves.Count() == 1)
-                    {
-                        board.Eliminated.Add(opponentMoves[0]);
-                        return opponentMoves[0];
-                    }
-                    else
-                    {
-                        if (opponentMoves.Contains(location))
-                        {
-                            opponentMoves.Remove(location);
-                            board.Eliminated.Add(opponentMoves[0]);
-                            return opponentMoves[0];
-                        }
-                    }
+                    board.Eliminated.Add(opponentMoves[0]);
+                    return opponentMoves[0];
                 }
 
-                if (aiMoves.Count == opponentMoves.Count && aiMoves.Count <= 4)
-                    if (aiMoves.Count % 2 == 0)
+                if (aiMoves.Count() == opponentMoves.Count() && aiMoves.Count() <= 4)
+                    if (aiMoves.Count() % 2 == 0)
                     {
                         for (int x = 0; x < board.Size; x++)
                             for (int y = 0; y < board.Size; y++)
@@ -83,12 +71,15 @@ namespace Isola
                                 else
                                     freeCells.Add(cell);
                             }
-                        int index = random.Next(freeCells.Count);
-                        board.Eliminated.Add(freeCells[index]);
-                        return freeCells[index];
+
+                        if (freeCells.Count() != 0)
+                        {
+                            int index = random.Next(freeCells.Count());
+                            board.Eliminated.Add(freeCells[index]);
+                            return freeCells[index];
+                        }
                     }
             }
-
             result = MostWaysOut(opponentMoves);
             Row = location.Key;
             Column = location.Value;

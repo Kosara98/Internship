@@ -77,8 +77,8 @@ namespace Isola
                 turn = 0;
             else if (turn == 2)
             {
-                AIMoves();
                 turn = 1;
+                AIMoves();
             }
         }
 
@@ -118,7 +118,8 @@ namespace Isola
                     countMoves = 0;
                     if (IsItEnded())
                     {
-                        MessageBox.Show($"{player.Name} WON");
+                        player.Name = player.Name == "P1" ? "Player 1" : player.Name == "P" ? "Player" : "Player 2";
+                        MessageBox.Show($"{player.Name} won");
                         Close();
                     }
                     else if (players[0].GetType() != players[1].GetType())
@@ -144,7 +145,7 @@ namespace Isola
             
             if (IsItEnded())
             {
-                MessageBox.Show($"{ai.Name} WON");
+                MessageBox.Show("Computer won");
                 Close();
             }
         }
@@ -180,9 +181,9 @@ namespace Isola
 
             List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(board);
             
-            if (legalMovesOpponent.Count <= 1)
+            if (legalMovesOpponent.Count() <= 1)
             {
-                if (legalMovesOpponent.Count == 0)
+                if (legalMovesOpponent.Count() == 0)
                     return true;
 
                 if (players[0].GetType() != players[1].GetType())

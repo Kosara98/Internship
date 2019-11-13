@@ -34,19 +34,19 @@ namespace Isola
             BoardGameForm boardForm = new BoardGameForm();
             boardForm.FormClosed += new FormClosedEventHandler(ChildForm_Closed);
             Player playerOne = new Player();
-            playerOne.Name = "U";
+            playerOne.Name = "P";
 
             if ((string)cbPlayerVs.SelectedItem == "Player VS Player")
             {
                 Player playerTwo = new Player();
-                playerTwo.Name = "U2";
-                playerOne.Name = "U1";
+                playerTwo.Name = "P2";
+                playerOne.Name = "P1";
                 players.Add(playerTwo);
             }
             else
             {
                 AI playerTwo = new AI();
-                playerTwo.Name = "A";
+                playerTwo.Name = "C";
                 players.Add(playerTwo);
                 chosenTurn = (int)cbTurn.SelectedItem;
             }

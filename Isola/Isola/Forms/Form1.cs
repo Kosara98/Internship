@@ -12,8 +12,7 @@ namespace Isola
 {
     public partial class Form1 : Form
     {
-        private Board board = new Board();
-        private List<Player> players = new List<Player>();
+        private Board board;
         private int[] size = { 3, 5, 7 };
         private int[] turn = { 1, 2 };
         private string[] vs = { "Player VS Player", "Player VS Computer" };
@@ -28,35 +27,32 @@ namespace Isola
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            int chosenTurn = 0;
-            List<Player> newPlayers = new List<Player>();
-            players = newPlayers;
             BoardGameForm boardForm = new BoardGameForm();
             boardForm.FormClosed += new FormClosedEventHandler(ChildForm_Closed);
             Player playerOne = new Player();
+            Player playerTwo;
             playerOne.Name = "P";
+            int chosenTurn = 0;
 
             if ((string)cbPlayerVs.SelectedItem == "Player VS Player")
             {
-                Player playerTwo = new Player();
+                playerTwo = new Player();
                 playerTwo.Name = "P2";
                 playerOne.Name = "P1";
-                players.Add(playerTwo);
             }
             else
             {
-                AI playerTwo = new AI();
+                playerTwo = new AI();
                 playerTwo.Name = "C";
-                players.Add(playerTwo);
                 chosenTurn = (int)cbTurn.SelectedItem;
             }
+            int boardSize = (int)cbSize.SelectedItem;
 
-            players.Add(playerOne);
-            board.Size = (int)cbSize.SelectedItem;
             if (cbTurn.Enabled == false)
                 chosenTurn = 0;
 
-            boardForm.BoardMaking(board, players, chosenTurn);
+            board = new Board(boardSize);
+            boardForm.BoardMaking(board, playerOne, playerTwo, chosenTurn);
             boardForm.Show();
             Hide();
         }

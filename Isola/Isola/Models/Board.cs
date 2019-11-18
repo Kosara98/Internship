@@ -5,15 +5,11 @@ namespace Isola
 {
     public class Board
     {
-        public int Size { get; set; }
-        public int[,] BoardMatrix { get; set; }
-        public List<KeyValuePair<int, int>> Eliminated;
+        public int Size { get; private set; }
         
-
-        public Board()
+        public Board(int size)
         {
-            Eliminated = new List<KeyValuePair<int, int>>();
-            BoardMatrix = new int[Size, Size];
+            Size = size;
         }
     }
 }

@@ -13,13 +13,14 @@ namespace Isola
 {
     public partial class BoardGameForm : Form
     {
-        private int countMoves = 0;
-        private Board board;
-        private Player player;
         private AI ai;
-        private Button[,] matrixBoard;
-        private List<Player> players;
-        private byte playerNumber = 1;
+        private Board board;
+        private Player firstPlayer;
+        private Player secondPlayer;
+        private Player currentPlayer;
+        private Cell[,] matrixBoard;
+        private byte playerNumber = 0;
+        private int countMoves = 0;
         private int turn;
 
         public BoardGameForm()
@@ -27,17 +28,17 @@ namespace Isola
             InitializeComponent();
         }
 
-        public void BoardMaking(Board newBoard, List<Player> listOfPlayers, int aiTurn)
+        public void BoardMaking(Board newBoard, Player playerOne, Player playerTwo, int aiTurn)
         {
             turn = aiTurn;
-            players = listOfPlayers;
             board = newBoard;
-            board.Eliminated = new List<KeyValuePair<int, int>>();
-            player = players[1];
-            matrixBoard = new Button[board.Size, board.Size];
+            firstPlayer = playerOne;
+            matrixBoard = new Cell[board.Size, board.Size];
 
-            if (players[0].GetType() != players[1].GetType())
-                ai = (AI)players[0];
+            if (playerOne.GetType() != playerTwo.GetType())
+                ai = (AI)playerTwo;
+            else
+                secondPlayer = playerTwo;
 
             int top = 0;
             int left = 0;
@@ -50,15 +51,18 @@ namespace Isola
                 for (int x = 0; x < board.Size; x++)
                 {
                     top += 35;
-                    matrixBoard[x, y] = new Button()
+                    matrixBoard[x, y] = new Cell()
                     {
                         Width = 35,
                         Height = 35,
-                        Left = left,
                         Top = top,
-                        Parent = panel
+                        Left = left,
+                        Parent = panel,
+                        Status = Status.Active,
+                        PositionRow = x,
+                        PositionColumn = y,
+                        NameTag = new KeyValuePair<int,int> (x,y)
                     };
-                    matrixBoard[x, y].Tag = new KeyValuePair<int,int>(x,y);
                     matrixBoard[x, y].Click += Button_Click;
                 }
             }
@@ -72,57 +76,57 @@ namespace Isola
 
             panel.Size = new Size(this.Size.Width, this.Size.Height + 50);
             SetUpPlayers();
-            
+
             if (turn == 1)
-                turn = 0;
-            else if (turn == 2)
-            {
-                turn = 1;
                 AIMoves();
-            }
+            else
+                turn = 0;
         }
 
         private void SetUpPlayers()
         {
+            Player playerTwo = secondPlayer == null ? ai : secondPlayer;
             foreach (var item in matrixBoard)
             {
-                if (item.Tag.Equals(new KeyValuePair<int,int>(0,board.Size/2)))
+                if (item.PositionRow == 0 && item.PositionColumn == board.Size / 2) 
                 {
-                    item.Text = players[0].Name.ToString();
-                    players[0].Row = 0;
-                    players[0].Column = board.Size / 2;
+                    item.Text = playerTwo.Name.ToString();
+                    playerTwo.Row = item.PositionRow;
+                    playerTwo.Column = item.PositionColumn;
+                    item.Status = Status.Inactive;
                 }
-                if (item.Tag.Equals(new KeyValuePair<int,int>(board.Size - 1, board.Size / 2)))
+                if (item.PositionRow == board.Size - 1 && item.PositionColumn == board.Size / 2)
                 {
-                    item.Text = player.Name.ToString();
-                    player.Row = board.Size - 1;
-                    player.Column = board.Size / 2;
+                    item.Text = firstPlayer.Name.ToString();
+                    firstPlayer.Row = item.PositionRow;
+                    firstPlayer.Column = item.PositionColumn;
+                    item.Status = Status.Inactive;
                 }
             }
         }
 
         private void Button_Click(object sender, EventArgs e)
         {
-            player = players[playerNumber];
-            Button currentButton = (Button)sender;
-            KeyValuePair<int,int> currentLocation = (KeyValuePair<int,int>)currentButton.Tag;
-            int row = currentLocation.Key;
-            int column = currentLocation.Value;
+            currentPlayer = playerNumber == 0 ? firstPlayer : secondPlayer;
+            
+            Cell currentCell = (Cell)sender;
+            int row = currentCell.PositionRow;
+            int column = currentCell.PositionColumn;
             
             if (countMoves == 0)
-                MovePlayer(currentButton, row, column);
+                MovePlayer(currentCell, row, column);
             else if (countMoves == 1)
             {
-                if (EliminatedCell(currentButton, row, column))
+                if (EliminatedCell(currentCell, row, column))
                 {
                     countMoves = 0;
                     if (IsItEnded())
                     {
-                        player.Name = player.Name == "P1" ? "Player 1" : player.Name == "P" ? "Player" : "Player 2";
-                        MessageBox.Show($"{player.Name} won");
+                        currentPlayer.Name = currentPlayer.Name == "P1" ? "Player 1" : currentPlayer.Name == "P" ? "Player" : "Player 2";
+                        MessageBox.Show($"{currentPlayer.Name} won");
                         Close();
                     }
-                    else if (players[0].GetType() != players[1].GetType())
+                    else if (secondPlayer == null)
                         AIMoves();
                 } 
             }
@@ -130,17 +134,23 @@ namespace Isola
 
         private void AIMoves()
         {
-            KeyValuePair<int, int> newLocation = ai.MovePlayer(board, player);
-            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board);
+            ai.MovePlayer(board, firstPlayer, matrixBoard);
+            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board, matrixBoard);
             
             foreach (var item in matrixBoard)
             {
-                if (item.Tag.Equals(newLocation))
+                if (item.NameTag.Equals(new KeyValuePair<int,int>(ai.Row,ai.Column)))
                     item.Text = ai.Name;
                 else if (item.Text == ai.Name)
+                {
                     item.Text = "";
-                if (item.Tag.Equals(eliminatedCell))
+                    item.Status = Status.Active;
+                }
+                if (item.NameTag.Equals(eliminatedCell))
+                {
                     item.Enabled = false;
+                    item.Status = Status.Inactive;
+                } 
             }
             
             if (IsItEnded())
@@ -154,86 +164,89 @@ namespace Isola
         {
             Player opponent = new Player();
 
-            if (players[0].GetType() != players[1].GetType())
+            if (secondPlayer == null)
             {
-                playerNumber = 1;
-                if (turn == 0)
+                playerNumber = (int)Turns.PlayerOne;
+                if (turn == (int)Turns.PlayerOne)
                 {
-                    opponent = players[0];
-                    turn = 1;
+                    opponent = ai;
+                    turn = (int)Turns.PlayerTwo;
                 }
                 else
                 {
-                    opponent = players[1];
-                    turn = 0;
+                    opponent = firstPlayer;
+                    turn = (int)Turns.PlayerOne;
                 } 
             }
-            else if (playerNumber == 0)
+            else if (playerNumber == (int)Turns.PlayerOne)
             {
-                opponent = players[1];
-                playerNumber = 1;
+                opponent = secondPlayer;
+                playerNumber = (int)Turns.PlayerTwo;
             }
             else
             {
-                opponent = players[0];
-                playerNumber = 0;
+                opponent = firstPlayer;
+                playerNumber = (int)Turns.PlayerOne;
             }
 
-            List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(board);
+            List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(board, matrixBoard);
             
             if (legalMovesOpponent.Count() <= 1)
             {
                 if (legalMovesOpponent.Count() == 0)
                     return true;
 
-                if (players[0].GetType() != players[1].GetType())
+                if (secondPlayer == null)
                 {
-                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(player.Row, player.Column)) || legalMovesOpponent.Contains(new KeyValuePair<int, int>(ai.Row,ai.Column)))
+                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(firstPlayer.Row, firstPlayer.Column)) || legalMovesOpponent.Contains(new KeyValuePair<int, int>(ai.Row,ai.Column)))
                         return true;
                 }
                 else
-                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(player.Row, player.Column)))
+                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(firstPlayer.Row, firstPlayer.Column)))
                         return true;
             }
             
             return false;
         }
 
-        private bool EliminatedCell(Button button, int row, int column)
+        private bool EliminatedCell(Cell cell, int row, int column)
         {
-            if (button.Text != "")
+            if (cell.Text != "")
                 MessageBox.Show("Can't eliminated the cell when there is a player.");
             else
             {
-                button.Enabled = false;
-                board.Eliminated.Add(new KeyValuePair<int, int>(row, column));
+                cell.Enabled = false;
+                cell.Status = Status.Inactive;
                 return true;
             }
             return false;
         }
 
-        private void MovePlayer(Button button, int row, int column)
+        private void MovePlayer(Cell button, int row, int column)
         {
-            List<KeyValuePair<int, int>> legalMoves = player.LegalMoves(board);
+            List<KeyValuePair<int, int>> legalMoves = currentPlayer.LegalMoves(board, matrixBoard);
             
-            if (legalMoves.Contains(new KeyValuePair<int, int>(row, column)))
+            if (legalMoves.Contains(button.NameTag))
             {
                 if (button.Text == "")
                 {
                     //clear the previous location of the player
                     foreach (var cell in matrixBoard)
-                        if (cell.Tag.Equals(new KeyValuePair<int,int>(player.Row,player.Column)))
+                        if (cell.NameTag.Equals(new KeyValuePair<int,int>(currentPlayer.Row, currentPlayer.Column)))
+                        {
                             cell.Text = "";
-
+                            cell.Status = Status.Active;
+                        }
+                            
                     //setting the new location of the player
                     foreach (var item in legalMoves)
-                        if (button.Tag.Equals(new KeyValuePair<int,int>(item.Key, item.Value)))
+                        if (button.NameTag.Equals(item))
                         {
-                            button.Text = player.Name;
-                            player.Row = row;
-                            player.Column = column;
+                            button.Text = currentPlayer.Name;
+                            currentPlayer.Row = row;
+                            currentPlayer.Column = column;
+                            button.Status = Status.Inactive;
                         }
-
                     countMoves++;
                 }
                 else

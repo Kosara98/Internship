@@ -47,7 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AI.cs" />
-    <Compile Include="Models\Board.cs" />
     <Compile Include="Forms\BoardGameForm.cs">
       <SubType>Form</SubType>
     </Compile>

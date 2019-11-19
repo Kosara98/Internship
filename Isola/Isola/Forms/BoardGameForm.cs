@@ -14,7 +14,6 @@ namespace Isola
     public partial class BoardGameForm : Form
     {
         private AI ai;
-        private Board board;
         private Player firstPlayer;
         private Player secondPlayer;
         private Player currentPlayer;
@@ -28,12 +27,11 @@ namespace Isola
             InitializeComponent();
         }
 
-        public void BoardMaking(Board newBoard, Player playerOne, Player playerTwo, int aiTurn)
+        public void BoardMaking(int size, Player playerOne, Player playerTwo, int aiTurn)
         {
             turn = aiTurn;
-            board = newBoard;
             firstPlayer = playerOne;
-            matrixBoard = new Cell[board.Size, board.Size];
+            matrixBoard = new Cell[size, size];
 
             if (playerOne.GetType() != playerTwo.GetType())
                 ai = (AI)playerTwo;
@@ -43,12 +41,12 @@ namespace Isola
             int top = 0;
             int left = 0;
 
-            for (int y = 0; y < board.Size; y++)
+            for (int y = 0; y < size; y++)
             {
                 left += 35;
                 top = -5;
 
-                for (int x = 0; x < board.Size; x++)
+                for (int x = 0; x < size; x++)
                 {
                     top += 35;
                     matrixBoard[x, y] = new Cell()
@@ -67,11 +65,11 @@ namespace Isola
                 }
             }
             
-            if (board.Size == 3)
+            if (size == 3)
                 this.Size = new Size(195, 200);
-            else if (board.Size == 5)
+            else if (size == 5)
                 this.Size = new Size(260, 270);
-            else if (board.Size == 7)
+            else if (size == 7)
                 this.Size = new Size(330, 350);
 
             panel.Size = new Size(this.Size.Width, this.Size.Height + 50);
@@ -88,14 +86,14 @@ namespace Isola
             Player playerTwo = secondPlayer == null ? ai : secondPlayer;
             foreach (var item in matrixBoard)
             {
-                if (item.PositionRow == 0 && item.PositionColumn == board.Size / 2) 
+                if (item.PositionRow == 0 && item.PositionColumn == matrixBoard.GetLength(0) / 2) 
                 {
                     item.Text = playerTwo.Name.ToString();
                     playerTwo.Row = item.PositionRow;
                     playerTwo.Column = item.PositionColumn;
                     item.Status = Status.Inactive;
                 }
-                if (item.PositionRow == board.Size - 1 && item.PositionColumn == board.Size / 2)
+                if (item.PositionRow == matrixBoard.GetLength(0) - 1 && item.PositionColumn == matrixBoard.GetLength(0) / 2)
                 {
                     item.Text = firstPlayer.Name.ToString();
                     firstPlayer.Row = item.PositionRow;
@@ -134,8 +132,8 @@ namespace Isola
 
         private void AIMoves()
         {
-            ai.MovePlayer(board, firstPlayer, matrixBoard);
-            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board, matrixBoard);
+            ai.MovePlayer(firstPlayer, matrixBoard);
+            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(matrixBoard);
             
             foreach (var item in matrixBoard)
             {
@@ -188,24 +186,13 @@ namespace Isola
                 opponent = firstPlayer;
                 playerNumber = (int)Turns.PlayerOne;
             }
-
-            List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(board, matrixBoard);
+            List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(matrixBoard);
             
             if (legalMovesOpponent.Count() <= 1)
-            {
-                if (legalMovesOpponent.Count() == 0)
+                if (legalMovesOpponent.Count() == 0 || legalMovesOpponent.Contains(new KeyValuePair<int, int>(firstPlayer.Row, firstPlayer.Column))
+                    || legalMovesOpponent.Contains(new KeyValuePair<int, int>(opponent.Row, opponent.Column)))
                     return true;
 
-                if (secondPlayer == null)
-                {
-                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(firstPlayer.Row, firstPlayer.Column)) || legalMovesOpponent.Contains(new KeyValuePair<int, int>(ai.Row,ai.Column)))
-                        return true;
-                }
-                else
-                    if (legalMovesOpponent.Contains(new KeyValuePair<int, int>(firstPlayer.Row, firstPlayer.Column)))
-                        return true;
-            }
-            
             return false;
         }
 
@@ -224,7 +211,7 @@ namespace Isola
 
         private void MovePlayer(Cell button, int row, int column)
         {
-            List<KeyValuePair<int, int>> legalMoves = currentPlayer.LegalMoves(board, matrixBoard);
+            List<KeyValuePair<int, int>> legalMoves = currentPlayer.LegalMoves(matrixBoard);
             
             if (legalMoves.Contains(button.NameTag))
             {

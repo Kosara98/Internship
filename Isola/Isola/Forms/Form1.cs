@@ -12,7 +12,6 @@ namespace Isola
 {
     public partial class Form1 : Form
     {
-        private Board board;
         private int[] size = { 3, 5, 7 };
         private int[] turn = { 1, 2 };
         private string[] vs = { "Player VS Player", "Player VS Computer" };
@@ -51,8 +50,7 @@ namespace Isola
             if (cbTurn.Enabled == false)
                 chosenTurn = 0;
 
-            board = new Board(boardSize);
-            boardForm.BoardMaking(board, playerOne, playerTwo, chosenTurn);
+            boardForm.BoardMaking(boardSize, playerOne, playerTwo, chosenTurn);
             boardForm.Show();
             Hide();
         }

@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Isola
@@ -21,6 +16,7 @@ namespace Isola
         private byte playerNumber = 0;
         private int countMoves = 0;
         private int turn;
+        private Board board;
 
         public BoardGameForm()
         {
@@ -32,12 +28,13 @@ namespace Isola
             turn = aiTurn;
             firstPlayer = playerOne;
             matrixBoard = new Cell[size, size];
+            board = new Board(matrixBoard);
 
             if (playerOne.GetType() != playerTwo.GetType())
                 ai = (AI)playerTwo;
             else
                 secondPlayer = playerTwo;
-
+            
             int top = 0;
             int left = 0;
 
@@ -84,16 +81,17 @@ namespace Isola
         private void SetUpPlayers()
         {
             Player playerTwo = secondPlayer == null ? ai : secondPlayer;
+            
             foreach (var item in matrixBoard)
             {
-                if (item.PositionRow == 0 && item.PositionColumn == matrixBoard.GetLength(0) / 2) 
+                if (item.PositionRow == 0 && item.PositionColumn == board.Lenght / 2) 
                 {
                     item.Text = playerTwo.Name.ToString();
                     playerTwo.Row = item.PositionRow;
                     playerTwo.Column = item.PositionColumn;
                     item.Status = Status.Inactive;
                 }
-                if (item.PositionRow == matrixBoard.GetLength(0) - 1 && item.PositionColumn == matrixBoard.GetLength(0) / 2)
+                if (item.PositionRow == board.Lenght - 1 && item.PositionColumn == board.Lenght / 2)
                 {
                     item.Text = firstPlayer.Name.ToString();
                     firstPlayer.Row = item.PositionRow;
@@ -115,7 +113,7 @@ namespace Isola
                 MovePlayer(currentCell, row, column);
             else if (countMoves == 1)
             {
-                if (EliminatedCell(currentCell, row, column))
+                if (EliminatedCell(currentCell))
                 {
                     countMoves = 0;
                     if (IsItEnded())
@@ -132,8 +130,8 @@ namespace Isola
 
         private void AIMoves()
         {
-            ai.MovePlayer(firstPlayer, matrixBoard);
-            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(matrixBoard);
+            ai.MovePlayer(board);
+            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board);
             
             foreach (var item in matrixBoard)
             {
@@ -160,45 +158,26 @@ namespace Isola
         
         private bool IsItEnded()
         {
-            Player opponent = new Player();
+            var opponent = new Player();
 
             if (secondPlayer == null)
             {
                 playerNumber = (int)Turns.PlayerOne;
-                if (turn == (int)Turns.PlayerOne)
-                {
-                    opponent = ai;
-                    turn = (int)Turns.PlayerTwo;
-                }
-                else
-                {
-                    opponent = firstPlayer;
-                    turn = (int)Turns.PlayerOne;
-                } 
-            }
-            else if (playerNumber == (int)Turns.PlayerOne)
-            {
-                opponent = secondPlayer;
-                playerNumber = (int)Turns.PlayerTwo;
+                opponent = turn == (int)Turns.PlayerOne ? ai : firstPlayer;
+                turn = turn == (int)Turns.PlayerOne ? turn++ : turn--; 
             }
             else
             {
-                opponent = firstPlayer;
-                playerNumber = (int)Turns.PlayerOne;
+                playerNumber = playerNumber == (int)Turns.PlayerOne ? playerNumber++ : playerNumber--;
+                opponent = playerNumber == (int)Turns.PlayerOne ? secondPlayer : firstPlayer;
             }
-            List<KeyValuePair<int, int>> legalMovesOpponent = opponent.LegalMoves(matrixBoard);
             
-            if (legalMovesOpponent.Count() <= 1)
-                if (legalMovesOpponent.Count() == 0 || legalMovesOpponent.Contains(new KeyValuePair<int, int>(firstPlayer.Row, firstPlayer.Column))
-                    || legalMovesOpponent.Contains(new KeyValuePair<int, int>(opponent.Row, opponent.Column)))
-                    return true;
-
-            return false;
+            return board.GameOver(opponent, currentPlayer);
         }
 
-        private bool EliminatedCell(Cell cell, int row, int column)
+        private bool EliminatedCell(Cell cell)
         {
-            if (cell.Text != "")
+            if (cell.Status == Status.Inactive)
                 MessageBox.Show("Can't eliminated the cell when there is a player.");
             else
             {
@@ -211,11 +190,11 @@ namespace Isola
 
         private void MovePlayer(Cell button, int row, int column)
         {
-            List<KeyValuePair<int, int>> legalMoves = currentPlayer.LegalMoves(matrixBoard);
+            List<KeyValuePair<int, int>> legalMoves = currentPlayer.LegalMoves(board);
             
             if (legalMoves.Contains(button.NameTag))
             {
-                if (button.Text == "")
+                if (button.Status == Status.Active)
                 {
                     //clear the previous location of the player
                     foreach (var cell in matrixBoard)

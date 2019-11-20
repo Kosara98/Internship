@@ -10,9 +10,13 @@ namespace Isola
         private Random random = new Random();
         private List<KeyValuePair<int, int>> opponentMoves;
 
-        public void MovePlayer(Player player, ICell[,] matrix)
+        public AI(Player player)
         {
             opponent = player;
+        }
+        
+        public void MovePlayer(Board matrix)
+        {
             opponentMoves = opponent.LegalMoves(matrix);
             List<KeyValuePair<int, int>> possibleMoves = LegalMoves(matrix);
             
@@ -23,6 +27,7 @@ namespace Isola
                     {
                         Row = item.Key;
                         Column = item.Value;
+                        matrix[Row,Column].Status = Status.Inactive;
                     }
             }
             else
@@ -30,15 +35,16 @@ namespace Isola
                 KeyValuePair<int, int> result = MostWaysOut(possibleMoves, matrix);
                 Row = result.Key;
                 Column = result.Value;
+                matrix[Row, Column].Status = Status.Inactive;
             }
         }
 
-        public KeyValuePair<int,int> EliminatedCell(ICell[,] matrix)
+        public KeyValuePair<int,int> EliminatedCell(Board matrix)
         {
-            List<KeyValuePair<int, int>> freeCells = new List<KeyValuePair<int, int>>();
+            var freeCells = new List<KeyValuePair<int, int>>();
             List<KeyValuePair<int,int>> aiMoves = LegalMoves(matrix);
             KeyValuePair<int, int> result;
-            KeyValuePair<int, int> location = new KeyValuePair<int, int>(Row, Column);
+            var location = new KeyValuePair<int, int>(Row, Column);
             opponentMoves = opponent.LegalMoves(matrix);
 
             if (opponentMoves.Contains(new KeyValuePair<int, int>(Row, Column)))
@@ -51,14 +57,12 @@ namespace Isola
                 if (aiMoves.Count() == opponentMoves.Count() && aiMoves.Count() <= 4)
                     if (aiMoves.Count() % 2 == 0)
                     {
-                        for (int x = 0; x < matrix.GetLength(0); x++)
-                            for (int y = 0; y < matrix.GetLength(0); y++)
+                        for (int x = 0; x < matrix.Lenght; x++)
+                            for (int y = 0; y < matrix.Lenght; y++)
                             {
-                                KeyValuePair<int, int> cell = new KeyValuePair<int, int>(x, y);
+                                var cell = new KeyValuePair<int, int>(x, y);
 
-                                if (matrix[x,y].Status == Status.Inactive || aiMoves.Contains(cell) || opponentMoves.Contains(cell))
-                                    break;
-                                else
+                                if (matrix[x,y].Status == Status.Active || !aiMoves.Contains(cell) || !opponentMoves.Contains(cell))
                                     freeCells.Add(cell);
                             }
 
@@ -75,10 +79,10 @@ namespace Isola
             return result;
         }
 
-        private KeyValuePair<int, int> MostWaysOut(List<KeyValuePair<int,int>> possibleMoves, ICell[,] matrix)
+        private KeyValuePair<int, int> MostWaysOut(List<KeyValuePair<int,int>> possibleMoves, Board matrix)
         {
-            List<KeyValuePair<int, int>> sameNumberOfWaysOut = new List<KeyValuePair<int, int>>();
-            List<KeyValuePair<int, int>> futurePossibleMoves = new List<KeyValuePair<int, int>>();
+            var sameNumberOfWaysOut = new List<KeyValuePair<int, int>>();
+            var futurePossibleMoves = new List<KeyValuePair<int, int>>();
             int mostWaysOut = 0;
             
             foreach (var item in possibleMoves)

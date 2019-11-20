@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Isola
@@ -26,9 +19,9 @@ namespace Isola
 
         private void btnPlay_Click(object sender, EventArgs e)
         {
-            BoardGameForm boardForm = new BoardGameForm();
+            var boardForm = new BoardGameForm();
             boardForm.FormClosed += new FormClosedEventHandler(ChildForm_Closed);
-            Player playerOne = new Player();
+            var playerOne = new Player();
             Player playerTwo;
             playerOne.Name = "P";
             int chosenTurn = 0;
@@ -41,7 +34,7 @@ namespace Isola
             }
             else
             {
-                playerTwo = new AI();
+                playerTwo = new AI(playerOne);
                 playerTwo.Name = "C";
                 chosenTurn = (int)cbTurn.SelectedItem;
             }

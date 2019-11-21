@@ -113,7 +113,7 @@ namespace Isola
                 MovePlayer(currentCell, row, column);
             else if (countMoves == 1)
             {
-                if (EliminatedCell(currentCell))
+                if (EliminateCell(currentCell))
                 {
                     countMoves = 0;
                     if (IsItEnded())
@@ -131,17 +131,14 @@ namespace Isola
         private void AIMoves()
         {
             ai.MovePlayer(board);
-            KeyValuePair<int, int> eliminatedCell = ai.EliminatedCell(board);
+            KeyValuePair<int, int> eliminatedCell = ai.EliminateCell(board);
             
             foreach (var item in matrixBoard)
             {
                 if (item.NameTag.Equals(new KeyValuePair<int,int>(ai.Row,ai.Column)))
                     item.Text = ai.Name;
                 else if (item.Text == ai.Name)
-                {
                     item.Text = "";
-                    item.Status = Status.Active;
-                }
                 if (item.NameTag.Equals(eliminatedCell))
                 {
                     item.Enabled = false;
@@ -164,7 +161,7 @@ namespace Isola
             {
                 playerNumber = (int)Turns.PlayerOne;
                 opponent = turn == (int)Turns.PlayerOne ? ai : firstPlayer;
-                turn = turn == (int)Turns.PlayerOne ? turn++ : turn--; 
+                turn = turn == (int)Turns.PlayerOne ? turn += 1 : turn -= 1; 
             }
             else
             {
@@ -175,10 +172,10 @@ namespace Isola
             return board.GameOver(opponent, currentPlayer);
         }
 
-        private bool EliminatedCell(Cell cell)
+        private bool EliminateCell(Cell cell)
         {
             if (cell.Status == Status.Inactive)
-                MessageBox.Show("Can't eliminated the cell when there is a player.");
+                MessageBox.Show("Can't eliminate the cell when there is a player.");
             else
             {
                 cell.Enabled = false;

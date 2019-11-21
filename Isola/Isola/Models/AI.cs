@@ -17,10 +17,11 @@ namespace Isola
         
         public void MovePlayer(Board matrix)
         {
+            matrix[Row, Column].Status = Status.Active;
             opponentMoves = opponent.LegalMoves(matrix);
             List<KeyValuePair<int, int>> possibleMoves = LegalMoves(matrix);
             
-            if (opponentMoves.Count() == 1)
+            if (opponentMoves.Count() == 1 || opponentMoves.Count() == 2)
             {
                 foreach (var item in opponentMoves)
                     if (possibleMoves.Contains(item))
@@ -39,7 +40,7 @@ namespace Isola
             }
         }
 
-        public KeyValuePair<int,int> EliminatedCell(Board matrix)
+        public KeyValuePair<int,int> EliminateCell(Board matrix)
         {
             var freeCells = new List<KeyValuePair<int, int>>();
             List<KeyValuePair<int,int>> aiMoves = LegalMoves(matrix);
@@ -47,32 +48,28 @@ namespace Isola
             var location = new KeyValuePair<int, int>(Row, Column);
             opponentMoves = opponent.LegalMoves(matrix);
 
-            if (opponentMoves.Contains(new KeyValuePair<int, int>(Row, Column)))
-            {
-                opponentMoves.Remove(new KeyValuePair<int, int>(Row, Column));
-                
-                if (opponentMoves.Count() == 1)
-                    return opponentMoves[0];
+            if (opponentMoves.Count() == 1)
+                return opponentMoves[0];
 
-                if (aiMoves.Count() == opponentMoves.Count() && aiMoves.Count() <= 4)
-                    if (aiMoves.Count() % 2 == 0)
-                    {
-                        for (int x = 0; x < matrix.Lenght; x++)
-                            for (int y = 0; y < matrix.Lenght; y++)
-                            {
-                                var cell = new KeyValuePair<int, int>(x, y);
-
-                                if (matrix[x,y].Status == Status.Active || !aiMoves.Contains(cell) || !opponentMoves.Contains(cell))
-                                    freeCells.Add(cell);
-                            }
-
-                        if (freeCells.Count() != 0)
+            if (aiMoves.Count() == opponentMoves.Count() && aiMoves.Count() <= 4 || opponentMoves.Count() == 0)
+                if (aiMoves.Count() % 2 == 0 || opponentMoves.Count() == 0)
+                {
+                    for (int x = 0; x < matrix.Lenght; x++)
+                        for (int y = 0; y < matrix.Lenght; y++)
                         {
-                            int index = random.Next(freeCells.Count());
-                            return freeCells[index];
+                            var cell = new KeyValuePair<int, int>(x, y);
+
+                            if (matrix[x, y].Status == Status.Active || !aiMoves.Contains(cell) || !opponentMoves.Contains(cell))
+                                freeCells.Add(cell);
                         }
+
+                    if (freeCells.Count() != 0)
+                    {
+                        int index = random.Next(freeCells.Count());
+                        return freeCells[index];
                     }
-            }
+                }
+            
             result = MostWaysOut(opponentMoves, matrix);
             Row = location.Key;
             Column = location.Value;

@@ -12,55 +12,62 @@ namespace DBFirstApproach
         }
 
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         public virtual ICollection<Subject> Subjects { get; set; }
 
-        public List<string> ShowAll()
+        public List<Professeur> GetAll()
         {
-            var result = new List<string>();
+            var result = new List<Professeur>();
 
             using (var db = new UniversityProgramContext())
-                foreach (var item in db.Professeurs)
-                    result.Add(item.Name);
+                result.AddRange(db.Professeurs);
 
             return result;
         }
 
-        public void Add(string name)
+        public void Add(Professeur professeur)
         {
             using (var db = new UniversityProgramContext())
             {
-                db.Professeurs.Add(new Professeur { Name = name });
+                db.Professeurs.Add(professeur);
                 db.SaveChanges();
             }
         }
 
-        public void Update(string prof, string newProf, int id)
+        public void Update(Professeur targetProf, Professeur updatedProf)
         {
             using (var db = new UniversityProgramContext())
             {
-                var entity = db.Professeurs.FirstOrDefault(item => item.Id == id);
+                var entity = db.Professeurs.FirstOrDefault(item => item.Id == targetProf.Id);
 
                 if (entity != null)
                 {
-                    entity.Name = newProf;
+                    entity.FirstName = updatedProf.FirstName;
+                    entity.LastName = updatedProf.LastName;
                     db.Professeurs.Update(entity);
                     db.SaveChanges();
                 }
             }
         }
 
-        public void Search(string name)
+        public List<Professeur> Search(string name)
         {
+            var results = new List<Professeur>();
 
+            using(var db = new UniversityProgramContext())
+                results = db.Professeurs.Where(item => item.FirstName == name).ToList();
+
+            return results;
         }
         
-        public void Delete()
+        public void Delete(Professeur professeur)
         {
             using (var db = new UniversityProgramContext())
             {
-                db.Professeurs.Remove(this);
+                var entity = db.Professeurs.FirstOrDefault(item => item.Id == professeur.Id);
+                db.Professeurs.Remove(entity);
                 db.SaveChanges();
             }
         }

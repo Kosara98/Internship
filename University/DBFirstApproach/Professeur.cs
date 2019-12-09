@@ -27,20 +27,20 @@ namespace DBFirstApproach
             return result;
         }
 
-        public void Add(Professeur professeur)
+        public void Add()
         {
             using (var db = new UniversityProgramContext())
             {
-                db.Professeurs.Add(professeur);
+                db.Professeurs.Add(this);
                 db.SaveChanges();
             }
         }
 
-        public void Update(Professeur targetProf, Professeur updatedProf)
+        public void Update(Professeur updatedProf)
         {
             using (var db = new UniversityProgramContext())
             {
-                var entity = db.Professeurs.FirstOrDefault(item => item.Id == targetProf.Id);
+                var entity = db.Professeurs.FirstOrDefault(item => item.Id == this.Id);
 
                 if (entity != null)
                 {
@@ -62,11 +62,11 @@ namespace DBFirstApproach
             return results;
         }
         
-        public void Delete(Professeur professeur)
+        public void Delete()
         {
             using (var db = new UniversityProgramContext())
             {
-                var entity = db.Professeurs.FirstOrDefault(item => item.Id == professeur.Id);
+                var entity = db.Professeurs.FirstOrDefault(item => item.Id == this.Id);
                 db.Professeurs.Remove(entity);
                 db.SaveChanges();
             }

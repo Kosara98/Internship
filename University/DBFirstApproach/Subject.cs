@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,30 +20,30 @@ namespace DBFirstApproach
         public virtual Professeur Professeur { get; set; }
         public virtual ICollection<StudentsSubjects> StudentsSubjects { get; set; }
 
-        public void Add(Subject subj)
+        public void Add()
         {
-            using(var db = new UniversityProgramContext())
+            using (var db = new UniversityProgramContext())
             {
-                db.Subjects.Add(subj);
+                db.Subjects.Add(this);
                 db.SaveChanges();
             }
         }
 
-        public void Delete(int id) // subject
+        public void Delete() 
         {
             using (var db = new UniversityProgramContext())
             {
-                var entity = db.Subjects.FirstOrDefault(item => item.Id == id);
+                var entity = db.Subjects.FirstOrDefault(item => item.Id == this.Id);
                 db.Subjects.Remove(entity);
                 db.SaveChanges();
             }
         }
 
-        public void Update(Subject oldSubject, Subject newSubject)
+        public void Update(Subject newSubject)
         {
             using (var db = new UniversityProgramContext())
             {
-                var entity = db.Subjects.FirstOrDefault(item => item.Id == oldSubject.Id);
+                var entity = db.Subjects.FirstOrDefault(item => item.Id == this.Id);
                 entity.Name = newSubject.Name;
                 entity.ProfesseurId = newSubject.ProfesseurId;
                 entity.Description = newSubject.Description;
@@ -56,14 +57,19 @@ namespace DBFirstApproach
             var subjects = new List<Subject>();
 
             using (var db = new UniversityProgramContext())
-                subjects.AddRange(db.Subjects);
+                subjects = db.Subjects.Include(item => item.Professeur).ToList();
 
             return subjects;
         }
 
-        public void Search()
+        public List<Subject> Search(string name)
         {
+            var results = new List<Subject>();
 
+            using (var db = new UniversityProgramContext())
+                results = db.Subjects.Include(i => i.Professeur).Where(item => item.Name == name).ToList();
+
+            return results;
         }
     }
 }

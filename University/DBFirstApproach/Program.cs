@@ -8,7 +8,7 @@ namespace DBFirstApproach
     class Program
     {
         static string choosenOption;
-        static Professeur prof = new Professeur();
+        static ProfesseurRepository prof = new ProfesseurRepository();
 
         static void Main(string[] args)
         {
@@ -23,18 +23,8 @@ namespace DBFirstApproach
             Console.WriteLine("2.Add new");
             Console.WriteLine("3.Update");
             Console.WriteLine("4.Delete");
-            Console.WriteLine("5.Search");
             choosenOption = Console.ReadLine();
 
-            //var subjects = new List<StudentsSubjects>();
-
-            //using (var db = new UniversityProgramContext())
-            //{
-            //    subjects = db.StudentsSubjects.Include(item => item.Subject).Include(i => i.Student).ToList();
-            //}
-
-            //foreach (var item in subjects)
-            //    Console.WriteLine($"{item.Student.Name} - {item.Subject.Name}");
             if (choosenTable == "1")
                 Professeurs();
             else if (choosenTable == "2")
@@ -47,21 +37,22 @@ namespace DBFirstApproach
 
         public static void Students()
         {
-            var student = new Student();
+            var student = new StudentRepository();
 
             switch (choosenOption)
             {
                 case "1":
+                    var students = new List<Student>();
                     Console.WriteLine("All the students are:");
-                    List<Student> students = student.GetAll();
-                    List<StudentsSubjects> subjects = student.Subjects();
+                    students.AddRange(student.GetAll());
+                    //List<StudentsSubjects> subjects = student.Subjects();
 
                     foreach (var item in students)
                     {
                         Console.WriteLine($"{item.Name} - {item.FacultyNumber}");
-                        foreach (var i in subjects)
-                            if (i.Student.Id == item.Id)
-                             Console.WriteLine($"{i.Subject.Name}");
+                        //foreach (var i in subjects)
+                        //    if (i.Student.Id == item.Id)
+                        //     Console.WriteLine($"{i.Subject.Name}");
                     }   
                     break;
                 case "2":
@@ -72,14 +63,15 @@ namespace DBFirstApproach
                     Console.WriteLine("Faculty number:");
                     newStudent.FacultyNumber = Console.ReadLine();
 
-                    newStudent.Add();
+                    student.Add(newStudent);
                     break;
                 case "3":
                     break;
                 case "4":
+                    var deleteStudent = new List<Student>();
                     Console.WriteLine("Student you want to delete");
                     string deleteName = Console.ReadLine();
-                    List<Student> deleteStudent = student.Search(deleteName);
+                    //deleteStudent.AddRange(student.Search(deleteName));
                     int deleteId = 0;
 
                     if (deleteStudent.Count > 1)
@@ -89,17 +81,7 @@ namespace DBFirstApproach
                         deleteId = Convert.ToInt32(Console.ReadLine());
                     }
 
-                    deleteStudent[deleteId].Delete();
-                    break;
-                case "5":
-                    Console.WriteLine("Enter the name of the student you want to find");
-                    string searchName = Console.ReadLine();
-
-                    Console.WriteLine("Results:");
-                    List<Student> searchResult = student.Search(searchName);
-
-                    foreach (var item in searchResult)
-                        Console.WriteLine($"{item.Name} - {item.FacultyNumber}");
+                    student.Delete(deleteStudent[deleteId]);
                     break;
                 default:
                     Console.WriteLine("There is not such option");
@@ -109,13 +91,14 @@ namespace DBFirstApproach
 
         public static void Subjects()
         {
-            var subject = new Subject();
+            var subject = new SubjectRepository();
 
             switch (choosenOption)
             {
                 case "1":
+                    var subjects = new List<Subject>();
                     Console.WriteLine("All the subjects are:");
-                    List<Subject> subjects = subject.GetAll();
+                    subjects.AddRange(subject.GetAll());
 
                     foreach (var item in subjects)
                         Console.WriteLine($"{item.Name} - {item.Description} - {item.Professeur.FirstName} {item.Professeur.LastName}");
@@ -129,18 +112,18 @@ namespace DBFirstApproach
                     newSubject.Description = Console.ReadLine();
                     Console.WriteLine("Professeur's name");
                     string[] name = Console.ReadLine().Split(' ');
-                    Professeur lector = prof.Search(name[0]).FirstOrDefault(item => item.LastName == name[1]);
-                    newSubject.ProfesseurId = lector.Id;
+                    //Professeur lector = prof.Search(name[0]).FirstOrDefault(item => item.LastName == name[1]);
+                    //newSubject.ProfesseurId = lector.Id;
 
-                    newSubject.Add();
+                    subject.Add(newSubject);
                     break;
                 case "3":
-                    
                     break;
                 case "4":
+                    var deleteSubjects = new List<Subject>();
                     Console.WriteLine("Name you want to delete");
                     string deleteName = Console.ReadLine();
-                    List<Subject> deleteSubjects = subject.Search(deleteName);
+                    //List<Subject> deleteSubjects = subject.Search(deleteName);
                     int deleteId = 0;
 
                     if (deleteSubjects.Count > 1)
@@ -150,17 +133,7 @@ namespace DBFirstApproach
                         deleteId = Convert.ToInt32(Console.ReadLine());
                     }
 
-                    deleteSubjects[deleteId].Delete();
-                    break;
-                case "5":
-                    Console.WriteLine("Enter name:");
-                    string subjectName = Console.ReadLine();
-
-                    Console.WriteLine("All the subjects are:");
-                    List<Subject> searchResult = subject.Search(subjectName);
-                    
-                    foreach (var item in searchResult)
-                        Console.WriteLine($"{item.Name} - {item.Professeur.FirstName} {item.Professeur.LastName} - {item.Description}");
+                    subject.Delete(deleteSubjects[deleteId]);
                     break;
                 default:
                     Console.WriteLine("There is not such option");
@@ -173,8 +146,9 @@ namespace DBFirstApproach
             switch (choosenOption)
             {
                 case "1":
+                    var profs = new List<Professeur>();
                     Console.WriteLine("All the professeurs are:");
-                    List<Professeur> profs = prof.GetAll();
+                    profs.AddRange(prof.GetAll());
 
                     foreach (var item in profs)
                         Console.WriteLine($"{item.FirstName} {item.LastName}");
@@ -187,27 +161,28 @@ namespace DBFirstApproach
                     Console.WriteLine("Last name:");
                     newProf.LastName = Console.ReadLine();
 
-                    newProf.Add();
+                    prof.Add(newProf);
                     Console.WriteLine("Succsefull");
                     break;
                 case "3":
                     var updateProf = new Professeur();
-
+                    var profTarget = new List<Professeur>();
                     Console.WriteLine("Which one do you want to update?");
                     string updateTarget = Console.ReadLine();
-                    List<Professeur> profTarget = prof.Search(updateTarget);
+                    profTarget.AddRange(prof.Search(updateTarget));
 
                     Console.WriteLine("New first name:");
                     updateProf.FirstName = Console.ReadLine();
                     Console.WriteLine("New last name:");
                     updateProf.LastName = Console.ReadLine();
 
-                    profTarget[0].Update( updateProf);
+                    prof.Update(profTarget[0],updateProf);
                     break;
                 case "4":
+                    var professeurs = new List<Professeur>();
                     Console.WriteLine("Which one do you want to delete?");
                     string deleteTarget = Console.ReadLine();
-                    List<Professeur> professeurs = prof.Search(deleteTarget);
+                    professeurs.AddRange(prof.Search(deleteTarget));
                     int deleteId = 0;
 
                     if (professeurs.Count > 1)
@@ -217,16 +192,7 @@ namespace DBFirstApproach
                         deleteId = Convert.ToInt32(Console.ReadLine());
                     }
 
-                    professeurs[deleteId].Delete();
-                    break;
-                case "5":
-                    Console.WriteLine("Enter first name:");
-                    string name = Console.ReadLine();
-
-                    List<Professeur> searchResult = prof.Search(name);
-
-                    foreach (var item in searchResult)
-                        Console.WriteLine($"{item.FirstName} {item.LastName}");
+                    prof.Delete(professeurs[deleteId]);
                     break;
                 default:
                     Console.WriteLine("There is not such option");

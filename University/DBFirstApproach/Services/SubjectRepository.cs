@@ -6,11 +6,6 @@ namespace DBFirstApproach
 {
     public class SubjectRepository : ISubjectRepository
     {
-        public int Id { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public string Name { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public int ProfesseurId { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public string Description { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
         public void Add(Subject subject)
         {
             using (var db = new UniversityProgramContext())

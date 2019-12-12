@@ -5,10 +5,6 @@ namespace DBFirstApproach
 {
     public class ProfesseurRepository : IProfesseurRepository
     {
-        public int Id { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public string FirstName { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public string LastName { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
         public void Add(Professeur professeur)
         {
             using (var db = new UniversityProgramContext())

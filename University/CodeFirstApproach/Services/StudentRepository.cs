@@ -32,7 +32,14 @@ namespace CodeFirstApproach
 
         public void Update(Student targetStudent, Student updateStudent)
         {
-            throw new System.NotImplementedException();
+            using (var db = new SchoolContext())
+            {
+                var entity = db.Students.FirstOrDefault(item => item.StudentId == targetStudent.StudentId);
+                entity.Name = updateStudent.Name;
+                entity.FacultyNumber = updateStudent.FacultyNumber;
+                db.Students.Update(entity);
+                db.SaveChanges();
+            }
         }
     }
 }

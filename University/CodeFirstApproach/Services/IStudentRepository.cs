@@ -1,10 +1,12 @@
-﻿namespace CodeFirstApproach
+﻿using System.Collections.Generic;
+
+namespace CodeFirstApproach
 {
     public interface IStudentRepository
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string FacultyNumber { get; set; }
-
+        public void Add(Student student);
+        public void Update(Student targetStudent, Student updatedStudent);
+        public void Delete(Student student);
+        public IEnumerable<Student> GetAll();
     }
 }

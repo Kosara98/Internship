@@ -1,11 +1,12 @@
-﻿namespace CodeFirstApproach
+﻿using System.Collections.Generic;
+
+namespace CodeFirstApproach
 {
     public interface ISubjectRepository
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int ProfessorId { get; set; }
-        public string Description { get; set; }
-
+        public void Add(Subject subject);
+        public void Update(Subject targetSubject, Subject updatedSubject);
+        public void Delete(Subject subject);
+        public IEnumerable<Subject> GetAll();
     }
 }

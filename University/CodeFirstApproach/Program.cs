@@ -9,11 +9,12 @@ namespace CodeFirstApproach
     {
         static void Main(string[] args)
         {
+            var subject = new StudentSubjectRepository();
+
             Console.WriteLine("All the students in Math:");
             var mathStudents = new List<StudentSubject>();
 
-            using (var db = new SchoolContext())
-                mathStudents = db.StudentSubjects.Include(item => item.Student).Include(item => item.Subject).Where(item => item.SubjectId == 1).ToList();
+            mathStudents.AddRange(subject.GetAll().Where(item => item.SubjectId == 1));
 
             foreach (var item in mathStudents)
                 Console.WriteLine($"{item.Student.Name}");

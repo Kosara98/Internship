@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace DBFirstApproach
 {
-    public class SubjectRepository : ISubjectRepository
+    public class SubjectRepository : UniRepository<Subject>, ISubjectRepository 
     {
-        public void Add(Subject subject)
+        public override void Add(Subject subject)
         {
             using (var db = new UniversityProgramContext())
             {
@@ -15,7 +15,7 @@ namespace DBFirstApproach
             }
         }
 
-        public void Delete(Subject subject)
+        public override void Delete(Subject subject)
         {
             using (var db = new UniversityProgramContext())
             {
@@ -25,30 +25,20 @@ namespace DBFirstApproach
             }
         }
 
-        public IEnumerable<Subject> GetAll()
+        public override IEnumerable<Subject> GetAll()
         {
             using (var db = new UniversityProgramContext())
-                return db.Subjects.Include(item => item.Professeur).ToList();
+                return db.Subjects.Include(item => item.Professor).ToList();
         }
 
-        public void Update(Subject targetSubject, Subject newSubject)
+        public override void Update(Subject subject)
         {
             using (var db = new UniversityProgramContext())
             {
-                var entity = db.Subjects.FirstOrDefault(item => item.Id == targetSubject.Id);
-                entity.Name = newSubject.Name;
-                entity.ProfesseurId = newSubject.ProfesseurId;
-                entity.Description = newSubject.Description;
+                var entity = db.Subjects.FirstOrDefault(item => item.Id == subject.Id);
                 db.Subjects.Update(entity);
                 db.SaveChanges();
             }
-        }
-
-        public IEnumerable<Subject> Search(string name)
-        {
-            using (var db = new UniversityProgramContext())
-               return db.Subjects.Include(i => i.Professeur).Where(item => item.Name == name).ToList();
-
         }
     }
 }

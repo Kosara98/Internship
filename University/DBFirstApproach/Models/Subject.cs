@@ -5,19 +5,21 @@ using System.Linq;
 
 namespace DBFirstApproach
 {
-    public partial class Subject
+    public partial class Subject : BaseModel
     {
         public Subject()
         {
-            StudentsSubjects = new HashSet<StudentsSubjects>();
+            StudentsSubjects = new HashSet<StudentSubjects>();
         }
-
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int ProfesseurId { get; set; }
+        public int ProfessorId { get; set; }
         public string Description { get; set; }
 
-        public virtual Professeur Professeur { get; set; }
-        public virtual ICollection<StudentsSubjects> StudentsSubjects { get; set; }
+        public virtual Professor Professor { get; set; }
+        public virtual ICollection<StudentSubjects> StudentsSubjects { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name} - {Professor.Id} - {Description}";
+        }
     }
 }

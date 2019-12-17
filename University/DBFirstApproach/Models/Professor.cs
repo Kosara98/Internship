@@ -4,17 +4,12 @@ using System.Linq;
 
 namespace DBFirstApproach
 {
-    public partial class Professeur
+    public partial class Professor : BaseModel
     {
-        public Professeur()
+        public Professor()
         {
             Subjects = new HashSet<Subject>();
         }
-
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-
         public virtual ICollection<Subject> Subjects { get; set; }
     }
 }

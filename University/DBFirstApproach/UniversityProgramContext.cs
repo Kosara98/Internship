@@ -15,9 +15,9 @@ namespace DBFirstApproach
         {
         }
 
-        public virtual DbSet<Professeur> Professeurs { get; set; }
+        public virtual DbSet<Professor> Professors { get; set; }
         public virtual DbSet<Student> Students { get; set; }
-        public virtual DbSet<StudentsSubjects> StudentsSubjects { get; set; }
+        public virtual DbSet<StudentSubjects> StudentSubjects { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,13 +31,9 @@ namespace DBFirstApproach
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Professeur>(entity =>
+            modelBuilder.Entity<Professor>(entity =>
             {
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(35);
-
-                entity.Property(e => e.LastName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(35);
             });
@@ -54,7 +50,7 @@ namespace DBFirstApproach
                     .HasMaxLength(35);
             });
 
-            modelBuilder.Entity<StudentsSubjects>(entity =>
+            modelBuilder.Entity<StudentSubjects>(entity =>
             {
                 entity.HasKey(e => new { e.StudentId, e.SubjectId })
                     .HasName("PK__Students__A80491A34322637B");
@@ -80,9 +76,9 @@ namespace DBFirstApproach
                     .IsRequired()
                     .HasMaxLength(35);
 
-                entity.HasOne(d => d.Professeur)
+                entity.HasOne(d => d.Professor)
                     .WithMany(p => p.Subjects)
-                    .HasForeignKey(d => d.ProfesseurId)
+                    .HasForeignKey(d => d.ProfessorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Subjects__Profes__398D8EEE");
             });

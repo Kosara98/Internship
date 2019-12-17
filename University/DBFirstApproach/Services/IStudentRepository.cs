@@ -4,9 +4,9 @@ namespace DBFirstApproach
 {
     public interface IStudentRepository
     {
-        public IEnumerable<DBFirstApproach.Student> GetAll();
+        public IEnumerable<Student> GetAll();
         public void Add(Student student);
         public void Delete(Student student);
-        public void Update(Student targetStudent, Student updatedStudent);
+        public void Update(Student student);
     }
 }

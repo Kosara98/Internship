@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace DBFirstApproach
 {
-    public class StudentRepository : IStudentRepository
+    public class StudentRepository : UniRepository<Student>, IStudentRepository
     {
-        public void Add(Student student)
+        public override void Add(Student student)
         {
             using (var db = new UniversityProgramContext())
             {
@@ -14,7 +14,7 @@ namespace DBFirstApproach
             }
         }
 
-        public void Delete(Student student)
+        public override void Delete(Student student)
         {
             using (var db = new UniversityProgramContext())
             {
@@ -24,19 +24,17 @@ namespace DBFirstApproach
             }
         }
 
-        public IEnumerable<DBFirstApproach.Student> GetAll()
+        public override IEnumerable<Student> GetAll()
         {
             using (var db = new UniversityProgramContext())
                 return db.Students.ToList();
         }
 
-        public void Update(Student targetStudent, Student student)
+        public override void Update(Student student)
         {
             using (var db = new UniversityProgramContext())
             {
-                var entity = db.Students.FirstOrDefault(item => item.Id == targetStudent.Id);
-                entity.Name = student.Name;
-                entity.FacultyNumber = student.FacultyNumber;
+                var entity = db.Students.FirstOrDefault(item => item.Id == student.Id);
                 db.Students.Update(entity);
                 db.SaveChanges();
             }

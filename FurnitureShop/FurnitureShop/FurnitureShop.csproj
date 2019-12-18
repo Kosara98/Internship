@@ -36,6 +36,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlClient, Version=4.5.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.6.1\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,16 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connections\Queries.cs" />
     <Compile Include="Forms\ClientUpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ClientUpdateForm.Designer.cs">
       <DependentUpon>ClientUpdateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Connections\Connection.cs" />
-    <Compile Include="Models\Client.cs" />
-    <Compile Include="Connections\ClientConnection.cs" />
     <Compile Include="Forms\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,13 +80,8 @@
     <Compile Include="Forms\NewSaleForm.Designer.cs">
       <DependentUpon>NewSaleForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Product.cs" />
-    <Compile Include="Connections\ProductConnection.cs" />
-    <Compile Include="Models\ProductSaleViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Sale.cs" />
-    <Compile Include="Connections\SaleConnection.cs" />
     <Compile Include="Forms\ProductUpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +124,7 @@
     <EmbeddedResource Include="Forms\SaleUpdateForm.resx">
       <DependentUpon>SaleUpdateForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -143,6 +138,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FurnitureShopAdo.DataAccess\FurnitureShopAdo.DataAccess.csproj">
+      <Project>{3df28af3-f479-4b62-84ed-959816034dfd}</Project>
+      <Name>FurnitureShopAdo.DataAccess</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

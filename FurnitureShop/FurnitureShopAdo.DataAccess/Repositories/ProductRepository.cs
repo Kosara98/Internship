@@ -6,7 +6,7 @@ using FurnitureShopAdo.DataAccess.Models;
 
 namespace FurnitureShopAdo.DataAccess.Repositories
 {
-    class ProductRepository : BaseRepository<Product>
+    public class ProductRepository : BaseRepository<Product>
     {
         public override IEnumerable<Product> GetAll()
         {

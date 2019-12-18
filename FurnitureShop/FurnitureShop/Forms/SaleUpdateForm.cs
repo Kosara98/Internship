@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using FurnitureShopAdo.DataAccess.Models;
+using FurnitureShopAdo.DataAccess;
+using FurnitureShopAdo.DataAccess.Repositories;
 
 namespace FurnitureShop
 {
     public partial class SaleUpdateForm : Form
     {
         private Sale upgradeSale = new Sale();
-        private SaleConnection saleConnection = new SaleConnection();
-        private ProductConnection productConnection = new ProductConnection();
-        private List<ProductSaleViewModel> productSales = new List<ProductSaleViewModel>();
+        private SaleRepository saleConnection = new SaleRepository();
+        private ProductRepository productConnection = new ProductRepository();
+        private List<ProductSale> productSales = new List<ProductSale>();
 
         public SaleUpdateForm()
         {
@@ -25,7 +23,7 @@ namespace FurnitureShop
             cbProduct.DisplayMember = "Name";
             cbProduct.ValueMember = "Id";
 
-            ProductSaleViewModel productSale = new ProductSaleViewModel();
+            var productSale = new ProductSale();
             productSales.Add(productSale);
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FurnitureShopAdo.DataAccess;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +13,7 @@ namespace FurnitureShop
 {
     public partial class ClientUpdateForm : Form
     {
-        private ClientConnection clientConnection = new ClientConnection();
+        private ClientRepository clientConnection = new ClientRepository();
         private Client updatedClient;
 
         public ClientUpdateForm()

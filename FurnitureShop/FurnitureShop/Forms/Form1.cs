@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Windows.Forms;
+using FurnitureShopAdo.DataAccess;
+using FurnitureShopAdo.DataAccess.Repositories;
+using FurnitureShopAdo.DataAccess.Models;
 
 namespace FurnitureShop
 {
     public partial class Form1 : Form
     {
-        private static ProductConnection productConnection = new ProductConnection();
-        private static ClientConnection clientConnection = new ClientConnection();
-        private static SaleConnection saleConnection = new SaleConnection();
+        private static ProductRepository productConnection = new ProductRepository();
+        private static ClientRepository clientConnection = new ClientRepository();
+        private static SaleRepository saleConnection = new SaleRepository();
+
         private BindingSource productSource = new BindingSource(productConnection.GetAll(), null);
         private BindingSource clientSource = new BindingSource(clientConnection.GetAll(), null);
         private BindingSource saleSource = new BindingSource(saleConnection.GetAll(), null);

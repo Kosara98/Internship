@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FurnitureShopAdo.DataAccess.Models
 {
-    class ProductSale
+    public class ProductSale
     {
         public int ProductId { get; set; }
         public int Quantity { get; set; } = 1;

@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using FurnitureShopAdo.DataAccess.Models;
+using FurnitureShopAdo.DataAccess.Repositories;
+using FurnitureShopAdo.DataAccess;
 
 namespace FurnitureShop
 {
     public partial class NewSaleForm : Form
     {
         private Sale sale = new Sale();
-        private SaleConnection saleConnection = new SaleConnection();
-        private ClientConnection clientConnection = new ClientConnection();
-        private ProductConnection productConnection = new ProductConnection();
-        private List<ProductSaleViewModel> productSales = new List<ProductSaleViewModel>();
+        private SaleRepository saleConnection = new SaleRepository();
+        private ClientRepository clientConnection = new ClientRepository();
+        private ProductRepository productConnection = new ProductRepository();
+        private List<ProductSale> productSales = new List<ProductSale>();
         private Button button = new Button();
        
         public NewSaleForm()
@@ -31,7 +29,7 @@ namespace FurnitureShop
             cbProduct.DisplayMember = "Name";
             cbProduct.ValueMember = "Id";
 
-            ProductSaleViewModel productSale = new ProductSaleViewModel();
+            var productSale = new ProductSale();
             productSales.Add(productSale);
 
             Binding bindingInvoice = new Binding("Text", sale, "Invoice");
@@ -47,36 +45,42 @@ namespace FurnitureShop
 
         private void btnAddMore_Click_1(object sender, EventArgs e)
         {
-            var newProductSaleViewModel = new ProductSaleViewModel();
+            var newProductSaleViewModel = new ProductSale();
             productSales.Add(newProductSaleViewModel);
+            int top = pSales.Controls.OfType<ComboBox>().Last().Top + 30;
 
             //Name of the product
-            ComboBox cb = new ComboBox();
-            cb.Name = "cb";
-            cb.Left = 112;
-            int top = pSales.Controls.OfType<ComboBox>().Last().Top + 30;
-            cb.Top = top;
-            cb.DropDownStyle = ComboBoxStyle.DropDownList;
-            cb.Size = cbProduct.Size;
-            cb.DataSource = productConnection.GetAll();
-            cb.DisplayMember = "Name";
-            cb.ValueMember = "Id";
+            ComboBox cb = new ComboBox
+            {
+                Name = "cb",
+                Left = 112,
+                Top = top,
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Size = cbProduct.Size,
+                DataSource = productConnection.GetAll(),
+                DisplayMember = "Name",
+                ValueMember = "Id"
+            };
             cb.DataBindings.Add(new Binding("SelectedValue", newProductSaleViewModel, "ProductId"));
 
             //Quantity of the product
-            Label lb = new Label();
-            lb.Name = "lb";
-            lb.Text = "Quantity";
-            lb.Left = 200;
-            lb.Top = top;
-            lb.Size = lblQuantity.Size;
+            Label lb = new Label
+            {
+                Name = "lb",
+                Text = "Quantity",
+                Left = 200,
+                Top = top,
+                Size = lblQuantity.Size
+            };
 
-            NumericUpDown numUp = new NumericUpDown();
-            numUp.Name = "num";
-            numUp.Left = 251;
-            numUp.Top = top;
-            numUp.Size = numQuantity.Size;
-            numUp.Minimum = 1;
+            NumericUpDown numUp = new NumericUpDown
+            {
+                Name = "num",
+                Left = 251,
+                Top = top,
+                Size = numQuantity.Size,
+                Minimum = 1
+            };
             numUp.DataBindings.Add(new Binding("Value", newProductSaleViewModel, "Quantity"));
 
             button.Name = "btnClear";

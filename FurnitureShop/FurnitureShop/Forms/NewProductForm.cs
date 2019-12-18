@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using FurnitureShopAdo.DataAccess.Models;
+using FurnitureShopAdo.DataAccess.Repositories;
 
 namespace FurnitureShop
 {
     public partial class NewProductForm : Form
     {
         private Product product = new Product();
-        private ProductConnection productConnection = new ProductConnection();
+        private ProductRepository productConnection = new ProductRepository();
 
         public NewProductForm()
         {

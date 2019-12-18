@@ -7,13 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FurnitureShopAdo.DataAccess.Models;
+using FurnitureShopAdo.DataAccess;
 
 namespace FurnitureShop
 {
     public partial class NewClientForm : Form
     {
         private Client client = new Client();
-        private ClientConnection clientConnection = new ClientConnection();
+        private ClientRepository clientConnection = new ClientRepository();
 
         public NewClientForm()
         {

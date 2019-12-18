@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
-using FurnitureShopAdo.DataAccess.Models;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShopAdo.DataAccess.Repositories
 {
-    public class ProductRepository : BaseRepository<Product>
+    public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
         public override IEnumerable<Product> GetAll()
         {

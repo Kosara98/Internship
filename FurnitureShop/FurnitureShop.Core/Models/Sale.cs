@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FurnitureShopAdo.DataAccess.Models
+namespace FurnitureShop.Core.Models
 {
     public class Sale
     {

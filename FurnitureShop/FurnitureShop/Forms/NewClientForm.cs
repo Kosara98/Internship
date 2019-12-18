@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using FurnitureShopAdo.DataAccess.Models;
-using FurnitureShopAdo.DataAccess;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShop
 {
     public partial class NewClientForm : Form
     {
-        private Client client = new Client();
-        private ClientRepository clientConnection = new ClientRepository();
+        private Client client;
+        private readonly IClientRepository clientConnection;
 
-        public NewClientForm()
+        public NewClientForm(IClientRepository clientRepository)
         {
+            clientConnection = clientRepository;
+            client = new Client();
+
             InitializeComponent();
 
             Binding bindingName = new Binding("Text", client, "Name");

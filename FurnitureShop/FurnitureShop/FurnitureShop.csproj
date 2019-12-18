@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -56,11 +58,11 @@
     <Compile Include="Forms\ClientUpdateForm.Designer.cs">
       <DependentUpon>ClientUpdateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Form1.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\NewClientForm.cs">
       <SubType>Form</SubType>
@@ -97,8 +99,8 @@
     <EmbeddedResource Include="Forms\ClientUpdateForm.resx">
       <DependentUpon>ClientUpdateForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewClientForm.resx">
       <DependentUpon>NewClientForm.cs</DependentUpon>
@@ -139,6 +141,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FurnitureShop.Core\FurnitureShop.Core.csproj">
+      <Project>{0e673018-175b-43b4-accb-8e5120312a0d}</Project>
+      <Name>FurnitureShop.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FurnitureShopAdo.DataAccess\FurnitureShopAdo.DataAccess.csproj">
       <Project>{3df28af3-f479-4b62-84ed-959816034dfd}</Project>
       <Name>FurnitureShopAdo.DataAccess</Name>

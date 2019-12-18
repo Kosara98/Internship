@@ -1,23 +1,19 @@
-﻿using FurnitureShopAdo.DataAccess;
+﻿using FurnitureShop.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShop
 {
     public partial class ClientUpdateForm : Form
     {
-        private ClientRepository clientConnection = new ClientRepository();
+        private readonly IClientRepository clientConnection;
         private Client updatedClient;
 
-        public ClientUpdateForm()
+        public ClientUpdateForm(IClientRepository clientRepository)
         {
+            clientConnection = clientRepository;
             InitializeComponent();
         }
 

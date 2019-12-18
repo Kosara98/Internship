@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using FurnitureShopAdo.DataAccess.Repositories;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShopAdo.DataAccess
 {
-    public class ClientRepository : BaseRepository<Client>
+    public class ClientRepository : BaseRepository<Client>, IClientRepository
     {
         public override IEnumerable<Client> GetAll()
         {

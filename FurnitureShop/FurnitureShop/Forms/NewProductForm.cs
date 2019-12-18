@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using FurnitureShopAdo.DataAccess.Models;
-using FurnitureShopAdo.DataAccess.Repositories;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
+
 
 namespace FurnitureShop
 {
     public partial class NewProductForm : Form
     {
-        private Product product = new Product();
-        private ProductRepository productConnection = new ProductRepository();
+        private Product product;
+        private readonly IProductRepository productConnection;
 
-        public NewProductForm()
+        public NewProductForm(IProductRepository productRepository)
         {
+            productConnection = productRepository;
+            product = new Product();
+            
             InitializeComponent();
 
             Binding bindingName = new Binding("Text", product, "Name");

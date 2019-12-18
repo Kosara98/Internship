@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using FurnitureShopAdo.DataAccess.Models;
-using FurnitureShopAdo.DataAccess;
-using FurnitureShopAdo.DataAccess.Repositories;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShop
 {
     public partial class ProductUpdateForm : Form
     {
-        private ProductRepository productConnection = new ProductRepository();
+        private readonly IProductRepository productConnection;
         private Product updatedProduct;
 
-        public ProductUpdateForm()
+        public ProductUpdateForm(IProductRepository productRepository)
         {
+            productConnection = productRepository;
             InitializeComponent();
         }
 

@@ -2,23 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using FurnitureShopAdo.DataAccess.Models;
-using FurnitureShopAdo.DataAccess.Repositories;
-using FurnitureShopAdo.DataAccess;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShop
 {
     public partial class NewSaleForm : Form
     {
-        private Sale sale = new Sale();
-        private SaleRepository saleConnection = new SaleRepository();
-        private ClientRepository clientConnection = new ClientRepository();
-        private ProductRepository productConnection = new ProductRepository();
-        private List<ProductSale> productSales = new List<ProductSale>();
-        private Button button = new Button();
+        private readonly ISaleRepository saleConnection;
+        private readonly IClientRepository clientConnection;
+        private readonly IProductRepository productConnection;
+        private Sale sale;
+        private List<ProductSale> productSales;
+        private Button button;
        
-        public NewSaleForm()
+        public NewSaleForm(ISaleRepository saleRepository, IClientRepository clientRepository, IProductRepository productRepository)
         {
+            saleConnection = saleRepository;
+            clientConnection = clientRepository;
+            productConnection = productRepository;
+            sale = new Sale();
+            productSales = new List<ProductSale>();
+            button = new Button();
+
             InitializeComponent();
 
             cbClient.DataSource = clientConnection.GetAll();

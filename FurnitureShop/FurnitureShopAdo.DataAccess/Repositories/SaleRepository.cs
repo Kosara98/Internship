@@ -1,12 +1,12 @@
-﻿using FurnitureShopAdo.DataAccess.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShopAdo.DataAccess.Repositories
 {
-    public class SaleRepository : BaseRepository<Sale>
+    public class SaleRepository : BaseRepository<Sale>, ISaleRepository
     {
         public override IEnumerable<Sale> GetAll()
         {

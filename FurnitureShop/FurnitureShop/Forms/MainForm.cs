@@ -3,43 +3,52 @@ using System.Threading;
 using System.Windows.Forms;
 using FurnitureShopAdo.DataAccess;
 using FurnitureShopAdo.DataAccess.Repositories;
-using FurnitureShopAdo.DataAccess.Models;
+using FurnitureShop.Core.Models;
+using FurnitureShop.Core.Repositories;
 
 namespace FurnitureShop
 {
     public partial class Form1 : Form
     {
-        private static ProductRepository productConnection = new ProductRepository();
-        private static ClientRepository clientConnection = new ClientRepository();
-        private static SaleRepository saleConnection = new SaleRepository();
+        private readonly IProductRepository productConnection;
+        private readonly IClientRepository clientConnection;
+        private readonly ISaleRepository saleConnection;
 
-        private BindingSource productSource = new BindingSource(productConnection.GetAll(), null);
-        private BindingSource clientSource = new BindingSource(clientConnection.GetAll(), null);
-        private BindingSource saleSource = new BindingSource(saleConnection.GetAll(), null);
+        private BindingSource productSource;
+        private BindingSource clientSource;
+        private BindingSource saleSource;
 
         public Form1()
         {
+            productConnection = new ProductRepository();
+            clientConnection = new ClientRepository();
+            saleConnection = new SaleRepository();
+            
+            productSource = new BindingSource(productConnection.GetAll(), null);
+            clientSource = new BindingSource(clientConnection.GetAll(), null);
+            saleSource = new BindingSource(saleConnection.GetAll(), null);
+
             Application.ThreadException += new ThreadExceptionEventHandler(Form1_UIThreadException);
             InitializeComponent();
         }
 
         private void newClientToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NewClientForm newClient = new NewClientForm();
+            NewClientForm newClient = new NewClientForm(clientConnection);
             newClient.FormClosed += new FormClosedEventHandler(childForm_Closed);
             newClient.Show();
         }
 
         private void newProductToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NewProductForm newProduct = new NewProductForm();
+            NewProductForm newProduct = new NewProductForm(productConnection);
             newProduct.FormClosed += new FormClosedEventHandler(childForm_Closed);
             newProduct.Show();
         }
 
         private void newSaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            NewSaleForm newSale = new NewSaleForm();
+            NewSaleForm newSale = new NewSaleForm(saleConnection, clientConnection, productConnection);
             newSale.FormClosed += new FormClosedEventHandler(childForm_Closed);
             newSale.Show();
         }
@@ -134,13 +143,13 @@ namespace FurnitureShop
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            ProductUpdateForm productUpdateForm = new ProductUpdateForm();
+            ProductUpdateForm productUpdateForm = new ProductUpdateForm(productConnection);
             productUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
 
-            ClientUpdateForm clientUpdateForm = new ClientUpdateForm();
+            ClientUpdateForm clientUpdateForm = new ClientUpdateForm(clientConnection);
             clientUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
 
-            SaleUpdateForm saleUpdateForm = new SaleUpdateForm();
+            SaleUpdateForm saleUpdateForm = new SaleUpdateForm(saleConnection, productConnection);
             saleUpdateForm.FormClosed += new FormClosedEventHandler(childForm_Closed);
 
             if (cbTables.SelectedIndex == 0)

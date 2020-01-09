@@ -31,6 +31,8 @@ namespace MVCFurnitureShop.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateConfirmation([Bind("ClientId,Name,Address,Bulstat,RegisteredVat,Mol")] Client client)
         {
             if (ModelState.IsValid)
@@ -56,6 +58,8 @@ namespace MVCFurnitureShop.Controllers
             return View(client);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int ClientId)
         {
             var client = await _context.Clients.FindAsync(ClientId);
@@ -65,6 +69,63 @@ namespace MVCFurnitureShop.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var client = _context.Clients.Find(id);
+
+            if (client == null)
+                return NotFound();
+
+            return View(client);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("ClientId,Name,Address,RegisteredVat,Mol")] Client client)
+        {
+            if (client.ClientId != id)
+                NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(client);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ClientExist(client.ClientId))
+                        return NotFound();
+                    else
+                        throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(client);
+        }
+
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+                NotFound();
+
+            var client = _context.Clients.FirstOrDefault(x => x.ClientId == id);
+
+            if (client == null)
+                NotFound();
+
+            return View(client);
+        }
+
+        private bool ClientExist(int id)
+        {
+            return _context.Clients.Any(x => x.ClientId == id);
         }
     }
 }

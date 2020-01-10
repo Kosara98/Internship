@@ -10,19 +10,18 @@ namespace MVCFurnitureShop.Models
     {
         public int SaleId { get; set; }
 
+        [Display(Name = "Sale Date")]
         [DataType(DataType.Date)]
         public DateTime SaleDate { get; set; }
 
+        [StringLength(10,MinimumLength = 10)]
+        [Required]
         public string Invoice { get; set; }
 
-        public string Product { get; set; }
+        [Display(Name = "Client")]
+        public string ClientName { get; set; }
 
-        public int Quantity { get; set; }
-
-        public Client Client { get; set; }
-
-        public decimal UnitPrice { get; set; }
-
-        public decimal TotalPrice { get; set; }
+        [Display(Name = "Products")]
+        public ICollection<ProductSale> ProductSales { get; set; }
     }
 }

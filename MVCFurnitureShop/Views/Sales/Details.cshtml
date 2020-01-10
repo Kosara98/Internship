@@ -1,0 +1,75 @@
+﻿@model MVCFurnitureShop.Models.Sale
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Sale</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SaleDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SaleDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Invoice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Invoice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ClientName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ClientName)
+        </dd>
+    </dl>
+    <hr/>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Product
+                </th>
+                <th>
+                   Quantity
+                </th>
+                <th>
+                    Unit Price
+                </th>
+                <th>
+                   Total Price
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.ProductSales)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => product.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => product.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => product.TotalPrice)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SaleId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

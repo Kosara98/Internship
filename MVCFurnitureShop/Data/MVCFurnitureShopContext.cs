@@ -13,7 +13,15 @@ namespace MVCFurnitureShop.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductSale>().HasKey(ps => new { ps.SaleId, ps.ProductName });
+        }
+
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Sale> Sales { get; set; }
+        public DbSet<ProductSale> ProductSales { get; set; }
     }
 }

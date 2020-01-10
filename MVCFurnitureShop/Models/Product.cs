@@ -26,7 +26,7 @@ namespace MVCFurnitureShop.Models
         [Required(ErrorMessage = "Required")]
         public string Barcode { get; set; }
 
-        [Range(1, 100)]
+        [Range(1, 300)]
         [DataType(DataType.Currency)]
         [Column(TypeName = "decimal(10, 2)")]
         [Required(ErrorMessage = "Required")]

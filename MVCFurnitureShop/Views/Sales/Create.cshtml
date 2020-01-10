@@ -1,0 +1,48 @@
+﻿@model MVCFurnitureShop.Models.Sale
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Sale</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SaleDate" class="control-label"></label>
+                <input asp-for="SaleDate" class="form-control" />
+                <span asp-validation-for="SaleDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Invoice" class="control-label"></label>
+                <input asp-for="Invoice" class="form-control" />
+                <span asp-validation-for="Invoice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClientName" class="control-label"></label><br />
+                @Html.DropDownList("ClientName", (IEnumerable<SelectListItem>)ViewData["Clients"])
+                <span asp-validation-for="ClientName" class="text-danger"></span>
+            </div>
+            @foreach (var item in Model.ProductSales.ToList())
+            {
+                <dl>
+                    <dt>
+                        @Html.DisplayNameFor(model => item.ProductName)
+                    </dt>
+                </dl>
+            }
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

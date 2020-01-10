@@ -19,6 +19,21 @@ create table Products (
 	Price decimal(10,2) not null
 )
 
+create table Sales(
+	SaleId int identity(1,1) not null primary key,
+	SaleDate date not null,
+	ClientName nvarchar(30) not null,
+	Invoice varchar(10) not null
+)
+
+create table ProductSales(
+	ProductName nvarchar(35) not null,
+	SaleId int not null,
+	Quantity int not null,
+	Price decimal(10,2) not null,
+	TotalPrice as ([Quantity] * [Price])
+)
+
 insert into Products
 values('Bed', null, 40, 1234567891234, 100.5)
 
@@ -45,6 +60,41 @@ values('Petar OOD','bul. "Tsar Boris III Obedinitel" 12', 987654321, 0,'Petar Di
 insert into Clients
 values('BRR OOD','bul. "Tsar Boris III Obedinitel" 31', 112233789, 1,'Denislav Todorov',0)
 
-update Clients
-set IsDeleted = 0
-where IsDeleted = 1
+insert into Sales
+values (convert(datetime, '18-09-2019',105), 'Ivan OOD', 12345412)
+
+insert into Sales
+values (convert(datetime, '20-08-2019',105), 'Ivan OOD', 48545412)
+
+insert into Sales
+values (convert(datetime, '15-05-2019',105), 'Petar OOD', 25254412)
+
+insert into Sales
+values (convert(datetime, '01-07-2019',105), 'BRR OOD', 65658412)
+
+insert into Sales
+values (convert(datetime, '5-09-2019',105), 'Petar OOD', 12333332)
+
+insert into Sales
+values (convert(datetime, '25-09-2019',105), 'BRR OOD', 12666332)
+
+insert into ProductSales
+values ('Bed', 3, 3, (select Price from Products where ProductId = 1))
+
+insert into ProductSales
+values ('Chair', 2, 3, (select Price from Products where ProductId = 2))
+
+insert into ProductSales
+values ('Bed', 5, 10, (select Price from Products where ProductId = 1))
+
+insert into ProductSales
+values ('Sofa', 6, 7, (select Price from Products where ProductId = 3))
+
+insert into ProductSales
+values ('Chair', 6, 4, (select Price from Products where ProductId = 2))
+
+insert into ProductSales
+values ('Chair', 5, 4, (select Price from Products where ProductId = 2))
+
+delete from Sales
+where Invoice = '12345412'
